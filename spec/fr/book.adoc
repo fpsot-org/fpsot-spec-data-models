@@ -1,0 +1,7 @@
+= Spécification FPSOT sur les modèles de données
+:doctype: book
+:toc:
+
+include::index.adoc[leveloffset=+1]
+
+include::glossary.adoc[leveloffset=+1]
