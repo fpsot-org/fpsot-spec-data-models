@@ -1,0 +1,118 @@
+= Audit, history and extensions
+include::_fpsot-terms.adoc[]
+
+These rules record when a system stored each entity, and how an entity keeps its past.
+They also set the one place where a {term-jurisdiction} adds its own fields.
+
+== Audit instants
+
+[[DMO-050]]
+*DMO-050.* Each entity MUST have a `createdAt` and an `updatedAt` slot, with the type `Instant`.
+Every record that a system of record emits MUST hold both, set at first storage and at each change.
+A request to create a record MAY omit them, since only the system of record can set them.
+The core model therefore leaves both slots optional, and each slot description states when it is required.
+These instants MUST NOT serve as the period of a fact, which belongs in `validity` under DMO-023.
+A system that needs to know who made each change SHOULD keep that in an audit log outside the entity.
+
+Apache OFBiz also stamps each entity, in fields named `createdStamp` and `lastUpdatedStamp`, as its link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/model/ModelEntity.java[entity engine code] shows.
+A mapping copies them as instants in {abbr-utc-first}.
+
+The audit instants tell when the system learned a fact, while `validity` tells when the fact is true.
+Take a move on 1 June that the system learns on 10 June.
+Its validity starts on 1 June, and its `createdAt` is on 10 June.
+
+== History
+
+[[DMO-051]]
+*DMO-051.* A past fact with a `validity` slot MUST stay retrievable as an ended record in the model form.
+When such a fact changes, the old record MUST end where the new record starts.
+To fix a value that was wrong from the start, a system MAY replace the record instead.
+How a system keeps this history inside its own boundary is its choice, under DMO-004.
+Other systems can then still get past facts, such as a former address or a former name.
+Two intervals that join end to start leave no gap and no overlap, under DAT-023.
+
+[[DMO-052]]
+*DMO-052.* A system MUST NOT delete a record only because its period has ended.
+Deletion follows the retention rules that apply to the deployment.
+An ended record still explains past decisions, such as where a notice went.
+
+== Extensions
+
+[[DMO-053]]
+*DMO-053.* Each entity MAY have one `extensions` slot, which holds an object.
+This object is the only place for fields that one jurisdiction adds to the core model.
+Each member MUST take its name from the link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166-1] or link:https://www.iso.org/standard/72483.html[ISO 3166-2] code of one jurisdiction.
+The name MUST be in lowerCamelCase, such as `ca` or `caQc`.
+The value of each member MUST be an object.
+Each jurisdiction then has one object, and its fields stay apart from the core, under DMO-054.
+
+A jurisdiction with no ISO 3166 code MUST nest its member in the member of the nearest coded jurisdiction.
+Examples are a municipality, a regional county municipality or an Indigenous government, such as `caQc.montreal`.
+The profile of the coded jurisdiction defines the name of the nested member, in lowerCamelCase.
+A body that is not a jurisdiction, such as the European Union, MUST use a registered name instead.
+The profile of that body registers the name, in lowerCamelCase from its English name, such as `europeanUnion`.
+
+The member names are field names derived from the ISO 3166 code, in lowerCamelCase under NAM-011.
+NAM-005, NAM-007 and NAM-042 do not apply to them.
+link:https://linkml.io/linkml/generators/index.html[LinkML] turns a hyphen in a slot name into an underscore, so the exact form `CA-QC` cannot validate.
+
+[source,json]
+----
+{
+  "id": "019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f",
+  "partyType": "organization",
+  "names": [{"name": "Boulangerie du Faubourg inc.", "language": "fr"}],
+  "extensions": {"caQc": {"administrativeRegion": "03"}},
+  "createdAt": "2026-11-07T14:00:00Z",
+  "updatedAt": "2026-11-07T14:05:00Z"
+}
+----
+
+[[DMO-054]]
+*DMO-054.* A field of a jurisdiction MUST NOT appear beside the core fields of an entity.
+Its name MUST NOT carry a prefix or a namespace instead, such as `qcRegion` or `ca:region`.
+Prefixed names mix the core and the local parts in one list, and every new jurisdiction adds to it.
+With one object per jurisdiction, a reader finds every local field in one place and can skip the others.
+
+[[DMO-055]]
+*DMO-055.* A jurisdiction profile MUST define each member of `extensions`, in its own LinkML schema that imports the core model.
+The profile MUST cite the law, regulation or standard that each of its fields comes from.
+The core model MUST NOT change to add a member.
+Each jurisdiction can then publish and version its profile on its own schedule.
+The file `model/examples/ca-qc-profile.yaml` is an example profile for Québec.
+
+The one field of that profile, `administrativeRegion`, holds the two-digit code of an administrative region of Québec.
+The codes come from the link:https://statistique.quebec.ca/statistiques/divisions-territoriales/nom-code_dt/6_1.htm[official list of administrative regions] of the Institut de la statistique du Québec.
+
+[[DMO-056]]
+*DMO-056.* A system MUST keep each unknown member of `extensions` when it stores or passes on a record.
+It MUST NOT reject a record because of such a member.
+A member MUST NOT repeat or change the meaning of a core field.
+A record can then cross a system that knows only the core model without losing local data.
+The core model accepts any member of `extensions`, and each profile checks its own members.
+
+[[DMO-057]]
+*DMO-057.* A field that several jurisdictions need SHOULD move into the core model, in a minor version under DMO-061.
+This applies when the field has the same meaning in each jurisdiction.
+The extension members then keep only what is truly local.
+
+== References
+
+=== Normative
+
+* link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166 Country Codes], ISO. link:https://web.archive.org/web/20261027022740/https://www.iso.org/iso-3166-country-codes.html[Archived copy]
+* link:https://www.iso.org/standard/72483.html[ISO 3166-2:2020, Codes for the representation of names of countries and their subdivisions, Part 2: Country subdivision code], ISO, 2020-08. link:https://web.archive.org/web/20261013114742/https://www.iso.org/standard/72483.html[Archived copy]
+
+=== Informative
+
+* link:https://statistique.quebec.ca/statistiques/divisions-territoriales/nom-code_dt/6_1.htm[Régions administratives (1997)], Institut de la statistique du Québec, 2011-06-02. link:https://web.archive.org/web/20181206022305/http://www.stat.gouv.qc.ca/statistiques/divisions-territoriales/nom-code_dt/6_1.htm[Archived copy]
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Archived copy]
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/model/ModelEntity.java[Apache OFBiz, ModelEntity.java], The Apache Software Foundation, commit e103805, 2026-11-07.
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-07 |First version.
+|===

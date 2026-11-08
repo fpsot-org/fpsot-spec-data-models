@@ -1,0 +1,123 @@
+# Every entity of the Party model, with history and a shared address.
+persons:
+  - id: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    partyType: person
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:20:00Z"
+    birthDate: "1988-06-24"
+    names:
+      - fullName: Marie-Ève Tremblay
+        nameType: legal
+        validity: {start: "1988-06-24", end: "2015-08-01"}
+      - fullName: Marie-Ève Lévesque-Côté
+        givenNames: Marie-Ève
+        familyName: Lévesque-Côté
+        nameType: legal
+        validity: {start: "2015-08-01"}
+      - fullName: Maeve
+        nameType: preferred
+  - id: 019a5e10-3c4d-7a21-8b3e-6e7f8091a2b3
+    partyType: person
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+    names:
+      - fullName: Sukarno
+        nameType: legal
+organizations:
+  - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    partyType: organization
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+    names:
+      - {name: Boulangerie du Faubourg inc., nameType: legal, language: fr}
+      - {name: Le Faubourg, nameType: trade-name, language: fr}
+partyRoles:
+  - id: 019a5e10-3c4d-7a21-8b3e-3b4c5d6e7f80
+    partyId: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    role: employee
+    validity: {start: "2021-03-15"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+partyRelationships:
+  # As in Apache OFBiz, an employment reads from the employer to the employee (DMO-044).
+  - id: 019a5e10-3c4d-7a21-8b3e-7f8091a2b3c4
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    role: employer
+    relatedPartyId: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    relatedRole: employee
+    relationshipType: employment
+    validity: {start: "2021-03-15"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+postalAddresses:
+  - id: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    contactMechanismType: postal-address
+    civicNumber: "1200"
+    unit: "3"
+    street: rue Saint-Jean
+    locality: Québec
+    region: QC
+    postalCode: G1R 1S1
+    country: CA
+    language: fr
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+  - id: 019a5e10-3c4d-7a21-8b3e-8091a2b3c4d5
+    contactMechanismType: postal-address
+    addressLines: ["Rua Augusta 100"]
+    locality: Lisboa
+    postalCode: 1100-053
+    country: PT
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+telephoneNumbers:
+  - id: 019a5e10-3c4d-7a21-8b3e-91a2b3c4d5e6
+    contactMechanismType: telephone-number
+    number: "+14185550123"
+    extensionNumber: "204"
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+telephoneShortCodes:
+  - id: 019a5e10-3c4d-7a21-8b3e-f708192a3b4c
+    contactMechanismType: telephone-short-code
+    code: "211"
+    country: CA
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+emailAddresses:
+  - id: 019a5e10-3c4d-7a21-8b3e-a2b3c4d5e6f7
+    contactMechanismType: email-address
+    address: Info@Faubourg.example
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+partyContactMechanisms:
+  # The person and the organization share one address.
+  - id: 019a5e10-3c4d-7a21-8b3e-b3c4d5e6f708
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    contactMechanismId: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    purposes: [head-office, mailing]
+    validity: {start: "2019-04-01"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+  - id: 019a5e10-3c4d-7a21-8b3e-c4d5e6f70819
+    partyId: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    contactMechanismId: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    purposes: [work]
+    validity: {start: "2021-03-15"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+partyIdentifications:
+  - id: 019a5e10-3c4d-7a21-8b3e-d5e6f708192a
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    identificationScheme: ca-business-number
+    value: "123456789"
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+partyClassifications:
+  - id: 019a5e10-3c4d-7a21-8b3e-e6f708192a3b
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    conceptScheme: https://data.example.org/vocabularies/industries
+    code: "311811"
+    validity: {start: "2019-04-01"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"

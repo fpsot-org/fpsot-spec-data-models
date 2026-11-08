@@ -1,0 +1,453 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+id: https://fpsot.org/model/party
+name: party
+title: FPSOT Party model
+description: >-
+  LinkML model of the Party subject area of the FPSOT data models
+  specification: parties, persons, organizations, party roles, party
+  relationships, contact mechanisms, identifications and classifications.
+  It follows the party patterns of the universal data models, as Apache
+  OFBiz implements them, adapted to the FPSOT naming, data types,
+  vocabularies and internationalization specifications. Each element
+  cites its requirement IDs. The model says nothing about storage (DMO-003).
+version: 0.1.0
+license: Community-Spec-1.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dat: https://fpsot.org/model/data-types/
+  party: https://fpsot.org/model/party/
+  # Planned FPSOT concept schemes. They will be published under the FPSOT vocabularies
+  # specification, and their URIs are reserved under VOC-002 to VOC-004 (DMO-030).
+  partyTypes: https://fpsot.org/vocabularies/party-types/concepts/
+  contactMechanismTypes: https://fpsot.org/vocabularies/contact-mechanism-types/concepts/
+default_prefix: party
+default_range: string
+imports:
+  - linkml:types
+  # A copy of model/data-types.yaml, release v0.1.1 of the FPSOT data types specification (DMO-012).
+  - imports/data-types
+
+types:
+  CountryCode:
+    typeof: string
+    description: "An ISO 3166-1 alpha-2 country code, in the form of its issuer, such as CA. DMO-033, LOC-053."
+    pattern: "^[A-Z]{2}$"
+  LanguageTag:
+    typeof: string
+    description: "A BCP 47 language tag, such as fr or fr-CA. DMO-033, LOC-001."
+    pattern: "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$"
+  TelephoneNumberValue:
+    typeof: string
+    description: "A telephone number in the international E.164 form, with a plus sign and digits only, such as +15145550123. DMO-034."
+    pattern: "^\\+[1-9][0-9]{1,14}$"
+  EmailAddressValue:
+    typeof: string
+    description: "An email address as the person wrote it, with one @ and no spaces. DMO-034."
+    pattern: "^[^@\\s]+@[^@\\s]+$"
+  NameText:
+    typeof: string
+    description: "A name as written, with at least one character that is not a space. Any Unicode letter is allowed. DMO-032, LOC-051."
+    pattern: "\\S"
+
+slots:
+  partyId:
+    range: Party
+    required: true
+    description: "The party that the entity is about. NAM-040."
+  validity:
+    range: DateInterval
+    inlined: true
+    description: "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023."
+  nameType:
+    range: CodeValue
+    description: "The kind of name, such as legal or preferred, from a scheme that the deployment names. DMO-030, DMO-031."
+  language:
+    range: LanguageTag
+    description: "The language in which the text is written, when known. LOC-055."
+  contactMechanismId:
+    range: ContactMechanism
+    required: true
+    description: "The contact mechanism that the link ties to the party. DMO-045."
+
+classes:
+  PartyContainer:
+    tree_root: true
+    description: >-
+      A container that carries records of the Party subject area in one
+      document, one list per class, such as for a bulk exchange or a test.
+      It is not an entity: it has no identifier and no audit instants. It is
+      the root class of the generated JSON Schema. DMO-014.
+    attributes:
+      persons: {range: Person, multivalued: true, inlined_as_list: true, description: "Persons. DMO-041."}
+      organizations: {range: Organization, multivalued: true, inlined_as_list: true, description: "Organizations. DMO-042."}
+      partyRoles: {range: PartyRole, multivalued: true, inlined_as_list: true, description: "Party roles. DMO-043."}
+      partyRelationships: {range: PartyRelationship, multivalued: true, inlined_as_list: true, description: "Party relationships. DMO-044."}
+      postalAddresses: {range: PostalAddress, multivalued: true, inlined_as_list: true, description: "Postal addresses. DMO-033, DMO-045."}
+      telephoneNumbers: {range: TelephoneNumber, multivalued: true, inlined_as_list: true, description: "Telephone numbers. DMO-034, DMO-045."}
+      telephoneShortCodes: {range: TelephoneShortCode, multivalued: true, inlined_as_list: true, description: "Telephone short codes. DMO-034, DMO-045."}
+      emailAddresses: {range: EmailAddress, multivalued: true, inlined_as_list: true, description: "Email addresses. DMO-034, DMO-045."}
+      partyContactMechanisms: {range: PartyContactMechanism, multivalued: true, inlined_as_list: true, description: "Links between parties and contact mechanisms. DMO-045."}
+      partyIdentifications: {range: PartyIdentification, multivalued: true, inlined_as_list: true, description: "Party identifications. DMO-046."}
+      partyClassifications: {range: PartyClassification, multivalued: true, inlined_as_list: true, description: "Party classifications. DMO-047."}
+
+  Entity:
+    abstract: true
+    description: >-
+      Fields that every entity of the model has: an identifier, audit instants
+      and the extensions object. An entity is a class whose records exist on
+      their own and that other data can refer to. A value class, such as
+      PersonName or DateInterval, exists only inlined in an entity, so it has
+      no identifier and no audit instants. Departs from Apache OFBiz (DMO-006):
+      each entity has its own UUID key, never a key of several fields.
+      DMO-021, DMO-022, DMO-050, DMO-053.
+    attributes:
+      id:
+        identifier: true
+        range: Uuid
+        description: "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021."
+      createdAt:
+        range: Instant
+        description: "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050."
+      updatedAt:
+        range: Instant
+        description: "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050."
+      extensions:
+        range: Extensions
+        inlined: true
+        description: "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+
+  Extensions:
+    description: >-
+      The extensions object. Each member is named after the ISO 3166-1 or
+      ISO 3166-2 code of one jurisdiction, in lowerCamelCase, such as ca or
+      caQc. A jurisdiction with no such code nests its member in the member
+      of the nearest coded jurisdiction, such as caQc.montreal. Its value is
+      an object that the profile of that jurisdiction defines. The core model
+      accepts any member, so that a system can keep extensions it does not
+      know. The generated SHACL shape of this class is left open after
+      generation, as model/test-model.sh records. DMO-053, DMO-056.
+    extra_slots:
+      allowed: true
+
+  Party:
+    is_a: Entity
+    abstract: true
+    description: "A person or an organization. Each party is exactly one of the two. DMO-040."
+    attributes:
+      partyType:
+        range: PartyType
+        required: true
+        description: >-
+          Whether the party is a person or an organization: a code of the
+          PartyType enumeration, which each subclass fixes to one value.
+          DMO-040.
+
+  Person:
+    is_a: Party
+    description: "A human being. DMO-041."
+    slot_usage:
+      partyType:
+        # gen-shacl 1.12.1 refuses equals_string on an enum range, so a one-value enumeration fixes the code.
+        range: PersonPartyType
+    attributes:
+      names:
+        range: PersonName
+        multivalued: true
+        inlined_as_list: true
+        description: "The names of the person, each with its type and period. DMO-032."
+      birthDate:
+        range: CalendarDate
+        description: "The date of birth, when a process needs it. DMO-041."
+
+  PersonName:
+    description: >-
+      One name of a person, a value class inlined in its person, so it has no
+      identifier and no audit instants. Only the full name is required.
+      Departs from Apache OFBiz (DMO-006): OFBiz keeps one set of name parts
+      on Person, such as firstName and lastName, and a PartyNameHistory keyed
+      by the date of change. This model keeps several names, each with a type
+      and a period, and requires only the full name, because many names have
+      no first and last parts (LOC-050). DMO-021, DMO-032.
+    slots: [nameType, language, validity]
+    attributes:
+      fullName:
+        range: NameText
+        required: true
+        description: "The whole name, as the person writes it."
+      givenNames:
+        range: NameText
+        description: "The given names, only when a process needs the parts."
+      familyName:
+        range: NameText
+        description: "The family name, only when a process needs the parts."
+
+  Organization:
+    is_a: Party
+    description: "A group of people with a shared purpose, such as a business, a public body or an association. Apache OFBiz calls it PartyGroup. DMO-042."
+    slot_usage:
+      partyType:
+        # gen-shacl 1.12.1 refuses equals_string on an enum range, so a one-value enumeration fixes the code.
+        range: OrganizationPartyType
+    attributes:
+      names:
+        range: OrganizationName
+        multivalued: true
+        inlined_as_list: true
+        description: "The names of the organization, each with its type, language and period. DMO-042."
+
+  OrganizationName:
+    description: >-
+      One name of an organization, as registered or used. A value class inlined
+      in its organization, so it has no identifier and no audit instants.
+      DMO-021, DMO-035, DMO-042.
+    slots: [nameType, language, validity]
+    attributes:
+      name:
+        range: NameText
+        required: true
+        description: "The name as the organization writes it, never translated by the system."
+
+  PartyRole:
+    is_a: Entity
+    description: "A role that a party plays, such as applicant, employer or supplier. Departs from Apache OFBiz (DMO-006): the role has a period, and the role is a code instead of a RoleType record. DMO-043."
+    slots: [partyId, validity]
+    attributes:
+      role:
+        range: CodeValue
+        required: true
+        description: "The role, from a scheme of party roles that the deployment names. DMO-030, DMO-031."
+
+  PartyRelationship:
+    is_a: Entity
+    description: "A relationship between two parties, each in a role, such as an employee and an employer. DMO-044."
+    slots: [partyId, validity]
+    attributes:
+      role:
+        range: CodeValue
+        required: true
+        description: "The role of the first party in the relationship. DMO-030."
+      relatedPartyId:
+        range: Party
+        required: true
+        description: "The second party of the relationship."
+      relatedRole:
+        range: CodeValue
+        required: true
+        description: "The role of the second party in the relationship. DMO-030."
+      relationshipType:
+        range: CodeValue
+        required: true
+        description: "The kind of relationship, from a scheme that the deployment names. DMO-030, DMO-031."
+
+  ContactMechanism:
+    is_a: Entity
+    abstract: true
+    description: "A way to reach a party: a postal address, a telephone number, a telephone short code or an email address. Apache OFBiz calls it ContactMech. DMO-045."
+    attributes:
+      contactMechanismType:
+        range: ContactMechanismType
+        required: true
+        description: >-
+          The kind of contact mechanism: a code of the ContactMechanismType
+          enumeration, which each subclass fixes to one value. DMO-045.
+
+  PostalAddress:
+    is_a: ContactMechanism
+    description: >-
+      A postal address in separate fields, kept as written. Only the country is
+      required. Departs from Apache OFBiz (DMO-006): OFBiz holds address1 and
+      address2, a numeric houseNumber, recipient names, and references to Geo
+      records for the city, the region and the country. This model keeps each
+      part as written, with the region and the country as codes in the form of
+      their issuer, and holds no recipient name, because each country orders
+      and writes its addresses in its own way (LOC-053, DAT-066). DMO-033,
+      LOC-055.
+    slots: [language]
+    slot_usage:
+      contactMechanismType:
+        # gen-shacl 1.12.1 refuses equals_string on an enum range, so a one-value enumeration fixes the code.
+        range: PostalAddressMechanismType
+    attributes:
+      civicNumber:
+        description: "The civic number, with its suffix, such as 1200 or 12A."
+      unit:
+        description: "The apartment, suite or unit, as written."
+      street:
+        description: "The street name with its type and direction, as written, such as rue Principale Ouest."
+      addressLines:
+        multivalued: true
+        description: "Other lines of the address, in order, for countries whose parts do not fit the other fields."
+      locality:
+        description: "The municipality or locality, never translated."
+      region:
+        description: "The province, state or other region, in the form of its issuer, such as QC."
+      postalCode:
+        description: "The postal code in the form of its issuer, such as H2X 1Y4. Some countries have none."
+      country:
+        range: CountryCode
+        required: true
+        description: "The country, as an ISO 3166-1 alpha-2 code."
+
+  TelephoneNumber:
+    is_a: ContactMechanism
+    description: >-
+      A telephone number in the international form. Departs from Apache OFBiz
+      (DMO-006): OFBiz TelecomNumber splits the country code, the area code and
+      the number, and keeps the extension on PartyContactMech. This model keeps
+      one E.164 string, because not every numbering plan has area codes, and
+      keeps the extension with the number. DMO-034.
+    slot_usage:
+      contactMechanismType:
+        # gen-shacl 1.12.1 refuses equals_string on an enum range, so a one-value enumeration fixes the code.
+        range: TelephoneNumberMechanismType
+    attributes:
+      number:
+        range: TelephoneNumberValue
+        required: true
+        description: "The number in E.164 form. The leading plus sign is the notation of ITU-T E.123."
+      extensionNumber:
+        pattern: "^[0-9]{1,10}$"
+        description: "The internal extension, digits only."
+
+  TelephoneShortCode:
+    is_a: ContactMechanism
+    description: >-
+      A short code that people dial within one country, such as 211 or 311.
+      It has no E.164 form, so it is a separate kind of contact mechanism.
+      DMO-034.
+    slot_usage:
+      contactMechanismType:
+        # gen-shacl 1.12.1 refuses equals_string on an enum range, so a one-value enumeration fixes the code.
+        range: TelephoneShortCodeMechanismType
+    attributes:
+      code:
+        required: true
+        pattern: "^[0-9]{2,8}$"
+        description: "The digits that people dial, such as 211."
+      country:
+        range: CountryCode
+        required: true
+        description: "The country whose numbering plan defines the code, as an ISO 3166-1 alpha-2 code."
+
+  EmailAddress:
+    is_a: ContactMechanism
+    description: "An email address. DMO-034."
+    slot_usage:
+      contactMechanismType:
+        # gen-shacl 1.12.1 refuses equals_string on an enum range, so a one-value enumeration fixes the code.
+        range: EmailAddressMechanismType
+    attributes:
+      address:
+        range: EmailAddressValue
+        required: true
+        description: "The address, kept as the person wrote it."
+
+  PartyContactMechanism:
+    is_a: Entity
+    description: "Links a party to a contact mechanism, for some purposes and a period. DMO-045."
+    slots: [partyId, contactMechanismId, validity]
+    attributes:
+      purposes:
+        range: CodeValue
+        multivalued: true
+        description: >-
+          What the party uses the mechanism for, such as billing or mailing,
+          from a scheme that the deployment names. Departs from Apache OFBiz
+          (DMO-006): OFBiz keeps each purpose in its own PartyContactMechPurpose
+          record, with its own period. Here every purpose shares the period of
+          the link, and a purpose with another period needs another link, so
+          that one record holds one period. DMO-030, DMO-031.
+
+  PartyIdentification:
+    is_a: Entity
+    description: >-
+      An identifier that a body issued for a party, such as a business number.
+      Departs from Apache OFBiz (DMO-006): OFBiz keys PartyIdentification by
+      the party and the identification type, with no period and no issuer, so
+      a party holds one identifier per type. This model gives each
+      identification its own id, a period and an optional issuer, because an
+      identifier can expire or be replaced while the party stays the same.
+      DMO-046.
+    slots: [partyId, validity]
+    attributes:
+      identificationScheme:
+        range: CodeValue
+        required: true
+        description: "The identification scheme, from a scheme of identification schemes that the deployment names. DMO-031, DMO-046."
+      value:
+        required: true
+        pattern: "\\S"
+        description: "The identifier, in the exact form of its issuer. DAT-066."
+      issuerId:
+        range: Party
+        description: "The organization that issued the identifier, when the model holds it."
+
+  PartyClassification:
+    is_a: Entity
+    description: >-
+      Places a party in a category of a controlled vocabulary, such as an
+      industry. Departs from Apache OFBiz (DMO-006): OFBiz links a party to a
+      PartyClassificationGroup record. This model holds the URI of a concept
+      scheme and a code, so that categories come from published vocabularies
+      (DMO-030). DMO-047.
+    slots: [partyId, validity]
+    attributes:
+      conceptScheme:
+        range: uri
+        required: true
+        description: "The URI of the concept scheme. DMO-047."
+      code:
+        required: true
+        pattern: "\\S"
+        description: "The code of the concept in that scheme, in the form of the scheme. VOC-065."
+
+
+enums:
+  PartyType:
+    description: >-
+      The two kinds of party. The model defines them, so they change only with
+      a major version. Each meaning is a concept of the planned FPSOT scheme
+      https://fpsot.org/vocabularies/party-types, which will be published under
+      the FPSOT vocabularies specification; its URIs are reserved under VOC-002
+      to VOC-004. DMO-030, DMO-040.
+    permissible_values:
+      person: {description: A human being., meaning: partyTypes:person}
+      organization: {description: A group of people with a shared purpose., meaning: partyTypes:organization}
+  ContactMechanismType:
+    description: >-
+      The four kinds of contact mechanism of this version. Each meaning is a
+      concept of the planned FPSOT scheme
+      https://fpsot.org/vocabularies/contact-mechanism-types, which will be
+      published under the FPSOT vocabularies specification; its URIs are
+      reserved under VOC-002 to VOC-004. DMO-030, DMO-045.
+    permissible_values:
+      postal-address: {description: A postal address., meaning: contactMechanismTypes:postal-address}
+      telephone-number: {description: A telephone number in E.164 form., meaning: contactMechanismTypes:telephone-number}
+      telephone-short-code: {description: A short code dialed within one country., meaning: contactMechanismTypes:telephone-short-code}
+      email-address: {description: An email address., meaning: contactMechanismTypes:email-address}
+
+  # One-value enumerations that fix the type code of each subclass, with the same meaning as in the full enumeration.
+  PersonPartyType:
+    description: "The party type of a person. DMO-040."
+    permissible_values:
+      person: {description: A human being., meaning: partyTypes:person}
+  OrganizationPartyType:
+    description: "The party type of an organization. DMO-040."
+    permissible_values:
+      organization: {description: A group of people with a shared purpose., meaning: partyTypes:organization}
+  PostalAddressMechanismType:
+    description: "The contact mechanism type of a postal address. DMO-045."
+    permissible_values:
+      postal-address: {description: A postal address., meaning: contactMechanismTypes:postal-address}
+  TelephoneNumberMechanismType:
+    description: "The contact mechanism type of a telephone number. DMO-045."
+    permissible_values:
+      telephone-number: {description: A telephone number in E.164 form., meaning: contactMechanismTypes:telephone-number}
+  TelephoneShortCodeMechanismType:
+    description: "The contact mechanism type of a telephone short code. DMO-045."
+    permissible_values:
+      telephone-short-code: {description: A short code dialed within one country., meaning: contactMechanismTypes:telephone-short-code}
+  EmailAddressMechanismType:
+    description: "The contact mechanism type of an email address. DMO-045."
+    permissible_values:
+      email-address: {description: An email address., meaning: contactMechanismTypes:email-address}

@@ -1,0 +1,96 @@
+= Codes, noms et coordonnées
+include::_fpsot-terms.adoc[]
+
+Ces règles rattachent les codes d’un modèle à des vocabulaires contrôlés.
+Elles appliquent aussi la spécification de la {abbr-fpsot-first} sur l’internationalisation aux noms, aux adresses et aux autres coordonnées.
+
+== Codes
+
+[[DMO-030]]
+*DMO-030.* Un attribut qui contient un type, un rôle, un but ou un statut DOIT contenir un code.
+Un vocabulaire contrôlé DOIT définir ce code, selon VOC-060 ou VOC-065.
+Le modèle NE DOIT PAS définir d’entité pour une telle liste de types.
+Apache OFBiz garde ces listes dans des entités de type, comme `RoleType`, avec un type parent pour la hiérarchie.
+Dans un modèle de {abbr-fpsot}, chaque liste est un schéma de concepts, et sa hiérarchie emploie `skos:broader` selon VOC-021.
+Un schéma porte des libellés bilingues, des définitions et des versions, ce qui manque à une table de types.
+
+Dans le modèle Party, les attributs `partyType` et `contactMechanismType` prennent leurs valeurs dans les énumérations `PartyType` et `ContactMechanismType`.
+Chaque valeur a un {abbr-uri-first} `meaning` dans un schéma prévu de la {abbr-fpsot}.
+Un exemple est `https://fpsot.org/vocabularies/party-types/concepts/person`.
+La {abbr-fpsot} publiera ces schémas comme schémas de concepts link:https://www.w3.org/TR/skos-reference/[SKOS], selon la spécification sur les vocabulaires.
+VOC-002 à VOC-004 réservent déjà leurs adresses {abbr-uri}.
+
+[[DMO-031]]
+*DMO-031.* Quand les codes varient selon l’institution, le modèle de base PEUT donner le type `CodeValue` à l’attribut, selon VOC-065.
+La description de l’attribut DOIT alors nommer la sorte de schéma attendue, comme un schéma de rôles de parties.
+Un déploiement DOIT nommer le schéma qu’il emploie pour chacun de ces attributs.
+Un profil PEUT restreindre l’attribut aux codes de ce schéma, sous forme d’énumération selon VOC-060.
+Chaque institution a ses propres rôles et buts, et une seule liste fixe ne conviendrait pas à toutes.
+
+== Noms des personnes
+
+[[DMO-032]]
+*DMO-032.* Un nom de personne DOIT avoir un attribut `fullName` obligatoire, avec le nom entier tel que la personne l’écrit.
+Ses parties, `givenNames` et `familyName`, DOIVENT être facultatives, selon LOC-050.
+Une personne PEUT avoir plusieurs noms, chacun avec un type, comme légal ou usuel, et une période.
+Un modèle NE DOIT PAS exiger de titre de civilité, selon LOC-052.
+Un attribut de nom NE DOIT PAS avoir de motif ni de limite qui refuse un nom que LOC-051 accepte.
+Bien des personnes n’ont qu’un seul nom, et le nom légal d’une personne peut changer avec le temps.
+
+== Adresses postales
+
+[[DMO-033]]
+*DMO-033.* Une adresse postale DOIT être une entité aux attributs distincts, selon LOC-053.
+Seul l’attribut `country` DOIT être obligatoire, sous forme de code alpha-2 de l’link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166-1].
+La région et le code postal DOIVENT garder la forme de leur émetteur, selon DAT-066, et DOIVENT être facultatifs.
+Le modèle NE DOIT PAS garder l’adresse seulement mise en page, ni en traduire une partie, selon LOC-055.
+Chaque pays nomme et ordonne à sa façon les parties d’une adresse.
+Un produit met l’adresse en forme pour l’affichage, selon LOC-054.
+
+== Numéros de téléphone et adresses de courriel
+
+[[DMO-034]]
+*DMO-034.* Un système DOIT échanger les numéros de téléphone dans la forme internationale de link:https://www.itu.int/rec/T-REC-E.164[UIT-T E.164], comme `+14185550123`.
+Le `+` initial suit la notation de link:https://www.itu.int/rec/T-REC-E.123[UIT-T E.123], et un numéro de poste DOIT être un attribut distinct.
+Un numéro abrégé sans forme E.164, comme le 211 ou le 311, DOIT plutôt être un `TelephoneShortCode`.
+Un système DOIT échanger une adresse de courriel telle quelle, et NE DOIT PAS changer la casse avant le `@`.
+Le link:https://www.rfc-editor.org/info/rfc5321[RFC 5321] permet que cette partie tienne compte de la casse.
+Une seule forme de numéro permet à tout système de le composer et de le comparer.
+
+== Noms des organisations
+
+[[DMO-035]]
+*DMO-035.* Un nom d’organisation DOIT être une simple chaîne, gardée telle que l’organisation l’a enregistrée ou l’emploie.
+Une organisation aux noms en plusieurs langues DOIT avoir une entrée de nom par langue, avec son étiquette de langue.
+Chaque entrée PEUT aussi porter un type, comme nom légal ou nom commercial, et une période.
+Chaque version linguistique d’un nom légal est un fait enregistré distinct, et le modèle la garde donc telle quelle.
+`MultilingualText` laisserait croire à une traduction qu’un système pourrait produire.
+
+== Données sensibles
+
+[[DMO-036]]
+*DMO-036.* Un modèle NE DOIT PAS rendre obligatoire un attribut sur une personne, sauf si chaque usage en a besoin.
+C’est le cas d’une date de naissance, d’un genre ou d’un sexe.
+Chaque processus qui a besoin d’un tel attribut DOIT quand même pouvoir l’exiger dans son propre profil.
+Un attribut obligatoire force chaque système à recueillir la donnée, même quand un service n’en a pas besoin.
+
+== Références
+
+=== Références normatives
+
+* link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166 Country Codes], ISO. link:https://web.archive.org/web/20261027022740/https://www.iso.org/iso-3166-country-codes.html[Copie archivée]
+* link:https://www.itu.int/rec/T-REC-E.123[Recommendation ITU-T E.123, Notation for national and international telephone numbers, e-mail addresses and web addresses], ITU, 2001-02. link:https://web.archive.org/web/20260913011635/https://www.itu.int/rec/T-REC-E.123[Copie archivée]
+* link:https://www.itu.int/rec/T-REC-E.164[Recommendation ITU-T E.164, The international public telecommunication numbering plan], ITU, 2010-11. link:https://web.archive.org/web/20261004075302/https://www.itu.int/rec/T-REC-E.164[Copie archivée]
+
+=== Références informatives
+
+* link:https://www.w3.org/TR/skos-reference/[SKOS Simple Knowledge Organization System Reference], W3C, Recommendation, 2009-08-18. link:https://web.archive.org/web/20261020031508/https://www.w3.org/TR/skos-reference/[Copie archivée]
+* link:https://www.rfc-editor.org/info/rfc5321[RFC 5321, Simple Mail Transfer Protocol], IETF, 2008-10. link:https://web.archive.org/web/20261027022540/https://www.rfc-editor.org/info/rfc5321/[Copie archivée]
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-07 |Première version.
+|===

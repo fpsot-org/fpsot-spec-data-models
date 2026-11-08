@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+# Exact releases of the tools that generate and check the Party model (DMO-016).
+# test-model.sh fails when the installed linkml or linkml-runtime differs.
+# Install with: pip install -r model/requirements.txt
+linkml==1.12.1
+linkml-runtime==1.12.1
+rdflib==7.6.0
+SQLAlchemy==2.1.6
+pyshacl==0.40.2
+jsonschema==4.26.0

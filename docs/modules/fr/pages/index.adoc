@@ -1,15 +1,150 @@
-= Guide
-:page-type: explanation
+= Bâtir un petit exemple Party
+:page-type: how-to
 include::_fpsot-terms.adoc[]
 
-Cette page explique la spécification aux personnes qui l’adoptent.
-Chaque page de guide a un seul type.
-C’est un tutoriel, un guide pratique, une référence ou une explication.
+Ce guide bâtit un petit ensemble d’enregistrements Party et les vérifie avec le validateur link:https://linkml.io/linkml/generators/index.html[LinkML].
+L’ensemble contient une personne, une organisation, un rôle, une adresse postale et une extension pour le Québec.
+Le fichier final est `model/examples/profile/valid/party-example.yaml`.
+
+== Installer les outils
+
+Installez les outils link:https://linkml.io/linkml/generators/index.html[LinkML] aux versions que fixe le dépôt, selon DMO-016 :
+
+[source,shell]
+----
+python3 -m venv .venv
+.venv/bin/pip install -r model/requirements.txt
+export PATH="$PWD/.venv/bin:$PATH"
+----
+
+== Ajouter une personne
+
+Une personne a un ou plusieurs noms.
+Seul `fullName` est obligatoire, et les parties sont facultatives, selon DMO-032.
+
+[source,yaml]
+----
+persons:
+  - id: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    partyType: person
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+    names:
+      - fullName: Marie-Ève Lévesque-Côté
+        givenNames: Marie-Ève
+        familyName: Lévesque-Côté
+        nameType: legal
+        language: fr
+----
+
+== Ajouter une organisation avec une extension pour le Québec
+
+L’organisation garde son nom tel qu’il est enregistré, selon DMO-035.
+Le champ qu’ajoute le Québec va dans le membre `caQc` d’`extensions`, selon DMO-053.
+Il ne va jamais à côté des champs de base, selon DMO-054.
+
+[source,yaml]
+----
+organizations:
+  - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    partyType: organization
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:05:00Z"
+    names:
+      - name: Boulangerie du Faubourg inc.
+        nameType: legal
+        language: fr
+        validity: {start: "2019-04-01"}
+    extensions:
+      caQc:
+        administrativeRegion: "03"
+----
+
+L’exemple de profil `model/examples/ca-qc-profile.yaml` définit `caQc` et vérifie que la région est un code de deux chiffres.
+Le modèle de base garde le membre sans le vérifier, selon DMO-056.
+
+== Donner un rôle à l’organisation
+
+Un rôle est une entité à part, avec un code et une période, selon DMO-043.
+La période comprend son début, mais pas sa fin, selon DAT-023.
+
+[source,yaml]
+----
+partyRoles:
+  - id: 019a5e10-3c4d-7a21-8b3e-3b4c5d6e7f80
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    role: permit-holder
+    validity: {start: "2026-11-07", end: "2027-11-07"}
+    createdAt: "2026-11-07T14:10:00Z"
+    updatedAt: "2026-11-07T14:10:00Z"
+----
+
+== Ajouter une adresse postale et la relier
+
+L’adresse est un moyen de contact, aux champs distincts gardés tels qu’écrits, selon DMO-033.
+Un lien distinct la rattache à l’organisation, avec des buts et une période, selon DMO-045.
+
+[source,yaml]
+----
+postalAddresses:
+  - id: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    contactMechanismType: postal-address
+    civicNumber: "1200"
+    street: rue Saint-Jean
+    locality: Québec
+    region: QC
+    postalCode: G1R 1S1
+    country: CA
+    language: fr
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+partyContactMechanisms:
+  - id: 019a5e10-3c4d-7a21-8b3e-5d6e7f8091a2
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    contactMechanismId: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    purposes: [mailing, head-office]
+    validity: {start: "2019-04-01"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+----
+
+== Vérifier les enregistrements
+
+Placez les quatre parties dans un seul fichier.
+Validez-le ensuite avec le profil du Québec et sa classe conteneur :
+
+[source,shell]
+----
+linkml-validate -s model/examples/ca-qc-profile.yaml -C QuebecPartyContainer party-example.yaml
+----
+
+Le validateur répond `No issues found`.
+Il refuse une région écrite en toutes lettres et un rôle avec `fromDate`.
+Il refuse aussi un champ comme `qcAdministrativeRegion` à côté des champs de base.
+
+== Vérifier tout le modèle
+
+Lancez le script du dépôt après chaque changement du modèle :
+
+[source,shell]
+----
+bash model/test-model.sh
+----
+
+Il vérifie les exemples avec LinkML, le JSON Schema généré et les formes SHACL générées.
+Il compare aussi chaque fichier généré à une nouvelle génération, selon DMO-015.
+Après un changement de `model/party.yaml`, lancez-le avec `UPDATE=true`, puis archivez les fichiers générés avec la source.
+
+== Références
+
+=== Références informatives
+
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Copie archivée]
 
 == Historique du document
 
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Changement
-|0.1.0 |2026-11-03 |Première version.
+|0.1.0 |2026-11-07 |Première version.
 |===

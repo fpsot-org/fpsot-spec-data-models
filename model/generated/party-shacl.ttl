@@ -1,0 +1,1099 @@
+@prefix contactMechanismTypes: <https://fpsot.org/vocabularies/contact-mechanism-types/concepts/> .
+@prefix partyTypes: <https://fpsot.org/vocabularies/party-types/concepts/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dat: <https://fpsot.org/model/data-types/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix party: <https://fpsot.org/model/party/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+dat:DateInterval a sh:NodeShape ;
+	rdfs:comment "A span between two dates. The end is excluded and may be absent. DAT-023." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n2 ;
+	sh:property _:c14n106 , _:c14n61 ;
+	sh:targetClass dat:DateInterval .
+party:ContactMechanism a sh:NodeShape ;
+	rdfs:comment "A way to reach a party: a postal address, a telephone number, a telephone short code or an email address. Apache OFBiz calls it ContactMech. DMO-045." ;
+	sh:closed false ;
+	sh:ignoredProperties _:c14n34 ;
+	sh:property _:c14n129 , _:c14n140 , _:c14n153 , _:c14n22 , _:c14n36 ;
+	sh:targetClass party:ContactMechanism .
+party:EmailAddress a sh:NodeShape ;
+	rdfs:comment "An email address. DMO-034." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n91 ;
+	sh:property _:c14n0 , _:c14n120 , _:c14n155 , _:c14n159 , _:c14n168 , _:c14n75 ;
+	sh:targetClass party:EmailAddress .
+party:Entity a sh:NodeShape ;
+	rdfs:comment "Fields that every entity of the model has: an identifier, audit instants and the extensions object. An entity is a class whose records exist on their own and that other data can refer to. A value class, such as PersonName or DateInterval, exists only inlined in an entity, so it has no identifier and no audit instants. Departs from Apache OFBiz (DMO-006): each entity has its own UUID key, never a key of several fields. DMO-021, DMO-022, DMO-050, DMO-053." ;
+	sh:closed false ;
+	sh:ignoredProperties _:c14n57 ;
+	sh:property _:c14n110 , _:c14n37 , _:c14n51 , _:c14n8 ;
+	sh:targetClass party:Entity .
+party:Extensions a sh:NodeShape ;
+	rdfs:comment "The extensions object. Each member is named after the ISO 3166-1 or ISO 3166-2 code of one jurisdiction, in lowerCamelCase, such as ca or caQc. A jurisdiction with no such code nests its member in the member of the nearest coded jurisdiction, such as caQc.montreal. Its value is an object that the profile of that jurisdiction defines. The core model accepts any member, so that a system can keep extensions it does not know. The generated SHACL shape of this class is left open after generation, as model/test-model.sh records. DMO-053, DMO-056." ;
+	sh:targetClass party:Extensions .
+party:Organization a sh:NodeShape ;
+	rdfs:comment "A group of people with a shared purpose, such as a business, a public body or an association. Apache OFBiz calls it PartyGroup. DMO-042." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n154 ;
+	sh:property _:c14n167 , _:c14n170 , _:c14n19 , _:c14n33 , _:c14n5 , _:c14n67 ;
+	sh:targetClass party:Organization .
+party:OrganizationName a sh:NodeShape ;
+	rdfs:comment "One name of an organization, as registered or used. A value class inlined in its organization, so it has no identifier and no audit instants. DMO-021, DMO-035, DMO-042." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n115 ;
+	sh:property _:c14n130 , _:c14n152 , _:c14n40 , _:c14n65 ;
+	sh:targetClass party:OrganizationName .
+party:Party a sh:NodeShape ;
+	rdfs:comment "A person or an organization. Each party is exactly one of the two. DMO-040." ;
+	sh:closed false ;
+	sh:ignoredProperties _:c14n93 ;
+	sh:property _:c14n108 , _:c14n117 , _:c14n156 , _:c14n32 , _:c14n87 ;
+	sh:targetClass party:Party .
+party:PartyClassification a sh:NodeShape ;
+	rdfs:comment "Places a party in a category of a controlled vocabulary, such as an industry. Departs from Apache OFBiz (DMO-006): OFBiz links a party to a PartyClassificationGroup record. This model holds the URI of a concept scheme and a code, so that categories come from published vocabularies (DMO-030). DMO-047." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n118 ;
+	sh:property _:c14n133 , _:c14n142 , _:c14n26 , _:c14n35 , _:c14n43 , _:c14n46 , _:c14n56 , _:c14n73 ;
+	sh:targetClass party:PartyClassification .
+party:PartyContactMechanism a sh:NodeShape ;
+	rdfs:comment "Links a party to a contact mechanism, for some purposes and a period. DMO-045." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n21 ;
+	sh:property _:c14n102 , _:c14n136 , _:c14n144 , _:c14n172 , _:c14n52 , _:c14n58 , _:c14n86 , _:c14n98 ;
+	sh:targetClass party:PartyContactMechanism .
+party:PartyContainer a sh:NodeShape ;
+	rdfs:comment "A container that carries records of the Party subject area in one document, one list per class, such as for a bulk exchange or a test. It is not an entity: it has no identifier and no audit instants. It is the root class of the generated JSON Schema. DMO-014." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n1 ;
+	sh:property _:c14n121 , _:c14n132 , _:c14n141 , _:c14n38 , _:c14n60 , _:c14n64 , _:c14n78 , _:c14n79 , _:c14n80 , _:c14n83 , _:c14n97 ;
+	sh:targetClass party:PartyContainer .
+party:PartyIdentification a sh:NodeShape ;
+	rdfs:comment "An identifier that a body issued for a party, such as a business number. Departs from Apache OFBiz (DMO-006): OFBiz keys PartyIdentification by the party and the identification type, with no period and no issuer, so a party holds one identifier per type. This model gives each identification its own id, a period and an optional issuer, because an identifier can expire or be replaced while the party stays the same. DMO-046." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n137 ;
+	sh:property _:c14n116 , _:c14n147 , _:c14n157 , _:c14n25 , _:c14n29 , _:c14n76 , _:c14n82 , _:c14n89 , _:c14n92 ;
+	sh:targetClass party:PartyIdentification .
+party:PartyRelationship a sh:NodeShape ;
+	rdfs:comment "A relationship between two parties, each in a role, such as an employee and an employer. DMO-044." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n103 ;
+	sh:property _:c14n10 , _:c14n112 , _:c14n122 , _:c14n135 , _:c14n151 , _:c14n163 , _:c14n169 , _:c14n23 , _:c14n4 , _:c14n41 ;
+	sh:targetClass party:PartyRelationship .
+party:PartyRole a sh:NodeShape ;
+	rdfs:comment "A role that a party plays, such as applicant, employer or supplier. Departs from Apache OFBiz (DMO-006): the role has a period, and the role is a code instead of a RoleType record. DMO-043." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n31 ;
+	sh:property _:c14n109 , _:c14n124 , _:c14n128 , _:c14n14 , _:c14n143 , _:c14n44 , _:c14n71 ;
+	sh:targetClass party:PartyRole .
+party:Person a sh:NodeShape ;
+	rdfs:comment "A human being. DMO-041." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n50 ;
+	sh:property _:c14n123 , _:c14n53 , _:c14n55 , _:c14n62 , _:c14n69 , _:c14n94 , _:c14n99 ;
+	sh:targetClass party:Person .
+party:PersonName a sh:NodeShape ;
+	rdfs:comment "One name of a person, a value class inlined in its person, so it has no identifier and no audit instants. Only the full name is required. Departs from Apache OFBiz (DMO-006): OFBiz keeps one set of name parts on Person, such as firstName and lastName, and a PartyNameHistory keyed by the date of change. This model keeps several names, each with a type and a period, and requires only the full name, because many names have no first and last parts (LOC-050). DMO-021, DMO-032." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n171 ;
+	sh:property _:c14n12 , _:c14n148 , _:c14n149 , _:c14n15 , _:c14n158 , _:c14n45 ;
+	sh:targetClass party:PersonName .
+party:PostalAddress a sh:NodeShape ;
+	rdfs:comment "A postal address in separate fields, kept as written. Only the country is required. Departs from Apache OFBiz (DMO-006): OFBiz holds address1 and address2, a numeric houseNumber, recipient names, and references to Geo records for the city, the region and the country. This model keeps each part as written, with the region and the country as codes in the form of their issuer, and holds no recipient name, because each country orders and writes its addresses in its own way (LOC-053, DAT-066). DMO-033, LOC-055." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n66 ;
+	sh:property _:c14n100 , _:c14n113 , _:c14n126 , _:c14n134 , _:c14n160 , _:c14n24 , _:c14n54 , _:c14n7 , _:c14n72 , _:c14n74 , _:c14n81 , _:c14n85 , _:c14n9 , _:c14n90 ;
+	sh:targetClass party:PostalAddress .
+party:TelephoneNumber a sh:NodeShape ;
+	rdfs:comment "A telephone number in the international form. Departs from Apache OFBiz (DMO-006): OFBiz TelecomNumber splits the country code, the area code and the number, and keeps the extension on PartyContactMech. This model keeps one E.164 string, because not every numbering plan has area codes, and keeps the extension with the number. DMO-034." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n18 ;
+	sh:property _:c14n104 , _:c14n11 , _:c14n13 , _:c14n166 , _:c14n20 , _:c14n30 , _:c14n6 ;
+	sh:targetClass party:TelephoneNumber .
+party:TelephoneShortCode a sh:NodeShape ;
+	rdfs:comment "A short code that people dial within one country, such as 211 or 311. It has no E.164 form, so it is a separate kind of contact mechanism. DMO-034." ;
+	sh:closed true ;
+	sh:ignoredProperties _:c14n138 ;
+	sh:property _:c14n150 , _:c14n165 , _:c14n3 , _:c14n39 , _:c14n48 , _:c14n63 , _:c14n84 ;
+	sh:targetClass party:TelephoneShortCode .
+_:c14n0 sh:description "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045." ;
+	sh:in _:c14n47 ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:order 1 ;
+	sh:path party:contactMechanismType .
+_:c14n1 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n10 sh:datatype xsd:string ;
+	sh:description "The role of the first party in the relationship. DMO-030." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:role ;
+	sh:pattern "^[a-z0-9]+(-[a-z0-9]+)*$" .
+_:c14n100 sh:datatype xsd:string ;
+	sh:description "The apartment, suite or unit, as written." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:unit .
+_:c14n101 rdf:first partyTypes:person ;
+	rdf:rest _:c14n119 .
+_:c14n102 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 6 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n103 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n104 sh:datatype xsd:string ;
+	sh:description "The number in E.164 form. The leading plus sign is the notation of ITU-T E.123." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 0 ;
+	sh:path party:number ;
+	sh:pattern "^\\+[1-9][0-9]{1,14}$" .
+_:c14n105 rdf:first party:purposes ;
+	rdf:rest _:c14n194 .
+_:c14n106 sh:datatype xsd:date ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path dat:end ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" .
+_:c14n107 rdf:first partyTypes:person ;
+	rdf:rest rdf:nil .
+_:c14n108 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n109 sh:class dat:DateInterval ;
+	sh:description "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 1 ;
+	sh:path party:validity .
+_:c14n11 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n110 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 3 ;
+	sh:path party:extensions .
+_:c14n111 rdf:first party:validity ;
+	rdf:rest _:c14n164 .
+_:c14n112 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 8 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n113 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 13 ;
+	sh:path party:extensions .
+_:c14n114 rdf:first contactMechanismTypes:postal-address ;
+	rdf:rest rdf:nil .
+_:c14n115 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n116 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n117 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n118 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n119 rdf:first partyTypes:organization ;
+	rdf:rest rdf:nil .
+_:c14n12 sh:class dat:DateInterval ;
+	sh:description "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 2 ;
+	sh:path party:validity .
+_:c14n120 sh:datatype xsd:string ;
+	sh:description "The address, kept as the person wrote it." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 0 ;
+	sh:path party:address ;
+	sh:pattern "^[^@\\s]+@[^@\\s]+$" .
+_:c14n121 sh:class party:PartyIdentification ;
+	sh:description "Party identifications. DMO-046." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 9 ;
+	sh:path party:partyIdentifications .
+_:c14n122 sh:datatype xsd:string ;
+	sh:description "The kind of relationship, from a scheme that the deployment names. DMO-030, DMO-031." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:relationshipType ;
+	sh:pattern "^[a-z0-9]+(-[a-z0-9]+)*$" .
+_:c14n123 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 6 ;
+	sh:path party:extensions .
+_:c14n124 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n125 rdf:first contactMechanismTypes:email-address ;
+	rdf:rest rdf:nil .
+_:c14n126 sh:description "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045." ;
+	sh:in _:c14n114 ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:order 9 ;
+	sh:path party:contactMechanismType .
+_:c14n127 rdf:first party:contactMechanismType ;
+	rdf:rest _:c14n197 .
+_:c14n128 sh:datatype xsd:string ;
+	sh:description "The role, from a scheme of party roles that the deployment names. DMO-030, DMO-031." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:role ;
+	sh:pattern "^[a-z0-9]+(-[a-z0-9]+)*$" .
+_:c14n129 sh:description "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045." ;
+	sh:in _:c14n16 ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:order 0 ;
+	sh:path party:contactMechanismType .
+_:c14n13 sh:datatype xsd:string ;
+	sh:description "The internal extension, digits only." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:extensionNumber ;
+	sh:pattern "^[0-9]{1,10}$" .
+_:c14n130 sh:class dat:DateInterval ;
+	sh:description "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 2 ;
+	sh:path party:validity .
+_:c14n131 rdf:first party:unit ;
+	rdf:rest rdf:nil .
+_:c14n132 sh:class party:Person ;
+	sh:description "Persons. DMO-041." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 0 ;
+	sh:path party:persons .
+_:c14n133 sh:description "The URI of the concept scheme. DMO-047." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 2 ;
+	sh:path party:conceptScheme .
+_:c14n134 sh:datatype xsd:string ;
+	sh:description "Other lines of the address, in order, for countries whose parts do not fit the other fields." ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:addressLines .
+_:c14n135 sh:datatype xsd:string ;
+	sh:description "The role of the second party in the relationship. DMO-030." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:relatedRole ;
+	sh:pattern "^[a-z0-9]+(-[a-z0-9]+)*$" .
+_:c14n136 sh:class dat:DateInterval ;
+	sh:description "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 2 ;
+	sh:path party:validity .
+_:c14n137 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n138 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n139 rdf:first contactMechanismTypes:telephone-short-code ;
+	rdf:rest rdf:nil .
+_:c14n14 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n140 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n141 sh:class party:TelephoneNumber ;
+	sh:description "Telephone numbers. DMO-034, DMO-045." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 5 ;
+	sh:path party:telephoneNumbers .
+_:c14n142 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n143 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 6 ;
+	sh:path party:extensions .
+_:c14n144 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 7 ;
+	sh:path party:extensions .
+_:c14n145 rdf:first party:partyType ;
+	rdf:rest _:c14n193 .
+_:c14n146 rdf:first party:contactMechanismId ;
+	rdf:rest _:c14n127 .
+_:c14n147 sh:datatype xsd:string ;
+	sh:description "The identifier, in the exact form of its issuer. DAT-066." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:value ;
+	sh:pattern "\\S" .
+_:c14n148 sh:datatype xsd:string ;
+	sh:description "The family name, only when a process needs the parts." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:familyName ;
+	sh:pattern "\\S" .
+_:c14n149 sh:datatype xsd:string ;
+	sh:description "The whole name, as the person writes it." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:fullName ;
+	sh:pattern "\\S" .
+_:c14n15 sh:datatype xsd:string ;
+	sh:description "The language in which the text is written, when known. LOC-055." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:language ;
+	sh:pattern "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$" .
+_:c14n150 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n151 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 9 ;
+	sh:path party:extensions .
+_:c14n152 sh:datatype xsd:string ;
+	sh:description "The name as the organization writes it, never translated by the system." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:name ;
+	sh:pattern "\\S" .
+_:c14n153 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 4 ;
+	sh:path party:extensions .
+_:c14n154 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n155 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n156 sh:description "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes to one value. DMO-040." ;
+	sh:in _:c14n101 ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:order 0 ;
+	sh:path party:partyType .
+_:c14n157 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 6 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n158 sh:datatype xsd:string ;
+	sh:description "The kind of name, such as legal or preferred, from a scheme that the deployment names. DMO-030, DMO-031." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 0 ;
+	sh:path party:nameType ;
+	sh:pattern "^[a-z0-9]+(-[a-z0-9]+)*$" .
+_:c14n159 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n16 rdf:first contactMechanismTypes:postal-address ;
+	rdf:rest _:c14n96 .
+_:c14n160 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 10 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n161 rdf:first party:relationshipType ;
+	rdf:rest _:c14n173 .
+_:c14n162 rdf:first party:unit ;
+	rdf:rest _:c14n111 .
+_:c14n163 sh:class party:Party ;
+	sh:description "The second party of the relationship." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 3 ;
+	sh:path party:relatedPartyId .
+_:c14n164 rdf:first party:value ;
+	rdf:rest rdf:nil .
+_:c14n165 sh:description "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045." ;
+	sh:in _:c14n139 ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:order 2 ;
+	sh:path party:contactMechanismType .
+_:c14n166 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n167 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n168 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 5 ;
+	sh:path party:extensions .
+_:c14n169 sh:class dat:DateInterval ;
+	sh:description "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 1 ;
+	sh:path party:validity .
+_:c14n17 rdf:first contactMechanismTypes:telephone-number ;
+	rdf:rest rdf:nil .
+_:c14n170 sh:class party:OrganizationName ;
+	sh:description "The names of the organization, each with its type, language and period. DMO-042." ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 0 ;
+	sh:path party:names .
+_:c14n171 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n172 sh:class party:ContactMechanism ;
+	sh:description "The contact mechanism that the link ties to the party. DMO-045." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 1 ;
+	sh:path party:contactMechanismId .
+_:c14n173 rdf:first party:role ;
+	rdf:rest _:c14n195 .
+_:c14n174 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n175 rdf:first party:number ;
+	rdf:rest _:c14n184 .
+_:c14n176 rdf:first party:locality ;
+	rdf:rest _:c14n175 .
+_:c14n177 rdf:first party:language ;
+	rdf:rest _:c14n176 .
+_:c14n178 rdf:first party:extensionNumber ;
+	rdf:rest _:c14n177 .
+_:c14n179 rdf:first party:country ;
+	rdf:rest _:c14n178 .
+_:c14n18 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n180 rdf:first party:code ;
+	rdf:rest _:c14n179 .
+_:c14n181 rdf:first party:civicNumber ;
+	rdf:rest _:c14n180 .
+_:c14n182 rdf:first party:addressLines ;
+	rdf:rest _:c14n181 .
+_:c14n183 rdf:first party:address ;
+	rdf:rest _:c14n182 .
+_:c14n184 rdf:first party:postalCode ;
+	rdf:rest _:c14n185 .
+_:c14n185 rdf:first party:region ;
+	rdf:rest _:c14n186 .
+_:c14n186 rdf:first party:street ;
+	rdf:rest _:c14n131 .
+_:c14n187 rdf:first party:number ;
+	rdf:rest _:c14n28 .
+_:c14n188 rdf:first party:addressLines ;
+	rdf:rest _:c14n190 .
+_:c14n189 rdf:first party:address ;
+	rdf:rest _:c14n188 .
+_:c14n19 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 5 ;
+	sh:path party:extensions .
+_:c14n190 rdf:first party:birthDate ;
+	rdf:rest _:c14n191 .
+_:c14n191 rdf:first party:civicNumber ;
+	rdf:rest _:c14n192 .
+_:c14n192 rdf:first party:code ;
+	rdf:rest _:c14n95 .
+_:c14n193 rdf:first party:postalCode ;
+	rdf:rest _:c14n105 .
+_:c14n194 rdf:first party:region ;
+	rdf:rest _:c14n59 .
+_:c14n195 rdf:first party:street ;
+	rdf:rest _:c14n162 .
+_:c14n196 rdf:first party:extensionNumber ;
+	rdf:rest _:c14n77 .
+_:c14n197 rdf:first party:country ;
+	rdf:rest _:c14n196 .
+_:c14n198 rdf:first party:language ;
+	rdf:rest _:c14n199 .
+_:c14n199 rdf:first party:locality ;
+	rdf:rest _:c14n70 .
+_:c14n2 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n20 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 6 ;
+	sh:path party:extensions .
+_:c14n200 rdf:first party:birthDate ;
+	rdf:rest _:c14n49 .
+_:c14n21 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n22 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n23 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 7 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n24 sh:datatype xsd:string ;
+	sh:description "The civic number, with its suffix, such as 1200 or 12A." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:civicNumber .
+_:c14n25 sh:class party:Party ;
+	sh:description "The organization that issued the identifier, when the model holds it." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 4 ;
+	sh:path party:issuerId .
+_:c14n26 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n27 rdf:first party:issuerId ;
+	rdf:rest _:c14n198 .
+_:c14n28 rdf:first party:partyId ;
+	rdf:rest _:c14n145 .
+_:c14n29 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 8 ;
+	sh:path party:extensions .
+_:c14n3 sh:datatype xsd:string ;
+	sh:description "The country whose numbering plan defines the code, as an ISO 3166-1 alpha-2 code." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:country ;
+	sh:pattern "^[A-Z]{2}$" .
+_:c14n30 sh:description "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045." ;
+	sh:in _:c14n17 ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:order 2 ;
+	sh:path party:contactMechanismType .
+_:c14n31 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n32 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 4 ;
+	sh:path party:extensions .
+_:c14n33 sh:description "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes to one value. DMO-040." ;
+	sh:in _:c14n88 ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:order 1 ;
+	sh:path party:partyType .
+_:c14n34 rdf:first rdf:type ;
+	rdf:rest _:c14n183 .
+_:c14n35 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 6 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n36 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n37 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n38 sh:class party:PartyRelationship ;
+	sh:description "Party relationships. DMO-044." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 3 ;
+	sh:path party:partyRelationships .
+_:c14n39 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n4 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 6 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n40 sh:datatype xsd:string ;
+	sh:description "The language in which the text is written, when known. LOC-055." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:language ;
+	sh:pattern "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$" .
+_:c14n41 sh:class party:Party ;
+	sh:description "The party that the entity is about. NAM-040." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 0 ;
+	sh:path party:partyId .
+_:c14n42 rdf:first contactMechanismTypes:telephone-short-code ;
+	rdf:rest _:c14n125 .
+_:c14n43 sh:datatype xsd:string ;
+	sh:description "The code of the concept in that scheme, in the form of the scheme. VOC-065." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:code ;
+	sh:pattern "\\S" .
+_:c14n44 sh:class party:Party ;
+	sh:description "The party that the entity is about. NAM-040." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 0 ;
+	sh:path party:partyId .
+_:c14n45 sh:datatype xsd:string ;
+	sh:description "The given names, only when a process needs the parts." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:givenNames ;
+	sh:pattern "\\S" .
+_:c14n46 sh:class dat:DateInterval ;
+	sh:description "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 1 ;
+	sh:path party:validity .
+_:c14n47 rdf:first contactMechanismTypes:email-address ;
+	rdf:rest rdf:nil .
+_:c14n48 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 6 ;
+	sh:path party:extensions .
+_:c14n49 rdf:first party:names ;
+	rdf:rest rdf:nil .
+_:c14n5 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n50 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n51 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n52 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n53 sh:description "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes to one value. DMO-040." ;
+	sh:in _:c14n107 ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:order 2 ;
+	sh:path party:partyType .
+_:c14n54 sh:datatype xsd:string ;
+	sh:description "The province, state or other region, in the form of its issuer, such as QC." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 6 ;
+	sh:path party:region .
+_:c14n55 sh:class party:PersonName ;
+	sh:description "The names of the person, each with its type and period. DMO-032." ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 0 ;
+	sh:path party:names .
+_:c14n56 sh:class party:Extensions ;
+	sh:description "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 7 ;
+	sh:path party:extensions .
+_:c14n57 rdf:first rdf:type ;
+	rdf:rest _:c14n189 .
+_:c14n58 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n59 rdf:first party:relatedPartyId ;
+	rdf:rest _:c14n68 .
+_:c14n6 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n60 sh:class party:TelephoneShortCode ;
+	sh:description "Telephone short codes. DMO-034, DMO-045." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 6 ;
+	sh:path party:telephoneShortCodes .
+_:c14n61 sh:datatype xsd:date ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 0 ;
+	sh:path dat:start ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" .
+_:c14n62 sh:datatype xsd:date ;
+	sh:description "The date of birth, when a process needs it. DMO-041." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 1 ;
+	sh:path party:birthDate ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" .
+_:c14n63 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n64 sh:class party:PostalAddress ;
+	sh:description "Postal addresses. DMO-033, DMO-045." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 4 ;
+	sh:path party:postalAddresses .
+_:c14n65 sh:datatype xsd:string ;
+	sh:description "The kind of name, such as legal or preferred, from a scheme that the deployment names. DMO-030, DMO-031." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 0 ;
+	sh:path party:nameType ;
+	sh:pattern "^[a-z0-9]+(-[a-z0-9]+)*$" .
+_:c14n66 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n67 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n68 rdf:first party:relatedRole ;
+	rdf:rest _:c14n161 .
+_:c14n69 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n7 sh:datatype xsd:string ;
+	sh:description "The language in which the text is written, when known. LOC-055." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 0 ;
+	sh:path party:language ;
+	sh:pattern "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$" .
+_:c14n70 rdf:first party:names ;
+	rdf:rest _:c14n187 .
+_:c14n71 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n72 sh:datatype xsd:string ;
+	sh:description "The municipality or locality, never translated." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 5 ;
+	sh:path party:locality .
+_:c14n73 sh:class party:Party ;
+	sh:description "The party that the entity is about. NAM-040." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 0 ;
+	sh:path party:partyId .
+_:c14n74 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 11 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n75 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n76 sh:datatype xsd:string ;
+	sh:description "The identification scheme, from a scheme of identification schemes that the deployment names. DMO-031, DMO-046." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 2 ;
+	sh:path party:identificationScheme ;
+	sh:pattern "^[a-z0-9]+(-[a-z0-9]+)*$" .
+_:c14n77 rdf:first party:identificationScheme ;
+	rdf:rest _:c14n27 .
+_:c14n78 sh:class party:PartyClassification ;
+	sh:description "Party classifications. DMO-047." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 10 ;
+	sh:path party:partyClassifications .
+_:c14n79 sh:class party:PartyRole ;
+	sh:description "Party roles. DMO-043." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 2 ;
+	sh:path party:partyRoles .
+_:c14n8 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 0 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+_:c14n80 sh:class party:EmailAddress ;
+	sh:description "Email addresses. DMO-034, DMO-045." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 7 ;
+	sh:path party:emailAddresses .
+_:c14n81 sh:datatype xsd:string ;
+	sh:description "The country, as an ISO 3166-1 alpha-2 code." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 8 ;
+	sh:path party:country ;
+	sh:pattern "^[A-Z]{2}$" .
+_:c14n82 sh:class dat:DateInterval ;
+	sh:description "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:BlankNodeOrIRI ;
+	sh:order 1 ;
+	sh:path party:validity .
+_:c14n83 sh:class party:Organization ;
+	sh:description "Organizations. DMO-042." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 1 ;
+	sh:path party:organizations .
+_:c14n84 sh:datatype xsd:string ;
+	sh:description "The digits that people dial, such as 211." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 0 ;
+	sh:path party:code ;
+	sh:pattern "^[0-9]{2,8}$" .
+_:c14n85 sh:datatype xsd:string ;
+	sh:description "The street name with its type and direction, as written, such as rue Principale Ouest." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:street .
+_:c14n86 sh:datatype xsd:string ;
+	sh:description "What the party uses the mechanism for, such as billing or mailing, from a scheme that the deployment names. Departs from Apache OFBiz (DMO-006): OFBiz keeps each purpose in its own PartyContactMechPurpose record, with its own period. Here every purpose shares the period of the link, and a purpose with another period needs another link, so that one record holds one period. DMO-030, DMO-031." ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:purposes ;
+	sh:pattern "^[a-z0-9]+(-[a-z0-9]+)*$" .
+_:c14n87 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n88 rdf:first partyTypes:organization ;
+	rdf:rest rdf:nil .
+_:c14n89 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 7 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n9 sh:datatype xsd:string ;
+	sh:description "The postal code in the form of its issuer, such as H2X 1Y4. Some countries have none." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 7 ;
+	sh:path party:postalCode .
+_:c14n90 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 12 ;
+	sh:path party:updatedAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n91 rdf:first rdf:type ;
+	rdf:rest rdf:nil .
+_:c14n92 sh:class party:Party ;
+	sh:description "The party that the entity is about. NAM-040." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 0 ;
+	sh:path party:partyId .
+_:c14n93 rdf:first rdf:type ;
+	rdf:rest _:c14n200 .
+_:c14n94 sh:datatype xsd:dateTime ;
+	sh:description "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 4 ;
+	sh:path party:createdAt ;
+	sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$" .
+_:c14n95 rdf:first party:conceptScheme ;
+	rdf:rest _:c14n146 .
+_:c14n96 rdf:first contactMechanismTypes:telephone-number ;
+	rdf:rest _:c14n42 .
+_:c14n97 sh:class party:PartyContactMechanism ;
+	sh:description "Links between parties and contact mechanisms. DMO-045." ;
+	sh:nodeKind sh:IRI ;
+	sh:order 8 ;
+	sh:path party:partyContactMechanisms .
+_:c14n98 sh:class party:Party ;
+	sh:description "The party that the entity is about. NAM-040." ;
+	sh:maxCount 1 ;
+	sh:minCount 1 ;
+	sh:nodeKind sh:IRI ;
+	sh:order 0 ;
+	sh:path party:partyId .
+_:c14n99 sh:datatype xsd:string ;
+	sh:description "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021." ;
+	sh:maxCount 1 ;
+	sh:nodeKind sh:Literal ;
+	sh:order 3 ;
+	sh:path party:id ;
+	sh:pattern "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" .
+

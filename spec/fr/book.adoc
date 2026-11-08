@@ -4,4 +4,20 @@
 
 include::index.adoc[leveloffset=+1]
 
+include::principles.adoc[leveloffset=+1]
+
+include::linkml.adoc[leveloffset=+1]
+
+include::names-types.adoc[leveloffset=+1]
+
+include::codes-contact.adoc[leveloffset=+1]
+
+include::party.adoc[leveloffset=+1]
+
+include::history-extensions.adoc[leveloffset=+1]
+
+include::versions.adoc[leveloffset=+1]
+
+include::persistence.adoc[leveloffset=+1]
+
 include::glossary.adoc[leveloffset=+1]

@@ -1,0 +1,64 @@
+= Persistence and tooling
+include::_fpsot-terms.adoc[]
+
+A model says nothing about storage, under DMO-003.
+These rules cover the separate files that map a model to a store, and the tools planned for them.
+
+== Persistence mappings
+
+[[DMO-070]]
+*DMO-070.* A persistence mapping MUST be a separate file, generated from the model under DMO-014.
+Examples are {abbr-sql-first} table definitions or an Apache OFBiz entity definition file.
+A system MAY store the data of a model in any other way.
+Examples are a document store, the OFBiz entity engine or a remote service.
+A generated mapping follows each change of the model, and no store becomes part of the model.
+
+The {abbr-sql} file in `model/generated/` is the raw output of the link:https://linkml.io/linkml/generators/index.html[LinkML] generator for PostgreSQL, as its header says.
+It shows the shape of a mapping only, and it is not a working mapping.
+Its foreign keys point to abstract classes, and the `extensions` object and the intervals map to no useful column.
+The rules of a model stay independent of storage, under DMO-003.
+
+[[DMO-071]]
+*DMO-071.* A persistence mapping MAY add items that only storage needs, such as indexes, technical columns or partition keys.
+These items MUST NOT change the meaning of any field, and MUST NOT appear in exchanged data.
+Exchanged data then stays the same whatever store a system uses.
+
+[[DMO-072]]
+*DMO-072.* A model MAY publish an Entity Engine {abbr-xml-first} file, for systems built on the Apache OFBiz entity engine.
+A tool MUST generate that file, and the check MUST cover it, as DMO-014 to DMO-016 require.
+The link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/dtd/entitymodel.xsd[entity model schema] of OFBiz sets the form of this file.
+An OFBiz system can then load the model without a hand-written copy.
+
+[[DMO-073]]
+*DMO-073.* A mapping between an existing model and an {abbr-fpsot-first} model MUST give the target of each entity and field.
+It MUST apply the date mapping of DMO-023 and the audit mapping of DMO-050.
+It MUST list each field that has no target.
+The OFBiz party model is an example of an existing model.
+An implementer then knows what a conversion keeps, what it changes and what it drops.
+
+== Planned tooling (informative)
+
+{abbr-fpsot} plans three tools.
+None of them exists yet, and this specification does not depend on them.
+
+* A translator from Entity Engine {abbr-xml} to link:https://linkml.io/linkml/generators/index.html[LinkML], to start a model from existing OFBiz entity definitions.
+* A generator from LinkML to Entity Engine {abbr-xml}, to produce the file of DMO-072.
+* A LinkML extension for Quarkus, so that a Java service can use a LinkML model directly.
+The OFBiz entity engine works in the same way with its own definitions.
+
+Each tool will follow DMO-002: a system can use it, or not, and still conform.
+
+== References
+
+=== Informative
+
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Archived copy]
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/dtd/entitymodel.xsd[Apache OFBiz, entitymodel.xsd], The Apache Software Foundation, commit e103805, 2026-11-07.
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-07 |First version.
+|===

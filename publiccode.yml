@@ -9,22 +9,33 @@ developmentStatus: concept
 softwareType: "standalone/other"
 description:
   en:
-    shortDescription: Template for FPSOT specification repositories.
+    shortDescription: Data model rules and the Party model for FPSOT projects.
     longDescription: >
-      Starting point for an FPSOT specification repository. It holds the
-      layout, the Community Specification License files, and the CI that
-      checks requirement IDs, links, languages and prose.
+      Rules for how FPSOT projects define and publish entity data models:
+      one LinkML source per model, generated JSON Schema, SQL, OWL and SHACL
+      files with checks against drift, names, keys, types, codes, history,
+      jurisdiction extensions and versions. Its first subject area is Party,
+      based on the universal data model patterns as Apache OFBiz implements them.
     features:
-      - Specification repository layout
+      - LinkML as the single source of each model
+      - Generated files checked against their source
+      - Party, person, organization, role and contact models
+      - One extensions object per jurisdiction
   fr:
-    shortDescription: Gabarit des dépôts de spécification de FPSOT.
+    shortDescription: Règles sur les modèles de données et modèle Party des projets FPSOT.
     longDescription: >
-      Point de départ d'un dépôt de spécification de FPSOT. Il contient la
-      structure, les fichiers de la Community Specification License, et
-      l'intégration continue qui vérifie les identifiants, les liens, les
-      langues et la rédaction.
+      Règles sur la façon dont les projets FPSOT définissent et publient les
+      modèles de données de leurs entités : une seule source LinkML par modèle,
+      des fichiers JSON Schema, SQL, OWL et SHACL générés et vérifiés contre
+      tout écart, les noms, les clés, les types, les codes, l’historique, les
+      extensions des collectivités publiques et les versions. Son premier
+      domaine est Party, fondé sur les patrons des modèles de données
+      universels tels qu’Apache OFBiz les met en œuvre.
     features:
-      - Structure d'un dépôt de spécification
+      - LinkML comme seule source de chaque modèle
+      - Fichiers générés vérifiés contre leur source
+      - Modèles de partie, de personne, d’organisation, de rôle et de contact
+      - Un seul objet d’extensions par collectivité publique
 legal:
   license: Community-Spec-1.0
 maintenance:

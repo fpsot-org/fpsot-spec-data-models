@@ -1,0 +1,121 @@
+= Audit, historique et extensions
+include::_fpsot-terms.adoc[]
+
+Ces règles disent quand un système a enregistré chaque entité, et comment une entité garde son passé.
+Elles fixent aussi le seul endroit où une {term-jurisdiction} ajoute ses propres champs.
+
+== Horodatages de création et de modification
+
+[[DMO-050]]
+*DMO-050.* Chaque entité DOIT avoir un attribut `createdAt` et un attribut `updatedAt`, du type `Instant`.
+Chaque enregistrement qu’émet un système de référence DOIT contenir les deux, fixés au premier stockage et à chaque changement.
+Une demande de création d’un enregistrement PEUT les omettre, car seul le système de référence peut les fixer.
+Le modèle de base laisse donc ces deux attributs facultatifs, et la description de chacun dit quand il est obligatoire.
+Ces horodatages NE DOIVENT PAS servir de période à un fait, qui va dans `validity` selon DMO-023.
+Un système qui doit connaître l’auteur de chaque changement DEVRAIT le noter dans un journal de vérification, hors de l’entité.
+
+Apache OFBiz horodate aussi chaque entité, dans `createdStamp` et `lastUpdatedStamp`, comme le montre le link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/model/ModelEntity.java[code de son moteur d’entités].
+Une correspondance les copie sous forme d’instants en {abbr-utc-first}.
+
+Les horodatages de création et de modification disent quand le système a appris un fait.
+L’attribut `validity` dit quand le fait est vrai.
+Prenons un déménagement le 1^er^ juin, que le système apprend le 10 juin.
+Sa validité commence le 1^er^ juin, et son `createdAt` tombe le 10 juin.
+
+== Historique
+
+[[DMO-051]]
+*DMO-051.* Un fait passé muni d’un attribut `validity` DOIT rester accessible sous forme d’enregistrement clos, dans la forme du modèle.
+Quand un tel fait change, l’ancien enregistrement DOIT finir là où le nouveau commence.
+Pour corriger une valeur fausse dès le départ, un système PEUT plutôt remplacer l’enregistrement.
+La façon dont un système garde cet historique à l’intérieur de ses limites lui appartient, selon DMO-004.
+Les autres systèmes peuvent alors encore obtenir les faits passés, comme une ancienne adresse ou un ancien nom.
+Deux intervalles qui se suivent ne laissent ni trou ni chevauchement, selon DAT-023.
+
+[[DMO-052]]
+*DMO-052.* Un système NE DOIT PAS supprimer un enregistrement pour la seule raison que sa période a pris fin.
+La suppression suit les règles de conservation qui s’appliquent au déploiement.
+Un enregistrement clos explique encore des décisions passées, comme l’endroit où un avis a été envoyé.
+
+== Extensions
+
+[[DMO-053]]
+*DMO-053.* Chaque entité PEUT avoir un seul attribut `extensions`, qui contient un objet.
+Cet objet est le seul endroit pour les champs qu’une collectivité publique ajoute au modèle de base.
+Chaque membre DOIT tirer son nom du code de l’link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166-1] ou de l’link:https://www.iso.org/standard/72483.html[ISO 3166-2] d’une collectivité publique.
+Le nom DOIT être en lowerCamelCase, comme `ca` ou `caQc`.
+La valeur de chaque membre DOIT être un objet.
+Chaque collectivité publique a alors un seul objet, et ses champs restent à part du modèle de base, selon DMO-054.
+
+Une collectivité publique sans code ISO 3166 DOIT imbriquer son membre dans celui de la collectivité codée la plus proche.
+C’est le cas d’une municipalité, d’une municipalité régionale de comté ou d’un gouvernement autochtone, comme `caQc.montreal`.
+Le profil de la collectivité codée définit le nom du membre imbriqué, en lowerCamelCase.
+Un organisme qui n’est pas une collectivité publique, comme l’Union européenne, DOIT plutôt employer un nom enregistré.
+Le profil de cet organisme enregistre ce nom, en lowerCamelCase d’après son nom anglais, comme `europeanUnion`.
+
+Les noms des membres sont des noms de champs tirés du code ISO 3166, en lowerCamelCase selon NAM-011.
+NAM-005, NAM-007 et NAM-042 ne s’appliquent pas à eux.
+link:https://linkml.io/linkml/generators/index.html[LinkML] change le trait d’union d’un nom d’attribut en trait de soulignement.
+La forme exacte `CA-QC` ne peut donc pas être validée.
+
+[source,json]
+----
+{
+  "id": "019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f",
+  "partyType": "organization",
+  "names": [{"name": "Boulangerie du Faubourg inc.", "language": "fr"}],
+  "extensions": {"caQc": {"administrativeRegion": "03"}},
+  "createdAt": "2026-11-07T14:00:00Z",
+  "updatedAt": "2026-11-07T14:05:00Z"
+}
+----
+
+[[DMO-054]]
+*DMO-054.* Un champ d’une collectivité publique NE DOIT PAS figurer à côté des champs de base d’une entité.
+Son nom NE DOIT PAS non plus porter de préfixe ni d’espace de noms, comme `qcRegion` ou `ca:region`.
+Les noms préfixés mêlent les parties de base et locales dans une seule liste, et chaque nouvelle collectivité l’allonge.
+Avec un objet par collectivité publique, le lectorat trouve les champs locaux au même endroit et peut ignorer les autres.
+
+[[DMO-055]]
+*DMO-055.* Un profil de collectivité publique DOIT définir chaque membre d’`extensions`, dans un schéma LinkML distinct.
+Ce schéma importe le modèle de base.
+Le profil DOIT citer la loi, le règlement ou la norme d’où vient chacun de ses champs.
+Le modèle de base NE DOIT PAS changer pour ajouter un membre.
+Chaque collectivité publique peut alors publier son profil et en gérer les versions à son propre rythme.
+Le fichier `model/examples/ca-qc-profile.yaml` est un exemple de profil pour le Québec.
+
+Le seul champ de ce profil, `administrativeRegion`, contient le code de deux chiffres d’une région administrative du Québec.
+Les codes viennent de la link:https://statistique.quebec.ca/statistiques/divisions-territoriales/nom-code_dt/6_1.htm[liste officielle des régions administratives] de l’Institut de la statistique du Québec.
+
+[[DMO-056]]
+*DMO-056.* Un système DOIT garder chaque membre inconnu d’`extensions` quand il enregistre ou transmet un enregistrement.
+Il NE DOIT PAS refuser un enregistrement à cause d’un tel membre.
+Un membre NE DOIT PAS répéter un champ de base ni en changer le sens.
+Un enregistrement peut alors traverser un système qui ne connaît que le modèle de base sans perdre ses données locales.
+Le modèle de base accepte tout membre d’`extensions`, et chaque profil vérifie ses propres membres.
+
+[[DMO-057]]
+*DMO-057.* Un champ utile à plusieurs collectivités publiques DEVRAIT passer au modèle de base, dans une version mineure selon DMO-061.
+Cela vaut quand le champ a le même sens dans chaque collectivité publique.
+Les membres d’extension gardent alors seulement ce qui est vraiment local.
+
+== Références
+
+=== Références normatives
+
+* link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166 Country Codes], ISO. link:https://web.archive.org/web/20261027022740/https://www.iso.org/iso-3166-country-codes.html[Copie archivée]
+* link:https://www.iso.org/standard/72483.html[ISO 3166-2:2020, Codes for the representation of names of countries and their subdivisions, Part 2: Country subdivision code], ISO, 2020-08. link:https://web.archive.org/web/20261013114742/https://www.iso.org/standard/72483.html[Copie archivée]
+
+=== Références informatives
+
+* link:https://statistique.quebec.ca/statistiques/divisions-territoriales/nom-code_dt/6_1.htm[Régions administratives (1997)], Institut de la statistique du Québec, 2011-06-02. link:https://web.archive.org/web/20181206022305/http://www.stat.gouv.qc.ca/statistiques/divisions-territoriales/nom-code_dt/6_1.htm[Copie archivée]
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Copie archivée]
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/model/ModelEntity.java[Apache OFBiz, ModelEntity.java], The Apache Software Foundation, archivage e103805, 2026-11-07.
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-07 |Première version.
+|===

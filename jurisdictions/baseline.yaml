@@ -1,12 +1,94 @@
 # Comparison data. The format is defined by fpsot-spec-doc (model/jurisdiction.yaml).
-# This example row compares requirement TPL-001. Replace it with the rows of this specification.
-# Add one file per jurisdiction, such as ca.yaml or ca/qc.yaml, only when a source exists.
 topics:
-  keywords: {en: Requirement keywords, fr: Mots clés des exigences}
+  model-descriptions: {en: Model descriptions, fr: Descriptions du modèle}
+  generated-files: {en: Generated files, fr: Fichiers générés}
+  keys: {en: Keys, fr: Clés}
+  periods: {en: Periods of validity, fr: Périodes de validité}
+  codes: {en: Codes, fr: Codes}
+  person-names: {en: Names of persons, fr: Noms des personnes}
+  telephone-numbers: {en: Telephone numbers, fr: Numéros de téléphone}
+  parties: {en: Parties, fr: Parties}
+  organizations: {en: Organizations, fr: Organisations}
+  roles: {en: Roles, fr: Rôles}
+  relationships: {en: Relationships, fr: Relations}
+  identifications: {en: Identifications, fr: Identifications}
+  deprecation: {en: Deprecation, fr: Éléments déconseillés}
 rows:
-  - id: TPL-001
-    topic: keywords
-    requirement: {en: Use the BCP 14 keywords., fr: Utiliser les mots clés du BCP 14.}
-    international: {en: "BCP 14 defines MUST, SHOULD and MAY. Only the capital forms carry that meaning.", fr: "Le BCP 14 définit MUST, SHOULD et MAY. Seules les majuscules ont ce sens."}
-    international_source: {title: "RFC 8174, Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words (BCP 14)", version: "BCP 14", date: "2017-05", url: "https://www.rfc-editor.org/info/rfc8174", archive: "https://web.archive.org/web/20261103005743/https://www.rfc-editor.org/info/rfc8174/"}
-    fpsot: {en: "Keywords in capitals, with a fixed French mapping.", fr: "Mots clés en majuscules, avec une correspondance française fixe."}
+  - id: DMO-013
+    topic: model-descriptions
+    requirement: {en: "Each element of a model has a description.", fr: "Chaque élément d’un modèle a une description."}
+    international: {en: "LinkML lets each element carry a description, an alias and a deprecation note. It does not require a description.", fr: "LinkML permet à chaque élément de porter une description, un alias et une note de retrait. Il n’exige pas de description."}
+    international_source: {title: "LinkML, Schema Element Metadata", version: "LinkML 1.12.1", url: "https://linkml.io/linkml/schemas/metadata.html", archive: "https://web.archive.org/web/20260728191802/https://linkml.io/linkml/schemas/metadata.html"}
+    fpsot: {en: "A description on every class, slot, type and enumeration, which should cite requirement IDs.", fr: "Une description pour chaque classe, attribut, type et énumération, qui devrait citer les identifiants des exigences."}
+  - id: DMO-014
+    topic: generated-files
+    requirement: {en: "Tools generate every other form of the model from its LinkML source.", fr: "Des outils génèrent chaque autre forme du modèle à partir de sa source LinkML."}
+    international: {en: "LinkML generators produce JSON Schema, SQL DDL, OWL, SHACL and other forms from one schema.", fr: "Les générateurs LinkML produisent du JSON Schema, du DDL SQL, de l’OWL, du SHACL et d’autres formes à partir d’un seul schéma."}
+    international_source: {title: "LinkML, Generators", version: "LinkML 1.12.1", url: "https://linkml.io/linkml/generators/index.html", archive: "https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html"}
+    fpsot: {en: "JSON Schema, SQL, OWL and SHACL files generated into model/generated/, with a check that fails on any drift.", fr: "Des fichiers JSON Schema, SQL, OWL et SHACL générés dans model/generated/, avec une vérification qui échoue à tout écart."}
+  - id: DMO-021
+    topic: keys
+    requirement: {en: "Each entity has a UUID key named id.", fr: "Chaque entité a une clé UUID nommée id."}
+    international: {en: "OFBiz keys a party by a string partyId. Link entities, such as PartyRelationship and PartyContactMech, use keys of several fields that include fromDate.", fr: "OFBiz identifie une partie par une chaîne partyId. Les entités de lien, comme PartyRelationship et PartyContactMech, ont des clés de plusieurs champs qui comprennent fromDate."}
+    international_source: {title: "Apache OFBiz, party-entitymodel.xml", version: "commit e103805", date: "2026-11-07", url: "https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml", archive: "https://web.archive.org/web/20260930125011/https://github.com/apache/ofbiz-framework/blob/trunk/applications/datamodel/entitydef/party-entitymodel.xml"}
+    fpsot: {en: "A UUID id on every entity, link entities included. Never a key of several fields.", fr: "Un id UUID pour chaque entité, entités de lien comprises. Jamais une clé de plusieurs champs."}
+  - id: DMO-023
+    topic: periods
+    requirement: {en: "A period of validity is one interval named validity.", fr: "Une période de validité est un seul intervalle nommé validity."}
+    international: {en: "OFBiz links, such as PartyRelationship, PartyContactMech and PartyClassification, carry fromDate and thruDate fields of type date-time.", fr: "Les liens d’OFBiz, comme PartyRelationship, PartyContactMech et PartyClassification, portent des champs fromDate et thruDate du type date-time."}
+    international_source: {title: "Apache OFBiz, party-entitymodel.xml", version: "commit e103805", date: "2026-11-07", url: "https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml", archive: "https://web.archive.org/web/20260930125011/https://github.com/apache/ofbiz-framework/blob/trunk/applications/datamodel/entitydef/party-entitymodel.xml"}
+    fpsot: {en: "One validity object with start and end, the end is excluded. fromDate maps to start and thruDate to end, with no shift into an InstantInterval.", fr: "Un seul objet validity avec start et end, la fin est exclue. fromDate correspond à start et thruDate à end, sans décalage vers un InstantInterval."}
+  - id: DMO-030
+    topic: codes
+    requirement: {en: "Kinds, roles and purposes are codes from a controlled vocabulary.", fr: "Les types, rôles et buts sont des codes d’un vocabulaire contrôlé."}
+    international: {en: "OFBiz keeps kinds in type entities, such as RoleType, PartyRelationshipType and ContactMechType, each with its own key.", fr: "OFBiz garde les types dans des entités de type, comme RoleType, PartyRelationshipType et ContactMechType, chacune avec sa propre clé."}
+    international_source: {title: "Apache OFBiz, party-entitymodel.xml", version: "commit e103805", date: "2026-11-07", url: "https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml", archive: "https://web.archive.org/web/20260930125011/https://github.com/apache/ofbiz-framework/blob/trunk/applications/datamodel/entitydef/party-entitymodel.xml"}
+    fpsot: {en: "A code bound to a SKOS concept scheme, never an entity of types.", fr: "Un code rattaché à un schéma de concepts SKOS, jamais une entité de types."}
+  - id: DMO-032
+    topic: person-names
+    requirement: {en: "A person name has a required full name and optional parts.", fr: "Un nom de personne a un nom complet obligatoire et des parties facultatives."}
+    international: {en: "schema.org gives a person the text properties name, givenName, familyName, additionalName and alternateName. None is required.", fr: "schema.org donne à une personne les propriétés textuelles name, givenName, familyName, additionalName et alternateName. Aucune n’est obligatoire."}
+    international_source: {title: "schema.org, Person", version: "30.1", date: "2026-09-16", url: "https://schema.org/Person", archive: "https://web.archive.org/web/20261031052350/https://schema.org/Person"}
+    fpsot: {en: "fullName required, givenNames and familyName optional, several names, each with a type and a period.", fr: "fullName obligatoire, givenNames et familyName facultatifs, plusieurs noms, chacun avec un type et une période."}
+  - id: DMO-034
+    topic: telephone-numbers
+    requirement: {en: "A telephone number is exchanged in E.164 form.", fr: "Un numéro de téléphone est échangé dans la forme E.164."}
+    international: {en: "E.164 sets the international numbering plan: a country code followed by a national number.", fr: "La E.164 fixe le plan de numérotage international : un indicatif de pays suivi d’un numéro national."}
+    international_source: {title: "Recommendation ITU-T E.164, The international public telecommunication numbering plan", version: "E.164 (11/2010)", date: "2010-11", url: "https://www.itu.int/rec/T-REC-E.164", archive: "https://web.archive.org/web/20261004075302/https://www.itu.int/rec/T-REC-E.164"}
+    fpsot: {en: "A plus sign and digits only, such as +14185550123, with the extension in its own slot. A short code such as 211 is a separate TelephoneShortCode.", fr: "Un signe plus et des chiffres seulement, comme +14185550123, avec le poste dans son propre attribut. Un numéro abrégé comme le 211 est un TelephoneShortCode distinct."}
+  - id: DMO-040
+    topic: parties
+    requirement: {en: "Each party is exactly one person or one organization.", fr: "Chaque partie est exactement une personne ou une organisation."}
+    international: {en: "In OFBiz, Person and PartyGroup each share the partyId of one Party record.", fr: "Dans OFBiz, Person et PartyGroup partagent chacune le partyId d’un enregistrement Party."}
+    international_source: {title: "Apache OFBiz, party-entitymodel.xml", version: "commit e103805", date: "2026-11-07", url: "https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml", archive: "https://web.archive.org/web/20260930125011/https://github.com/apache/ofbiz-framework/blob/trunk/applications/datamodel/entitydef/party-entitymodel.xml"}
+    fpsot: {en: "An abstract Party with the subclasses Person and Organization, and a partyType code.", fr: "Une classe abstraite Party avec les sous-classes Person et Organization, et un code partyType."}
+  - id: DMO-042
+    topic: organizations
+    requirement: {en: "An organization holds its names as registered.", fr: "Une organisation contient ses noms tels qu’ils sont enregistrés."}
+    international: {en: "schema.org gives an organization a name, a legalName and an alternateName, with identifier, address and parentOrganization.", fr: "schema.org donne à une organisation un name, un legalName et un alternateName, avec identifier, address et parentOrganization."}
+    international_source: {title: "schema.org, Organization", version: "30.1", date: "2026-09-16", url: "https://schema.org/Organization", archive: "https://web.archive.org/web/20261027165008/https://schema.org/Organization"}
+    fpsot: {en: "Organization, with one name entry per language and type, each with a period.", fr: "Organization, avec une entrée de nom par langue et par type, chacune avec une période."}
+  - id: DMO-043
+    topic: roles
+    requirement: {en: "A role is a PartyRole entity with a code and a period.", fr: "Un rôle est une entité PartyRole avec un code et une période."}
+    international: {en: "OFBiz PartyRole links a party to a RoleType, keyed by both. It has no period.", fr: "PartyRole d’OFBiz relie une partie à un RoleType, avec une clé formée des deux. Il n’a pas de période."}
+    international_source: {title: "Apache OFBiz, party-entitymodel.xml", version: "commit e103805", date: "2026-11-07", url: "https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml", archive: "https://web.archive.org/web/20260930125011/https://github.com/apache/ofbiz-framework/blob/trunk/applications/datamodel/entitydef/party-entitymodel.xml"}
+    fpsot: {en: "PartyRole with its own id, a role code and an optional validity.", fr: "PartyRole avec son propre id, un code de rôle et un attribut validity facultatif."}
+  - id: DMO-044
+    topic: relationships
+    requirement: {en: "A relationship links two parties, each in a role, for a period.", fr: "Une relation relie deux parties, chacune dans un rôle, pour une période."}
+    international: {en: "A schema.org Role adds a roleName, a startDate and an endDate to a relation, such as the member of an organization.", fr: "Un Role de schema.org ajoute un roleName, une startDate et une endDate à une relation, comme le membre d’une organisation."}
+    international_source: {title: "schema.org, Role", version: "30.1", date: "2026-09-16", url: "https://schema.org/Role", archive: "https://web.archive.org/web/20261027230827/https://schema.org/Role"}
+    fpsot: {en: "PartyRelationship with both parties, both roles, a relationship type and a validity.", fr: "PartyRelationship avec les deux parties, les deux rôles, un type de relation et un attribut validity."}
+  - id: DMO-046
+    topic: identifications
+    requirement: {en: "An identifier from another body is a PartyIdentification entity.", fr: "Un identifiant d’un autre organisme est une entité PartyIdentification."}
+    international: {en: "An Identifier has a notation, a schema, a schema agency, an issuer and a date of issue. The identifier from the registering authority has its own property, legal identifier.", fr: "Un Identifier a une notation, un schéma, une agence du schéma, un émetteur et une date d’émission. L’identifiant de l’autorité d’enregistrement a sa propre propriété, legal identifier."}
+    international_source: {title: "Core Business Vocabulary", version: "2.3.0", date: "2026-05-12", url: "https://semiceu.github.io/Core-Business-Vocabulary/releases/2.3.0/", archive: "https://web.archive.org/web/20260618104426/https://semiceu.github.io/Core-Business-Vocabulary/releases/2.3.0/"}
+    fpsot: {en: "PartyIdentification with a scheme code, the value in the issuer form, an optional issuer and a period.", fr: "PartyIdentification avec un code de schéma, la valeur dans la forme de l’émetteur, un émetteur facultatif et une période."}
+  - id: DMO-062
+    topic: deprecation
+    requirement: {en: "A retired element is marked deprecated and stays until the next major version.", fr: "Un élément retiré est marqué déconseillé et reste jusqu’à la version majeure suivante."}
+    international: {en: "LinkML marks a retired element with a deprecated text, and can name an exact replacement. It sets no period of support.", fr: "LinkML marque un élément retiré d’un texte deprecated, et peut nommer un remplaçant exact. Il ne fixe aucune période de soutien."}
+    international_source: {title: "LinkML, Schema Element Metadata", version: "LinkML 1.12.1", url: "https://linkml.io/linkml/schemas/metadata.html", archive: "https://web.archive.org/web/20260728191802/https://linkml.io/linkml/schemas/metadata.html"}
+    fpsot: {en: "deprecated with the reason and the release, an exact replacement when one exists, kept until the next major version.", fr: "deprecated avec la raison et la version, un remplaçant exact s’il existe, gardé jusqu’à la version majeure suivante."}

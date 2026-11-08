@@ -1,0 +1,96 @@
+= Codes, names and contact data
+include::_fpsot-terms.adoc[]
+
+These rules bind the codes of a model to controlled vocabularies.
+They also apply the {abbr-fpsot-first} internationalization specification to names, addresses and other contact data.
+
+== Codes
+
+[[DMO-030]]
+*DMO-030.* A slot that holds a kind, a role, a purpose or a status MUST hold a code.
+A controlled vocabulary MUST define that code, under VOC-060 or VOC-065.
+The model MUST NOT define an entity for such a list of kinds.
+Apache OFBiz keeps these lists in type entities, such as `RoleType`, with a parent type for the hierarchy.
+In an {abbr-fpsot} model, each such list is a concept scheme, and its hierarchy uses `skos:broader` under VOC-021.
+A scheme carries labels in both languages, definitions and versions, which a table of types lacks.
+
+The Party model types `partyType` and `contactMechanismType` with the enumerations `PartyType` and `ContactMechanismType`.
+Each value has a `meaning` {abbr-uri-first} in a planned {abbr-fpsot} scheme.
+An example is `https://fpsot.org/vocabularies/party-types/concepts/person`.
+{abbr-fpsot} will publish these schemes as link:https://www.w3.org/TR/skos-reference/[SKOS] concept schemes, under the vocabularies specification.
+VOC-002 to VOC-004 already reserve their {abbr-uri} addresses.
+
+[[DMO-031]]
+*DMO-031.* When the codes differ by institution, the core model MAY give the slot the type `CodeValue`, under VOC-065.
+The slot description MUST then name the kind of scheme it expects, such as a scheme of party roles.
+A deployment MUST name the scheme that it uses for each such slot.
+A profile MAY narrow the slot to the codes of that scheme, as an enumeration under VOC-060.
+Each institution has its own roles and purposes, so one fixed list would not fit them all.
+
+== Names of persons
+
+[[DMO-032]]
+*DMO-032.* A person name MUST have a required `fullName` slot, with the whole name as the person writes it.
+Its parts, `givenNames` and `familyName`, MUST be optional, under LOC-050.
+A person MAY have several names, each with a type, such as legal or preferred, and a period.
+A model MUST NOT require a title, under LOC-052.
+A name slot MUST NOT have a pattern or a length limit that rejects a name that LOC-051 accepts.
+Many people have one name only, and a person's legal name can change over time.
+
+== Postal addresses
+
+[[DMO-033]]
+*DMO-033.* A postal address MUST be an entity with separate slots, under LOC-053.
+Only the `country` slot MUST be required, as an link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166-1] alpha-2 code.
+The region and the postal code MUST keep the form of their issuer, under DAT-066, and MUST be optional.
+The model MUST NOT store a formatted address as the only form, and MUST NOT translate any part, under LOC-055.
+Each country names and orders the parts of an address in its own way.
+A product formats the address for display, under LOC-054.
+
+== Telephone numbers and email addresses
+
+[[DMO-034]]
+*DMO-034.* A system MUST exchange telephone numbers in the international form of link:https://www.itu.int/rec/T-REC-E.164[ITU-T E.164], such as `+14185550123`.
+The leading `+` is the notation of link:https://www.itu.int/rec/T-REC-E.123[ITU-T E.123], and an extension MUST be a separate slot.
+A short code with no E.164 form, such as 211 or 311, MUST be a `TelephoneShortCode` instead.
+A system MUST exchange an email address as written, and MUST NOT change the case of its local part.
+link:https://www.rfc-editor.org/info/rfc5321[RFC 5321] allows the local part, before the `@`, to be case-sensitive.
+One form of telephone number lets any system dial it and compare it.
+
+== Names of organizations
+
+[[DMO-035]]
+*DMO-035.* A name of an organization MUST be a plain string, kept as the organization registered or uses it.
+An organization with names in several languages MUST have one name entry per language, each with its language tag.
+Each entry MAY also carry a type, such as legal name or trade name, and a period.
+Each language version of a legal name is a separate registered fact, so the model keeps it as written.
+`MultilingualText` would suggest a translation that a system may produce.
+
+== Sensitive data
+
+[[DMO-036]]
+*DMO-036.* A model MUST NOT make a slot about a person required unless every use of the entity needs it.
+Examples are a date of birth, a gender or a sex.
+Each process that needs such a slot MUST still be able to require it in its own profile.
+A required slot forces every system to collect the data, even where a service has no need for it.
+
+== References
+
+=== Normative
+
+* link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166, Country codes], ISO. link:https://web.archive.org/web/20261027022740/https://www.iso.org/iso-3166-country-codes.html[Archived copy]
+* link:https://www.itu.int/rec/T-REC-E.123[Recommendation ITU-T E.123, Notation for national and international telephone numbers, e-mail addresses and web addresses], ITU, 2001-02. link:https://web.archive.org/web/20260913011635/https://www.itu.int/rec/T-REC-E.123[Archived copy]
+* link:https://www.itu.int/rec/T-REC-E.164[Recommendation ITU-T E.164, The international public telecommunication numbering plan], ITU, 2010-11. link:https://web.archive.org/web/20261004075302/https://www.itu.int/rec/T-REC-E.164[Archived copy]
+
+=== Informative
+
+* link:https://www.w3.org/TR/skos-reference/[SKOS Simple Knowledge Organization System Reference], W3C, Recommendation, 2009-08-18. link:https://web.archive.org/web/20261020031508/https://www.w3.org/TR/skos-reference/[Archived copy]
+* link:https://www.rfc-editor.org/info/rfc5321[RFC 5321, Simple Mail Transfer Protocol], IETF, 2008-10. link:https://web.archive.org/web/20261027022540/https://www.rfc-editor.org/info/rfc5321/[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-07 |First version.
+|===

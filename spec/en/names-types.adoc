@@ -1,0 +1,96 @@
+= Names, keys and types
+include::_fpsot-terms.adoc[]
+
+These rules apply the {abbr-fpsot-first} naming and data types specifications to the elements of a model.
+They also map the date pattern of Apache OFBiz to the intervals of the data types specification.
+
+== Names
+
+[[DMO-020]]
+*DMO-020.* A class name MUST be a singular noun in UpperCamelCase, such as `PartyRole`.
+Slot names and enumeration values MUST follow the naming specification, such as NAM-010, NAM-040 to NAM-043 and NAM-060.
+Every name MUST use the term of the writing term base when one exists, under NAM-002.
+A name MUST NOT shorten a word, under NAM-005.
+So the model writes `Organization` and `ContactMechanism`, where Apache OFBiz writes `PartyGroup` and `ContactMech`.
+UpperCamelCase is the usual form for link:https://linkml.io/linkml/generators/index.html[LinkML] classes, and it matches the class names of generated code.
+
+== Keys and references
+
+Here, an entity is a class whose records exist on their own and that other data can refer to.
+A value class, such as `PersonName` or `DateInterval`, exists only inside an entity, inlined.
+It needs no `id` and no audit instants, since it is part of the entity that holds it.
+
+[[DMO-021]]
+*DMO-021.* Each entity MUST have a slot named `id`, marked `identifier: true`, with the type `Uuid` of the data types specification.
+A new identifier SHOULD be a version 7 {abbr-uuid-first}, under DAT-063, and MUST be version 4 when DAT-064 applies.
+An identifier that another body issues, such as a business number, MUST NOT be the `id`.
+A key that a system creates never changes and reveals nothing, under DAT-062.
+Another body can change its number, give it to someone else later, or issue none at all.
+
+[[DMO-022]]
+*DMO-022.* A reference to another entity MUST be a slot that holds its `id`, such as `partyId`.
+A model MUST NOT use a key of several fields as an identifier or as the target of a reference.
+An entity that links others, such as a party contact mechanism, MUST still have its own `id`.
+Apache OFBiz keys `PartyContactMech` by the party, the contact mechanism and a start date.
+A model MAY state a natural uniqueness with the `unique_keys` of link:https://linkml.io/linkml/generators/index.html[LinkML], which is not an identifier.
+With its own `id`, a link keeps its key when its period changes, and other data can refer to it.
+
+== Periods of validity
+
+[[DMO-023]]
+*DMO-023.* An entity that holds for a period MUST have a slot named `validity`, which is an interval under DAT-023.
+The model MUST NOT use two separate fields for the start and the end.
+The range SHOULD be `DateInterval` for a fact that changes on a calendar day.
+It SHOULD be `InstantInterval` for a fact that changes at a moment.
+One form lets every tool test whether a record is valid on a given day.
+
+The table maps the date pair of Apache OFBiz to an interval.
+
+[cols="2,3",options="header"]
+|===
+|Apache OFBiz |{abbr-fpsot} model
+|`fromDate` |`validity.start`
+|`thruDate` |`validity.end`
+|Empty `thruDate` |No `end` member
+|Date and time on the server clock |`Instant` in {abbr-utc-first}, or `CalendarDate` when only the day matters
+|`fromDate` in the primary key |Not in any key, since the entity has its own `id`
+|===
+
+The link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/util/EntityUtil.java[OFBiz date filter] treats a record as valid when the moment is on or after `fromDate` and before `thruDate`.
+That is the same rule as DAT-023: the interval holds its start but not its end.
+Into an `InstantInterval`, a mapping therefore copies the two values with no shift of one day or one second.
+
+Into a `DateInterval`, a mapping MUST know the time zone of the source.
+It converts each value to a date in that zone, and the `start` is the date of `fromDate`.
+The `end` is the date of `thruDate` when `thruDate` falls at midnight, and the next day when it falls later.
+The next day keeps the last day of the fact inside the interval, since the interval excludes its end.
+A mapping MUST flag a record with no `fromDate`, and leave out its `validity` until someone sets the start.
+Taking the start from another field, such as the storage instant, would state a fact that the source lacks.
+
+== Types
+
+[[DMO-024]]
+*DMO-024.* Each slot MUST use the type of the data types specification that matches its value.
+Examples are `Instant` for a moment, `CalendarDate` for a date and `Money` for an amount.
+Text that {abbr-fpsot} or an institution publishes in several languages MUST use `MultilingualText`.
+Text that a person enters MUST be a plain string, kept as the person wrote it.
+Examples are a name or an address.
+A name or an address has one form in its own language, under LOC-051, and nobody translates it.
+
+== References
+
+=== Normative
+
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Archived copy]
+
+=== Informative
+
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/util/EntityUtil.java[Apache OFBiz, EntityUtil.java], The Apache Software Foundation, commit e103805, 2026-11-07.
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-07 |First version.
+|===

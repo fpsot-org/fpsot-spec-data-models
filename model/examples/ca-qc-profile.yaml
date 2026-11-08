@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+id: https://data.example.org/model/party-ca-qc
+name: party_ca_qc
+title: Example Québec profile of the FPSOT Party model
+description: >-
+  Example jurisdiction profile. It imports the core Party model and defines
+  the CA-QC member of the extensions object of an organization. The core
+  model stays unchanged. DMO-053 to DMO-056.
+version: 0.1.0
+license: Community-Spec-1.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  qc: https://data.example.org/model/party-ca-qc/
+default_prefix: qc
+default_range: string
+imports:
+  - linkml:types
+  - ../party
+
+classes:
+  QuebecOrganizationExtension:
+    description: "Fields that Québec adds to an organization in this example. DMO-055."
+    attributes:
+      administrativeRegion:
+        pattern: "^[0-9]{2}$"
+        description: >-
+          The administrative region of Québec where the organization has its
+          head office, as the two-digit code of its issuer, such as 03 for
+          Capitale-Nationale. The codes come from the official list of the
+          administrative regions of Québec, Institut de la statistique du
+          Québec, Régions administratives (1997). DAT-066, DMO-055.
+        see_also:
+          - https://statistique.quebec.ca/statistiques/divisions-territoriales/nom-code_dt/6_1.htm
+
+  QuebecOrganizationExtensions:
+    is_a: Extensions
+    description: "The extensions object of an organization under this profile. Members of other jurisdictions stay allowed. DMO-053, DMO-054."
+    extra_slots:
+      allowed: true
+    attributes:
+      caQc:
+        range: QuebecOrganizationExtension
+        inlined: true
+        description: "The member for Québec, named after the ISO 3166-2 code CA-QC in lowerCamelCase. DMO-054."
+
+  QuebecOrganization:
+    is_a: Organization
+    description: "An organization under this profile. DMO-055."
+    slot_usage:
+      extensions:
+        range: QuebecOrganizationExtensions
+
+  QuebecPartyContainer:
+    is_a: PartyContainer
+    tree_root: true
+    description: "The container of the Party model, with the organizations of this profile. Used to test the examples."
+    slot_usage:
+      organizations:
+        range: QuebecOrganization

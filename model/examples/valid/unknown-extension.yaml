@@ -1,0 +1,12 @@
+# The core model accepts an extensions member that it does not define, so a system keeps it (DMO-056).
+organizations:
+  - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    partyType: organization
+    names:
+      - {name: Example Bakery Ltd., nameType: legal, language: en}
+    extensions:
+      caOn:
+        exampleCode: a1
+        exampleList: [one, two]
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
