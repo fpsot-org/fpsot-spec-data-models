@@ -1,0 +1,8 @@
+# The Québec profile checks its own member: the region is a two-digit code (DMO-055).
+quebecOrganizations:
+  - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    partyType: organization
+    extensions:
+      caQc: {administrativeRegion: Capitale-Nationale}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"

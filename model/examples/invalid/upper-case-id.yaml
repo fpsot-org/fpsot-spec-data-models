@@ -1,0 +1,6 @@
+# A UUID is written in lower case (DMO-021, DAT-065).
+persons:
+  - id: 019A5E10-3C4D-7A21-8B3E-1F2A3B4C5D6E
+    partyType: person
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"

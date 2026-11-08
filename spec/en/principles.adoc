@@ -1,0 +1,86 @@
+= Principles
+include::_fpsot-terms.adoc[]
+
+These rules apply to every {abbr-fpsot-first} data model.
+They say what a model describes, and what it leaves to each system.
+
+== What a model describes
+
+[[DMO-001]]
+*DMO-001.* A data model MUST describe the data that systems exchange and keep: its entities, fields, types, references and constraints.
+It MUST NOT describe the behavior of a system, such as business rules, screens or workflows.
+A model is a contract on data.
+Many systems with different behavior can then share the same data.
+
+[[DMO-002]]
+*DMO-002.* Each subject area, entity and field group of an {abbr-fpsot} model is optional.
+A system MAY implement any part of a model and leave out the rest.
+It MAY also take a part from another system, such as its own Party records, Apache OFBiz or another product.
+That system MAY run inside the same program or as a remote service.
+Institutions already hold party data, and few would adopt a model that demands all or nothing.
+
+[[DMO-003]]
+*DMO-003.* A data model MUST NOT say how a system stores its data.
+It does not name tables or indexes, and it does not name a database product.
+A persistence mapping is a separate generated file, under DMO-070.
+The same model then fits a relational database, a document store or a remote service.
+
+[[DMO-004]]
+*DMO-004.* A system MUST exchange the data of each part it implements or replaces in the model form.
+It MAY keep the data in any other form inside its own boundary, and convert at the boundary.
+Other systems then depend only on the model, never on the product behind it.
+
+[[DMO-005]]
+*DMO-005.* A data model MUST NOT require a given product or framework.
+It MUST NOT require an application module or a way to deploy.
+A model MAY name a product as one implementation, as this specification names Apache OFBiz.
+A required product would tie every adopter to one vendor or one code base.
+
+== Universal data model patterns
+
+[[DMO-006]]
+*DMO-006.* A data model SHOULD follow the patterns of the universal data models, as Apache OFBiz implements them.
+It MAY depart from a pattern that conflicts with another {abbr-fpsot} specification, or that does not fit public sector data.
+The description of the element MUST then state the departure and its reason.
+These patterns have served many kinds of organizations for decades, so they rarely need a redesign.
+A stated departure lets an implementer map the model to OFBiz and back.
+
+=== Background (informative)
+
+The universal data models come from the work of Len Silverston.
+His book, _The Data Model Resource Book_, publishes them.
+Apache OFBiz is an open source application that implements these patterns.
+Its link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[list of model changes] says that OFBiz follows this model, with some changes.
+This specification relies on the public OFBiz model, not on the book.
+It copies no text, diagram or attribute list from the book.
+
+The link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml[OFBiz party model] shows these patterns, in short:
+
+* One party supertype covers both people and organizations, so other data can refer to either one.
+* A role is a separate record that links a party to a kind of role.
+One party can then hold many roles.
+* A relationship links two parties, each in a role, for a period.
+* A contact mechanism, such as an address, is a separate record.
+A link ties it to a party, with a purpose and a period.
+* Kinds of roles, relationships and contact purposes are records of type entities, which can form a hierarchy.
+* Many links carry a start date and an end date, named `fromDate` and `thruDate`.
+The history then stays in the data.
+
+The other pages of this specification adapt each pattern to the other {abbr-fpsot} specifications.
+For example, type entities become controlled vocabularies, and date pairs become intervals.
+
+== References
+
+=== Informative
+
+* Len Silverston, The Data Model Resource Book, Volume 1: A Library of Universal Data Models for All Enterprises, Revised Edition, Wiley, ISBN 978-0-471-38023-8, 2001-03.
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[Apache OFBiz, DATAMODEL_CHANGES.adoc], The Apache Software Foundation, commit e103805, 2026-11-07.
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml[Apache OFBiz, party-entitymodel.xml], The Apache Software Foundation, commit e103805, 2026-11-07.
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-07 |First version.
+|===

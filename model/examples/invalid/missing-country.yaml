@@ -1,0 +1,8 @@
+# A postal address always has its country (DMO-033, LOC-053).
+postalAddresses:
+  - id: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    contactMechanismType: postal-address
+    street: rue Saint-Jean
+    locality: Québec
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"

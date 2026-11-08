@@ -1,0 +1,60 @@
+= Stockage et outils
+include::_fpsot-terms.adoc[]
+
+Un modèle ne dit rien du stockage, selon DMO-003.
+Ces règles portent sur les fichiers qui font correspondre un modèle à un stockage, et sur les outils prévus.
+
+== Correspondances de stockage
+
+[[DMO-070]]
+*DMO-070.* Une correspondance de stockage DOIT être un fichier distinct, généré à partir du modèle selon DMO-014.
+Par exemple, des définitions de tables en {abbr-sql-first} ou un fichier de définition d’entités d’Apache OFBiz.
+Le fichier {abbr-sql} de `model/generated/` est un exemple de correspondance, pour PostgreSQL.
+Un système PEUT stocker les données d’un modèle de toute autre façon.
+Par exemple, dans un magasin de documents, dans le moteur d’entités d’OFBiz ou dans un service distant.
+Une correspondance générée suit chaque changement du modèle, et aucun stockage ne devient une partie du modèle.
+
+[[DMO-071]]
+*DMO-071.* Une correspondance de stockage PEUT ajouter des éléments propres au stockage.
+Par exemple, des index, des colonnes techniques ou des clés de partition.
+Ces éléments NE DOIVENT PAS changer le sens d’un champ, et NE DOIVENT PAS figurer dans les données échangées.
+Les données échangées restent alors les mêmes, quel que soit le stockage d’un système.
+
+[[DMO-072]]
+*DMO-072.* Un modèle PEUT publier un fichier {abbr-xml-first} pour les systèmes bâtis sur l’Entity Engine d’Apache OFBiz.
+Un outil DOIT générer ce fichier, et la vérification DOIT le couvrir, comme l’exigent DMO-014 à DMO-016.
+Le link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/dtd/entitymodel.xsd[schéma du modèle d’entités] d’OFBiz fixe la forme de ce fichier.
+Un système OFBiz peut alors charger le modèle sans copie écrite à la main.
+
+[[DMO-073]]
+*DMO-073.* Une correspondance d’un modèle existant vers un modèle de la {abbr-fpsot-first} DOIT cibler chaque entité et champ.
+Elle DOIT appliquer la correspondance des dates de DMO-023 et celle des instants d’audit de DMO-050.
+Elle DOIT énumérer chaque champ qui n’a pas de cible.
+Le modèle des parties d’OFBiz est un exemple de modèle existant.
+La personne qui met en œuvre sait alors ce qu’une conversion garde, change et laisse tomber.
+
+== Outils prévus (informatif)
+
+La {abbr-fpsot} prévoit trois outils.
+Aucun n’existe encore, et cette spécification n’en dépend pas.
+
+* Un traducteur du {abbr-xml} de l’Entity Engine vers LinkML, pour partir des définitions d’entités d’OFBiz existantes.
+* Un générateur de LinkML vers le {abbr-xml} de l’Entity Engine, pour produire le fichier de DMO-072.
+* Une extension LinkML pour Quarkus, pour qu’un service Java emploie directement un modèle LinkML.
+Le moteur d’entités d’OFBiz fonctionne de la même façon avec ses propres définitions.
+
+Chaque outil suivra DMO-002 : un système peut l’employer ou non, et rester conforme.
+
+== Références
+
+=== Références informatives
+
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/dtd/entitymodel.xsd[Apache OFBiz, entitymodel.xsd], The Apache Software Foundation, archivage e103805, 2026-11-07.
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-07 |Première version.
+|===

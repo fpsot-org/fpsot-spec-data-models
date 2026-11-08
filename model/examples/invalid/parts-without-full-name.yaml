@@ -1,0 +1,8 @@
+# A name always has its full form; the parts are optional (DMO-032, LOC-050).
+persons:
+  - id: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    partyType: person
+    names:
+      - {givenNames: Marie-Ève, familyName: Lévesque-Côté}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"

@@ -1,0 +1,8 @@
+# An interval always has its start (DMO-023, DAT-023).
+partyRoles:
+  - id: 019a5e10-3c4d-7a21-8b3e-3b4c5d6e7f80
+    partyId: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    role: employee
+    validity: {end: "2027-01-01"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"

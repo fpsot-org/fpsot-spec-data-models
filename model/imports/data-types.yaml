@@ -1,0 +1,125 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+id: https://fpsot.org/model/data-types
+name: data_types
+title: FPSOT data types
+description: >-
+  LinkML types and classes for the FPSOT data types specification.
+  Import this schema and use these ranges, so that every FPSOT model
+  stores and exchanges the same JSON forms. Each element cites its
+  requirement IDs.
+version: 0.1.0
+license: Community-Spec-1.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dat: https://fpsot.org/model/data-types/
+default_prefix: dat
+default_range: string
+imports:
+  - linkml:types
+
+types:
+  Instant:
+    typeof: datetime
+    description: "A moment in time, in UTC with Z, such as 2026-11-04T15:30:00Z. DAT-010, DAT-011."
+    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$"
+  CalendarDate:
+    typeof: date
+    description: "A date without a time, such as 2026-11-04. DAT-014."
+    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+  LocalDateTime:
+    typeof: string
+    description: "A wall-clock date and time without an offset, such as 2027-03-14T09:00:00. Always paired with a time zone. DAT-015."
+    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?$"
+  TimeOfDay:
+    typeof: string
+    description: "A wall-clock time without a date, such as 09:00:00. DAT-016."
+    pattern: "^[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?$"
+  Duration:
+    typeof: string
+    description: "An ISO 8601 duration without fractions, such as PT30M, P1Y2M or P1Y1D. Weeks stand alone. Writers should use the stricter RFC 3339 appendix A form. DAT-020, DAT-024."
+    pattern: "^P(?:[0-9]+W|(?=[0-9]|T[0-9])(?:[0-9]+Y)?(?:[0-9]+M)?(?:[0-9]+D)?(?:T(?=[0-9])(?:[0-9]+H)?(?:[0-9]+M)?(?:[0-9]+S)?)?)$"
+  TimeZoneName:
+    typeof: string
+    description: "A time zone name from the IANA time zone database, such as America/Toronto. DAT-030."
+    pattern: "^[A-Za-z][A-Za-z0-9_+-]*(/[A-Za-z0-9_+-]+)*$"
+  DecimalString:
+    typeof: string
+    description: "An exact decimal number written as a string, such as -12.50. DAT-041."
+    pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+  CurrencyCode:
+    typeof: string
+    description: "An ISO 4217 alphabetic currency code, such as CAD. DAT-051."
+    pattern: "^[A-Z]{3}$"
+  Uuid:
+    typeof: string
+    description: "A UUID in lower-case canonical form, as written and stored. A reader converts other cases to lower case before it validates. DAT-065, DAT-067."
+    pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+  Uuid7:
+    typeof: string
+    description: "A version 7 UUID in lower-case canonical form, for new identifiers. DAT-063, DAT-065."
+    pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+  CodeValue:
+    typeof: string
+    description: "A code list or enum value in lower-case kebab-case, such as in-review. DAT-072."
+    pattern: "^[a-z0-9]+(-[a-z0-9]+)*$"
+
+classes:
+  Money:
+    description: "An amount of money. DAT-050 to DAT-053."
+    attributes:
+      amount: {required: true, range: DecimalString}
+      currency: {required: true, range: CurrencyCode}
+
+  MultilingualText:
+    description: "Text in English and French, keyed by language tag. Other language tags are allowed as extra members. DAT-004 to DAT-006."
+    attributes:
+      en: {required: true, pattern: "\\S"}
+      fr: {required: true, pattern: "\\S"}
+    extra_slots:
+      range_expression: {range: string, pattern: "\\S"}
+
+  ZonedLocalDateTime:
+    description: "A wall-clock date and time with the time zone it belongs to. DAT-015."
+    attributes:
+      localDateTime: {required: true, range: LocalDateTime}
+      timeZone: {required: true, range: TimeZoneName}
+
+  InstantInterval:
+    description: "A span between two instants. The end is excluded and may be absent. DAT-023."
+    attributes:
+      start: {required: true, range: Instant}
+      end: {range: Instant}
+
+  DateInterval:
+    description: "A span between two dates. The end is excluded and may be absent. DAT-023."
+    attributes:
+      start: {required: true, range: CalendarDate}
+      end: {range: CalendarDate}
+
+  Point:
+    description: "A GeoJSON point: longitude, then latitude, in WGS 84 decimal degrees. DAT-080, DAT-081."
+    attributes:
+      type: {required: true, range: GeometryType}
+      coordinates: {required: true, multivalued: true, range: double, minimum_cardinality: 2, maximum_cardinality: 3}
+
+  Examples:
+    tree_root: true
+    description: "Container used only to test the examples of this schema."
+    attributes:
+      id: {identifier: true, range: Uuid7}
+      createdAt: {range: Instant}
+      birthDate: {range: CalendarDate}
+      appointment: {range: ZonedLocalDateTime, inlined: true}
+      openingTime: {range: TimeOfDay}
+      processingTime: {range: Duration}
+      fee: {range: Money, inlined: true}
+      name: {range: MultilingualText, inlined: true}
+      validity: {range: DateInterval, inlined: true}
+      status: {range: CodeValue}
+      active: {range: boolean}
+      location: {range: Point, inlined: true}
+
+enums:
+  GeometryType:
+    permissible_values:
+      Point: {}

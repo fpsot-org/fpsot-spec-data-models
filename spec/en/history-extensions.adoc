@@ -1,0 +1,102 @@
+= Audit, history and extensions
+include::_fpsot-terms.adoc[]
+
+These rules record when a system stored each entity, and how an entity keeps its past.
+They also set the one place where a {term-jurisdiction} adds its own fields.
+
+== Audit instants
+
+[[DMO-050]]
+*DMO-050.* Each entity MUST have a `createdAt` and an `updatedAt` slot, both required, with the type `Instant`.
+The system of record MUST set them when it first stores the entity, and each time it changes the entity.
+These instants MUST NOT serve as the period of a fact, which belongs in `validity` under DMO-023.
+A system that needs to know who made each change SHOULD keep that in an audit log outside the entity.
+Apache OFBiz also stamps each entity, in fields named `createdStamp` and `lastUpdatedStamp`, as its link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/model/ModelEntity.java[entity engine code] shows.
+A mapping copies them as instants in {abbr-utc-first}.
+
+The audit instants tell when the system learned a fact, while `validity` tells when the fact is true.
+Take a move on 1 June that the system learns on 10 June.
+Its validity starts on 1 June, and its `createdAt` is on 10 June.
+
+== History
+
+[[DMO-051]]
+*DMO-051.* When a fact with a `validity` slot changes, the system MUST end its record and add a new one.
+It sets the `end` of the old record to the start of the new one.
+To fix a value that was wrong from the start, a system MAY change the record in place.
+Past facts then stay in the data, such as a former address or a former name.
+Two intervals that join end to start leave no gap and no overlap, under DAT-023.
+
+[[DMO-052]]
+*DMO-052.* A system MUST NOT delete a record only because its period has ended.
+Deletion follows the retention rules that apply to the deployment.
+An ended record still explains past decisions, such as where a notice went.
+
+== Extensions
+
+[[DMO-053]]
+*DMO-053.* Each entity MAY have one `extensions` slot, which holds an object.
+This object is the only place for fields that one jurisdiction adds to the core model.
+Each member MUST take its name from the link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166-1] or link:https://www.iso.org/standard/72483.html[ISO 3166-2] code of one jurisdiction.
+The name MUST be in lowerCamelCase, such as `ca` or `caQc`.
+The value of each member MUST be an object.
+
+LinkML turns a hyphen in a slot name into an underscore.
+So a member name cannot keep the hyphen of `CA-QC`.
+LowerCamelCase follows NAM-010 and NAM-011 for field names.
+
+[source,json]
+----
+{
+  "id": "019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f",
+  "partyType": "organization",
+  "names": [{"name": "Boulangerie du Faubourg inc.", "language": "fr"}],
+  "extensions": {"caQc": {"administrativeRegion": "03"}},
+  "createdAt": "2026-11-07T14:00:00Z",
+  "updatedAt": "2026-11-07T14:05:00Z"
+}
+----
+
+[[DMO-054]]
+*DMO-054.* A field of a jurisdiction MUST NOT appear beside the core fields of an entity.
+Its name MUST NOT carry a prefix or a namespace instead, such as `qcRegion` or `ca:region`.
+Prefixed names mix the core and the local parts in one list, and every new jurisdiction adds to it.
+With one object per jurisdiction, a reader finds every local field in one place and can skip the others.
+
+[[DMO-055]]
+*DMO-055.* A jurisdiction profile MUST define each member of `extensions`, in its own LinkML schema that imports the core model.
+The profile MUST cite the law, regulation or standard that each of its fields comes from.
+The core model MUST NOT change to add a member.
+Each jurisdiction can then publish and version its profile on its own schedule.
+The file `model/examples/ca-qc-profile.yaml` is an example profile for Québec.
+
+[[DMO-056]]
+*DMO-056.* A system MUST keep each unknown member of `extensions` when it stores or passes on a record.
+It MUST NOT reject a record because of such a member.
+A member MUST NOT repeat or change the meaning of a core field.
+A record can then cross a system that knows only the core model without losing local data.
+The core model accepts any member of `extensions`, and each profile checks its own members.
+
+[[DMO-057]]
+*DMO-057.* A field that several jurisdictions need SHOULD move into the core model, in a minor version under DMO-061.
+This applies when the field has the same meaning in each jurisdiction.
+The extension members then keep only what is truly local.
+
+== References
+
+=== Normative
+
+* link:https://www.iso.org/iso-3166-country-codes.html[ISO 3166 Country Codes], ISO. link:https://web.archive.org/web/20261027022740/https://www.iso.org/iso-3166-country-codes.html[Archived copy]
+* link:https://www.iso.org/standard/72483.html[ISO 3166-2:2020, Codes for the representation of names of countries and their subdivisions, Part 2: Country subdivision code], ISO, 2020-08. link:https://web.archive.org/web/20261013114742/https://www.iso.org/standard/72483.html[Archived copy]
+
+=== Informative
+
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/model/ModelEntity.java[Apache OFBiz, ModelEntity.java], The Apache Software Foundation, commit e103805, 2026-11-07.
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-07 |First version.
+|===

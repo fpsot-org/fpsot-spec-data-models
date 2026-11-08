@@ -1,0 +1,81 @@
+= Noms, clés et types
+include::_fpsot-terms.adoc[]
+
+Ces règles appliquent à un modèle les spécifications de la {abbr-fpsot-first} sur le nommage et les types de données.
+Elles font aussi correspondre le patron de dates d’Apache OFBiz aux intervalles de la spécification sur les types de données.
+
+== Noms
+
+[[DMO-020]]
+*DMO-020.* Un nom de classe DOIT être un nom commun au singulier, en UpperCamelCase, comme `PartyRole`.
+Les noms d’attributs et les valeurs d’énumération DOIVENT suivre le nommage, comme NAM-010, NAM-040 à NAM-043 et NAM-060.
+Chaque nom DOIT employer le terme de la base terminologique de rédaction quand il en existe un, selon NAM-002.
+Un nom NE DOIT PAS abréger un mot, selon NAM-005.
+Le modèle écrit donc `Organization` et `ContactMechanism`, là où Apache OFBiz écrit `PartyGroup` et `ContactMech`.
+L’UpperCamelCase est la forme courante des classes LinkML, et il concorde avec les noms de classes du code généré.
+
+== Clés et références
+
+[[DMO-021]]
+*DMO-021.* Chaque entité DOIT avoir un attribut `id`, marqué `identifier: true`, avec le type `Uuid` des types de données.
+Un nouvel identifiant DEVRAIT être un {abbr-uuid-first} de version 7, selon DAT-063, ou de version 4 selon DAT-064.
+Un identifiant qu’attribue un autre organisme, comme un numéro d’entreprise, NE DOIT PAS servir d’`id`.
+Une clé que crée un système ne change jamais et ne révèle rien, selon DAT-062.
+Un autre organisme peut changer son numéro, le donner plus tard à quelqu’un d’autre, ou n’en attribuer aucun.
+
+[[DMO-022]]
+*DMO-022.* Une référence à une autre entité DOIT être un attribut qui contient son `id`, comme `partyId`.
+Un modèle NE DOIT PAS employer de clé formée de plusieurs champs.
+Une entité qui relie deux autres entités, comme un rôle de partie, DOIT quand même avoir son propre `id`.
+Apache OFBiz forme la clé d’un tel lien avec les deux références et une date de début.
+Avec son propre `id`, un lien peut changer de période et garder sa clé.
+D’autres données peuvent aussi y renvoyer.
+
+== Périodes de validité
+
+[[DMO-023]]
+*DMO-023.* Une entité valable pour une période DOIT avoir un attribut nommé `validity`, qui est un intervalle selon DAT-023.
+Le modèle NE DOIT PAS employer deux champs distincts pour le début et la fin.
+Le domaine de valeurs DEVRAIT être `DateInterval` pour un fait qui change un jour civil donné.
+Il DEVRAIT être `InstantInterval` pour un fait qui change à un moment précis.
+Une seule forme permet à chaque outil de savoir si un enregistrement est valable un jour donné.
+
+Le tableau fait correspondre la paire de dates d’Apache OFBiz à un intervalle.
+
+[cols="2,3",options="header"]
+|===
+|Apache OFBiz |Modèle de {abbr-fpsot}
+|`fromDate` |`validity.start`
+|`thruDate` |`validity.end`
+|`thruDate` vide |Pas de membre `end`
+|Date et heure selon l’horloge du serveur |`Instant` en {abbr-utc-first}, ou `CalendarDate` quand seul le jour compte
+|`fromDate` dans la clé primaire |Dans aucune clé, car l’entité a son propre `id`
+|===
+
+Le link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/util/EntityUtil.java[filtre de dates d’OFBiz] tient un enregistrement pour valable à partir de `fromDate` et jusqu’avant `thruDate`.
+C’est la même règle que DAT-023 : l’intervalle comprend son début, mais pas sa fin.
+Une correspondance copie donc les deux valeurs sans décalage d’un jour ni d’une seconde.
+
+== Types
+
+[[DMO-024]]
+*DMO-024.* Chaque attribut DOIT employer le type de la spécification sur les types de données qui convient à sa valeur.
+Par exemple, `Instant` pour un moment, `CalendarDate` pour une date et `Money` pour un montant.
+Le texte que {abbr-fpsot} ou une institution publie en plusieurs langues DOIT employer `MultilingualText`.
+Le texte qu’une personne saisit DOIT être une simple chaîne, gardée telle que la personne l’a écrite.
+C’est le cas d’un nom ou d’une adresse.
+Un nom ou une adresse a une seule forme dans sa propre langue, selon LOC-055, et personne ne le traduit.
+
+== Références
+
+=== Références informatives
+
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/util/EntityUtil.java[Apache OFBiz, EntityUtil.java], The Apache Software Foundation, archivage e103805, 2026-11-07.
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-07 |Première version.
+|===

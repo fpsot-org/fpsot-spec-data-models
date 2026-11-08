@@ -1,15 +1,142 @@
-= Guide
-:page-type: explanation
+= Build a small Party example
+:page-type: how-to
 include::_fpsot-terms.adoc[]
 
-This page explains the specification for the people who adopt it.
-Each guide page has one type.
-It is a tutorial, a how-to guide, a reference or an explanation.
+This guide builds a small set of Party records and checks them with the LinkML validator.
+The set holds a person, an organization, a role, a postal address and a Québec extension.
+The finished file is `model/examples/valid/party-example.yaml`.
+
+== Set up the tools
+
+Install the LinkML tools at the release that the repository fixes, under DMO-016:
+
+[source,shell]
+----
+python3 -m venv .venv
+.venv/bin/pip install "linkml==1.12.1"
+export PATH="$PWD/.venv/bin:$PATH"
+----
+
+== Add a person
+
+A person has one or more names.
+Only `fullName` is required, and the parts are optional, under DMO-032.
+
+[source,yaml]
+----
+persons:
+  - id: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    partyType: person
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+    names:
+      - fullName: Marie-Ève Lévesque-Côté
+        givenNames: Marie-Ève
+        familyName: Lévesque-Côté
+        nameType: legal
+        language: fr
+----
+
+== Add an organization with a Québec extension
+
+The organization keeps its name as registered, under DMO-035.
+The field that Québec adds goes in the `caQc` member of `extensions`, under DMO-053.
+It never goes beside the core fields, under DMO-054.
+
+[source,yaml]
+----
+quebecOrganizations:
+  - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    partyType: organization
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:05:00Z"
+    names:
+      - name: Boulangerie du Faubourg inc.
+        nameType: legal
+        language: fr
+        validity: {start: "2019-04-01"}
+    extensions:
+      caQc:
+        administrativeRegion: "03"
+----
+
+The example profile `model/examples/ca-qc-profile.yaml` defines `caQc` and checks that the region is a two-digit code.
+The core model keeps the member without checking it, under DMO-056.
+
+== Give the organization a role
+
+A role is its own entity, with a code and a period, under DMO-043.
+The period holds its start but not its end, under DAT-023.
+
+[source,yaml]
+----
+partyRoles:
+  - id: 019a5e10-3c4d-7a21-8b3e-3b4c5d6e7f80
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    role: permit-holder
+    validity: {start: "2026-11-07", end: "2027-11-07"}
+    createdAt: "2026-11-07T14:10:00Z"
+    updatedAt: "2026-11-07T14:10:00Z"
+----
+
+== Add a postal address and link it
+
+The address is a contact mechanism, with separate fields kept as written, under DMO-033.
+A separate link ties it to the organization, with purposes and a period, under DMO-045.
+
+[source,yaml]
+----
+postalAddresses:
+  - id: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    contactMechanismType: postal-address
+    civicNumber: "1200"
+    street: rue Saint-Jean
+    locality: Québec
+    region: QC
+    postalCode: G1R 1S1
+    country: CA
+    language: fr
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+partyContactMechanisms:
+  - id: 019a5e10-3c4d-7a21-8b3e-5d6e7f8091a2
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    contactMechanismId: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    purposes: [mailing, head-office]
+    validity: {start: "2019-04-01"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+----
+
+== Check the records
+
+Put the four parts in one file, then validate it with the test schema, which imports the Québec profile:
+
+[source,shell]
+----
+linkml-validate -s model/examples/test-schema.yaml -C Examples party-example.yaml
+----
+
+The validator answers `No issues found`.
+It rejects a region written as a name, and a role with `fromDate`.
+It also rejects a field such as `qcAdministrativeRegion` beside the core fields.
+
+== Check the whole model
+
+Run the script of the repository after each change to the model:
+
+[source,shell]
+----
+bash model/test-model.sh
+----
+
+It checks the examples and compares each generated file with a fresh generation, under DMO-015.
+After a change to `model/party.yaml`, run it with `UPDATE=true`, then commit the generated files with the source.
 
 == Document history
 
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Change
-|0.1.0 |2026-11-03 |First version.
+|0.1.0 |2026-11-07 |First version.
 |===

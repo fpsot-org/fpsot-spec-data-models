@@ -1,0 +1,27 @@
+# FPSOT data models specification
+
+> How FPSOT projects define and publish entity data models: one LinkML source per model, generated JSON Schema, SQL, OWL and SHACL files with drift checks, and the Party subject area (persons, organizations, roles, relationships, contact mechanisms, identifications, classifications).
+
+## Specification
+
+- [Overview](spec/en/index.adoc): scope, parts and conformance.
+- [Principles](spec/en/principles.adoc): DMO-001 to DMO-006.
+- [LinkML source and generated files](spec/en/linkml.adoc): DMO-010 to DMO-017.
+- [Names, keys and types](spec/en/names-types.adoc): DMO-020 to DMO-024.
+- [Codes, names and contact data](spec/en/codes-contact.adoc): DMO-030 to DMO-036.
+- [Party subject area](spec/en/party.adoc): DMO-040 to DMO-047.
+- [Audit, history and extensions](spec/en/history-extensions.adoc): DMO-050 to DMO-057.
+- [Versions and deprecation](spec/en/versions.adoc): DMO-060 to DMO-064.
+- [Persistence and tooling](spec/en/persistence.adoc): DMO-070 to DMO-073.
+
+## Model
+
+- [LinkML Party model](model/party.yaml)
+- [Generated files](model/generated/)
+- [Example Québec profile](model/examples/ca-qc-profile.yaml)
+- [How-to guide](docs/modules/en/pages/index.adoc)
+
+## Optional
+
+- [Agent skill](skill/SKILL.md)
+- [Français](spec/fr/index.adoc)

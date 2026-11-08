@@ -1,33 +1,38 @@
-= FPSOT specification template
+= FPSOT data models specification
 
-This repository is the starting point for an FPSOT specification.
-Create a new repository from it, then replace this text.
-
-== Start a specification
-
-. Set `SPEC_PREFIX` in `.github/workflows/ci.yml` to the three-letter prefix of the requirement IDs.
-. Replace the titles in `spec/`, `docs/antora.yml`, `publiccode.yml`, `AGENTS.md`, `NOTICE` and `skill/SKILL.md`.
-. Replace the example requirement TPL-001 and the example row in `jurisdictions/baseline.yaml`.
-. List each spec page in `spec/<lang>/book.adoc`. The glossary stays the last include.
-
-Each page ends with a document history.
-Each guide page sets `:page-type:` to tutorial, how-to, reference or explanation.
-Write abbreviations and defined terms as `{abbr-…}` and `{term-…}` from the term base of `fpsot-spec-writing`.
-Write English in US spelling.
-Each page that cites outside sources ends with a References section, right before its document history.
-Each code block names its language, such as `[source,text]` or `[source,plantuml]`.
-The continuous integration writes `_fpsot-terms.adoc`, the glossaries and the comparison pages. Git ignores them.
+Rules for how FPSOT projects define and publish the data models of their entities.
+Each model has one LinkML source, and tools generate its JSON Schema, SQL, OWL and SHACL forms, with a check that fails on any drift.
+The first subject area is Party: persons, organizations, roles, relationships, contact mechanisms, identifications and classifications.
+The models follow the universal data model patterns as Apache OFBiz implements them, adapted to the other FPSOT specifications.
+Version 0.1 is a draft.
 
 == Implement this spec
 
 Read the normative text in `spec/en/` or `spec/fr/`.
-Each requirement has an ID, such as `XYZ-001`.
-Check your implementation against every requirement.
+Each requirement has an ID from `DMO-001` to `DMO-073`.
+
+* Write each model as a LinkML schema under `model/`, which imports the FPSOT data types model.
+* Generate the other forms into `model/generated/`, and run `model/test-model.sh` in the continuous integration, so that drift fails the build.
+* Keep jurisdiction fields in the `extensions` object, defined by a separate profile schema.
+
+Every part of a model is optional.
+A system can implement a part, or take it from its own Party records, Apache OFBiz or another system, embedded or as a remote service.
+It conforms when the data it exchanges for that part takes the form of the model.
 
 == Adopt this spec
 
-Read the guides in `docs/modules/en/pages/` or `docs/modules/fr/pages/`.
-They explain what the spec gives your organization and how to require it.
+Read the guide in `docs/modules/en/pages/index.adoc` or `docs/modules/fr/pages/index.adoc`.
+It builds a small Party example, with a Québec extension, and checks it with the LinkML validator.
+The comparison data in `jurisdictions/` shows how the rules of Canada and Québec differ.
+
+To check the model locally:
+
+[source,shell]
+----
+python3 -m venv .venv
+.venv/bin/pip install "linkml==1.12.1"
+PATH="$PWD/.venv/bin:$PATH" bash model/test-model.sh
+----
 
 == Layout
 
@@ -36,22 +41,25 @@ They explain what the spec gives your organization and how to require it.
 | Folder | Content
 
 | `spec/`
-| Normative text, in English and French. `book.adoc` joins the pages into one book.
+| Normative text, in English and French. `book.adoc` joins the pages into one book, published as PDF with each release.
 
 | `docs/`
 | Guides, in the Antora folder layout.
+
+| `model/`
+| The LinkML Party model, a copy of the data types model in `imports/`, the generated files in `generated/`, and examples with a Québec profile in `examples/`. Run `model/test-model.sh` after a change.
 
 | `skill/`
 | The agent skill: a short summary that cites requirement IDs.
 
 | `rules/`
-| Machine-checkable rules.
+| Machine-checkable rules. The model checks are in `model/`.
 
 | `diagrams/`
-| PlantUML sources and their rendered SVG files.
+| PlantUML sources and their rendered SVG files. None yet; the Party diagram is inline in `spec/`.
 
 | `jurisdictions/`
-| Comparison data per jurisdiction. `baseline.yaml` lists the compared requirements.
+| Comparison data: how each government handles the same topics.
 |===
 
 == License

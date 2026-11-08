@@ -1,0 +1,101 @@
+= Source LinkML et fichiers générés
+include::_fpsot-terms.adoc[]
+
+Chaque modèle de la {abbr-fpsot-first} a une seule source, écrite en link:https://linkml.io/linkml/generators/index.html[LinkML].
+Des outils génèrent toutes les autres formes du modèle à partir de cette source.
+Ces règles fixent la source, les fichiers générés et les vérifications qui les gardent en accord.
+
+== La source
+
+[[DMO-010]]
+*DMO-010.* Chaque modèle de données DOIT avoir un seul schéma LinkML comme source, sous gestion de versions dans `model/`.
+Un modèle DEVRAIT placer un domaine par fichier de schéma, comme `model/party.yaml`.
+Une seule source donne un seul endroit où changer le modèle.
+Toutes les autres formes s’accordent alors avec elle par construction.
+
+[[DMO-011]]
+*DMO-011.* Un schéma DOIT déclarer ses champs `id`, `name`, `title`, `description`, `version` et `license`.
+L’`id` DOIT être un {abbr-uri-first} `https` sous un domaine que l’éditeur contrôle, comme `https://fpsot.org/model/party`.
+Le schéma DOIT déclarer un `default_prefix` qui donne l’`id` suivi de `/`.
+La `version` suit DMO-060.
+Ces champs disent au lectorat et aux outils ce qu’est le schéma, à qui il appartient et sa version.
+
+[[DMO-012]]
+*DMO-012.* Un schéma DOIT importer le modèle des types de données de {abbr-fpsot}, et employer ses types et classes.
+Il NE DOIT PAS définir son propre type pour une forme que fixent les types de données, comme un intervalle.
+Quand un outil ne peut pas obtenir l’import, le dépôt PEUT garder une copie de ce modèle, sans changement.
+Un commentaire DOIT alors nommer la version de la copie.
+Le modèle Party importe une telle copie, tirée de la version v0.1.1 des types de données.
+Chaque modèle de {abbr-fpsot} écrit alors la même forme {abbr-json-first} pour la même sorte de valeur.
+
+[[DMO-013]]
+*DMO-013.* Chaque classe, attribut, type et énumération DOIT avoir une `description`.
+La description DEVRAIT citer les identifiants des exigences que suit l’élément.
+Les fichiers générés et la documentation copient ces descriptions.
+Le lectorat trouve alors la raison de chaque élément dans chaque forme du modèle.
+
+== Fichiers générés
+
+[[DMO-014]]
+*DMO-014.* Un outil DOIT générer chaque autre forme du modèle à partir de la source LinkML.
+Le dépôt DOIT garder ces fichiers dans `model/generated/`, et personne ne les modifie à la main.
+Pour le modèle Party, les fichiers sont :
+
+* un link:https://json-schema.org/draft/2019-09[JSON Schema], pour vérifier les données {abbr-json} ;
+* des définitions de tables en {abbr-sql-first}, comme exemple de correspondance de stockage selon DMO-070 ;
+* une ontologie link:https://www.w3.org/TR/owl2-overview/[OWL 2] en Turtle, pour décrire le sens des données ;
+* des formes link:https://www.w3.org/TR/shacl/[SHACL] en Turtle, pour vérifier les données en {abbr-rdf-first}.
+
+Un fichier modifié à la main s’écarte de sa source, et deux formes du modèle ne concordent plus.
+
+[[DMO-015]]
+*DMO-015.* Une vérification DOIT générer de nouveau chaque fichier, et échouer quand le résultat diffère du fichier du dépôt.
+L’{abbr-ci-first} DOIT lancer cette vérification à chaque changement.
+Un changement de la source ne peut alors pas être fusionné avant que les fichiers générés concordent.
+Une modification à la main d’un fichier généré fait échouer la vérification de la même façon.
+Le script `model/test-model.sh` de ce dépôt lance cette vérification.
+
+[[DMO-016]]
+*DMO-016.* Le dépôt DOIT fixer la version des outils LinkML qui génère ses fichiers.
+La vérification DOIT échouer quand elle tourne avec une autre version.
+Deux versions d’un générateur peuvent écrire des fichiers différents à partir de la même source.
+Une version fixe permet à la vérification de trouver les écarts plutôt que les changements d’outils.
+Le modèle Party emploie link:https://github.com/linkml/linkml/releases/tag/v1.12.1[LinkML 1.12.1].
+
+[[DMO-017]]
+*DMO-017.* Chaque modèle DOIT avoir des exemples de données valides et de données non valides, dans `model/examples/`.
+La vérification DOIT accepter chaque exemple valide et refuser chaque exemple non valide.
+Chaque exemple non valide DEVRAIT enfreindre une seule règle, et un commentaire DEVRAIT la nommer.
+Les exemples montrent comment se lit le modèle, et ils prouvent que ses contraintes fonctionnent.
+
+== Générateurs (informatif)
+
+Les outils LinkML comptent un générateur pour chaque fichier de DMO-014 : `gen-json-schema`, `gen-sqltables`, `gen-owl` et `gen-shacl`.
+Les pages des générateurs link:https://linkml.io/linkml/generators/json-schema.html[JSON Schema], link:https://linkml.io/linkml/generators/sqltable.html[SQL], link:https://linkml.io/linkml/generators/owl.html[OWL] et link:https://linkml.io/linkml/generators/shacl.html[SHACL] décrivent leurs options.
+Sa page présente le générateur SHACL comme une version bêta.
+LinkML 1.12.1 écrit le JSON Schema dans le dialecte 2019-09.
+
+== Références
+
+=== Références normatives
+
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Copie archivée]
+* link:https://github.com/linkml/linkml/releases/tag/v1.12.1[LinkML v1.12.1 release], LinkML, 1.12.1, 2026-10-13. link:https://web.archive.org/web/20261025014553/https://github.com/linkml/linkml/releases/tag/v1.12.1[Copie archivée]
+
+=== Références informatives
+
+* link:https://json-schema.org/draft/2019-09[JSON Schema, Draft 2019-09], JSON Schema, 2019-09. link:https://web.archive.org/web/20261009175117/https://json-schema.org/draft/2019-09[Copie archivée]
+* link:https://www.w3.org/TR/owl2-overview/[OWL 2 Web Ontology Language Document Overview (Second Edition)], W3C, Recommendation, 2012-12-11. link:https://web.archive.org/web/20261028071421/https://www.w3.org/TR/owl2-overview/[Copie archivée]
+* link:https://www.w3.org/TR/shacl/[Shapes Constraint Language (SHACL)], W3C, Recommendation, 2017-07-20. link:https://web.archive.org/web/20261027174052/https://www.w3.org/TR/shacl/[Copie archivée]
+* link:https://linkml.io/linkml/generators/json-schema.html[LinkML, JSON Schema generator], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151729/https://linkml.io/linkml/generators/json-schema.html[Copie archivée]
+* link:https://linkml.io/linkml/generators/sqltable.html[LinkML, SQL DDL generator], LinkML, 1.12.1. link:https://web.archive.org/web/20261001144734/https://linkml.io/linkml/generators/sqltable.html[Copie archivée]
+* link:https://linkml.io/linkml/generators/owl.html[LinkML, OWL generator], LinkML, 1.12.1. link:https://web.archive.org/web/20261001144645/https://linkml.io/linkml/generators/owl.html[Copie archivée]
+* link:https://linkml.io/linkml/generators/shacl.html[LinkML, SHACL generator], LinkML, 1.12.1. link:https://web.archive.org/web/20261001144741/https://linkml.io/linkml/generators/shacl.html[Copie archivée]
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-07 |Première version.
+|===

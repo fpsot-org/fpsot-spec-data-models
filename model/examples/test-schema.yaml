@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: Apache-2.0
+id: https://data.example.org/model/party-tests
+name: party_tests
+title: Test container for the Party model examples
+description: Container used only to test the examples. It is not part of the model.
+version: 0.1.0
+license: Apache-2.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  test: https://data.example.org/model/party-tests/
+default_prefix: test
+default_range: string
+imports:
+  - linkml:types
+  - ca-qc-profile
+
+classes:
+  Examples:
+    tree_root: true
+    description: "Container used only to test the examples."
+    attributes:
+      persons: {range: Person, multivalued: true, inlined_as_list: true}
+      organizations: {range: Organization, multivalued: true, inlined_as_list: true}
+      quebecOrganizations: {range: QuebecOrganization, multivalued: true, inlined_as_list: true}
+      partyRoles: {range: PartyRole, multivalued: true, inlined_as_list: true}
+      partyRelationships: {range: PartyRelationship, multivalued: true, inlined_as_list: true}
+      postalAddresses: {range: PostalAddress, multivalued: true, inlined_as_list: true}
+      telephoneNumbers: {range: TelephoneNumber, multivalued: true, inlined_as_list: true}
+      emailAddresses: {range: EmailAddress, multivalued: true, inlined_as_list: true}
+      partyContactMechanisms: {range: PartyContactMechanism, multivalued: true, inlined_as_list: true}
+      partyIdentifications: {range: PartyIdentification, multivalued: true, inlined_as_list: true}
+      partyClassifications: {range: PartyClassification, multivalued: true, inlined_as_list: true}

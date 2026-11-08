@@ -1,0 +1,1338 @@
+{
+    "$defs": {
+        "ContactMechanism": {
+            "additionalProperties": false,
+            "description": "A way to reach a party: a postal address, a telephone number or an email address. Apache OFBiz calls it ContactMech. DMO-045.",
+            "properties": {
+                "contactMechanismType": {
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes. DMO-045.",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contactMechanismType",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "ContactMechanism",
+            "type": "object"
+        },
+        "ContactMechanismType": {
+            "description": "The three kinds of contact mechanism of this version. DMO-045.",
+            "enum": [
+                "postal-address",
+                "telephone-number",
+                "email-address"
+            ],
+            "title": "ContactMechanismType",
+            "type": "string"
+        },
+        "DateInterval": {
+            "additionalProperties": false,
+            "description": "A span between two dates. The end is excluded and may be absent. DAT-023.",
+            "properties": {
+                "end": {
+                    "format": "date",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "start": {
+                    "format": "date",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "start"
+            ],
+            "title": "DateInterval",
+            "type": "object"
+        },
+        "EmailAddress": {
+            "additionalProperties": false,
+            "description": "An email address. DMO-034.",
+            "properties": {
+                "address": {
+                    "description": "The address, kept as the person wrote it.",
+                    "pattern": "^[^@\\s]+@[^@\\s]+$",
+                    "type": "string"
+                },
+                "contactMechanismType": {
+                    "const": "email-address",
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes. DMO-045.",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "address",
+                "contactMechanismType",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "EmailAddress",
+            "type": "object"
+        },
+        "Entity": {
+            "additionalProperties": false,
+            "description": "Fields that every entity of the model has: an identifier, audit instants and the extensions object. Departs from Apache OFBiz (DMO-006): each entity has its own UUID key, never a key of several fields. DMO-021, DMO-022, DMO-050, DMO-053.",
+            "properties": {
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "Entity",
+            "type": "object"
+        },
+        "Examples": {
+            "additionalProperties": false,
+            "description": "Container used only to test the examples of this schema.",
+            "properties": {
+                "active": {
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "appointment": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/ZonedLocalDateTime"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "birthDate": {
+                    "format": "date",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "createdAt": {
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "fee": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Money"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "id": {
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "location": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Point"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "name": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/MultilingualText"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "openingTime": {
+                    "pattern": "^[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "processingTime": {
+                    "pattern": "^P(?:[0-9]+W|(?=[0-9]|T[0-9])(?:[0-9]+Y)?(?:[0-9]+M)?(?:[0-9]+D)?(?:T(?=[0-9])(?:[0-9]+H)?(?:[0-9]+M)?(?:[0-9]+S)?)?)$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "status": {
+                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "validity": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DateInterval"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "title": "Examples",
+            "type": "object"
+        },
+        "Extensions": {
+            "additionalProperties": true,
+            "description": "The extensions object. Each member is named after the ISO 3166-1 or ISO 3166-2 code of one jurisdiction, in lowerCamelCase, such as ca or caQc. Its value is an object that the profile of that jurisdiction defines. The core model accepts any member, so that a system can keep extensions it does not know. DMO-053, DMO-056.",
+            "title": "Extensions",
+            "type": "object"
+        },
+        "GeometryType": {
+            "description": "",
+            "enum": [
+                "Point"
+            ],
+            "title": "GeometryType",
+            "type": "string"
+        },
+        "InstantInterval": {
+            "additionalProperties": false,
+            "description": "A span between two instants. The end is excluded and may be absent. DAT-023.",
+            "properties": {
+                "end": {
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "start": {
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "start"
+            ],
+            "title": "InstantInterval",
+            "type": "object"
+        },
+        "Money": {
+            "additionalProperties": false,
+            "description": "An amount of money. DAT-050 to DAT-053.",
+            "properties": {
+                "amount": {
+                    "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+                    "type": "string"
+                },
+                "currency": {
+                    "pattern": "^[A-Z]{3}$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount",
+                "currency"
+            ],
+            "title": "Money",
+            "type": "object"
+        },
+        "MultilingualText": {
+            "additionalProperties": {
+                "pattern": "\\S",
+                "type": [
+                    "string",
+                    "null"
+                ]
+            },
+            "description": "Text in English and French, keyed by language tag. Other language tags are allowed as extra members. DAT-004 to DAT-006.",
+            "properties": {
+                "en": {
+                    "pattern": "\\S",
+                    "type": "string"
+                },
+                "fr": {
+                    "pattern": "\\S",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "en",
+                "fr"
+            ],
+            "title": "MultilingualText",
+            "type": "object"
+        },
+        "Organization": {
+            "additionalProperties": false,
+            "description": "A group of people with a shared purpose, such as a business, a public body or an association. Apache OFBiz calls it PartyGroup. DMO-042.",
+            "properties": {
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "names": {
+                    "description": "The names of the organization, each with its type, language and period. DMO-042.",
+                    "items": {
+                        "$ref": "#/$defs/OrganizationName"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "partyType": {
+                    "const": "organization",
+                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes. DMO-040.",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "partyType",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "Organization",
+            "type": "object"
+        },
+        "OrganizationName": {
+            "additionalProperties": false,
+            "description": "One name of an organization, as registered or used. DMO-035, DMO-042.",
+            "properties": {
+                "language": {
+                    "description": "The language in which the text is written, when known. LOC-055.",
+                    "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "name": {
+                    "description": "The name as the organization writes it, never translated by the system.",
+                    "pattern": "\\S",
+                    "type": "string"
+                },
+                "nameType": {
+                    "description": "The kind of name, such as legal or preferred, from a scheme that the deployment names. DMO-030, DMO-031.",
+                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "validity": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DateInterval"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023."
+                }
+            },
+            "required": [
+                "name"
+            ],
+            "title": "OrganizationName",
+            "type": "object"
+        },
+        "Party": {
+            "additionalProperties": false,
+            "description": "A person or an organization. Each party is exactly one of the two. DMO-040.",
+            "properties": {
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "partyType": {
+                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes. DMO-040.",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "partyType",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "Party",
+            "type": "object"
+        },
+        "PartyClassification": {
+            "additionalProperties": false,
+            "description": "Places a party in a category of a controlled vocabulary, such as an industry. DMO-047.",
+            "properties": {
+                "code": {
+                    "description": "The code of the concept in that scheme, in the form of the scheme. VOC-065.",
+                    "pattern": "\\S",
+                    "type": "string"
+                },
+                "conceptScheme": {
+                    "description": "The URI of the concept scheme. DMO-047.",
+                    "format": "uri",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "partyId": {
+                    "description": "The party that the entity is about. NAM-040.",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "validity": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DateInterval"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023."
+                }
+            },
+            "required": [
+                "partyId",
+                "conceptScheme",
+                "code",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "PartyClassification",
+            "type": "object"
+        },
+        "PartyContactMechanism": {
+            "additionalProperties": false,
+            "description": "Links a party to a contact mechanism, for some purposes and a period. DMO-045.",
+            "properties": {
+                "contactMechanismId": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "partyId": {
+                    "description": "The party that the entity is about. NAM-040.",
+                    "type": "string"
+                },
+                "purposes": {
+                    "description": "What the party uses the mechanism for, such as billing or mailing, from a scheme that the deployment names. DMO-030, DMO-031.",
+                    "items": {
+                        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "validity": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DateInterval"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023."
+                }
+            },
+            "required": [
+                "partyId",
+                "contactMechanismId",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "PartyContactMechanism",
+            "type": "object"
+        },
+        "PartyIdentification": {
+            "additionalProperties": false,
+            "description": "An identifier that a body issued for a party, such as a business number. DMO-046.",
+            "properties": {
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "identificationScheme": {
+                    "description": "The identification scheme, from a scheme of identification schemes that the deployment names. DMO-031, DMO-046.",
+                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                    "type": "string"
+                },
+                "issuerId": {
+                    "description": "The organization that issued the identifier, when the model holds it.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "partyId": {
+                    "description": "The party that the entity is about. NAM-040.",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "validity": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DateInterval"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023."
+                },
+                "value": {
+                    "description": "The identifier, in the exact form of its issuer. DAT-066.",
+                    "pattern": "\\S",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "partyId",
+                "identificationScheme",
+                "value",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "PartyIdentification",
+            "type": "object"
+        },
+        "PartyRelationship": {
+            "additionalProperties": false,
+            "description": "A relationship between two parties, each in a role, such as an employee and an employer. DMO-044.",
+            "properties": {
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "partyId": {
+                    "description": "The party that the entity is about. NAM-040.",
+                    "type": "string"
+                },
+                "relatedPartyId": {
+                    "description": "The second party of the relationship.",
+                    "type": "string"
+                },
+                "relatedRole": {
+                    "description": "The role of the second party in the relationship. DMO-030.",
+                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                    "type": "string"
+                },
+                "relationshipType": {
+                    "description": "The kind of relationship, from a scheme that the deployment names. DMO-030, DMO-031.",
+                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                    "type": "string"
+                },
+                "role": {
+                    "description": "The role of the first party in the relationship. DMO-030.",
+                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "validity": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DateInterval"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023."
+                }
+            },
+            "required": [
+                "partyId",
+                "role",
+                "relatedPartyId",
+                "relatedRole",
+                "relationshipType",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "PartyRelationship",
+            "type": "object"
+        },
+        "PartyRole": {
+            "additionalProperties": false,
+            "description": "A role that a party plays, such as applicant, employer or supplier. Departs from Apache OFBiz (DMO-006): the role has a period, and the role is a code instead of a RoleType record. DMO-043.",
+            "properties": {
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "partyId": {
+                    "description": "The party that the entity is about. NAM-040.",
+                    "type": "string"
+                },
+                "role": {
+                    "description": "The role, from a scheme of party roles that the deployment names. DMO-030, DMO-031.",
+                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "validity": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DateInterval"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023."
+                }
+            },
+            "required": [
+                "partyId",
+                "role",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "PartyRole",
+            "type": "object"
+        },
+        "PartyType": {
+            "description": "The two kinds of party. The model defines them, so they change only with a major version. DMO-040.",
+            "enum": [
+                "person",
+                "organization"
+            ],
+            "title": "PartyType",
+            "type": "string"
+        },
+        "Person": {
+            "additionalProperties": false,
+            "description": "A human being. DMO-041.",
+            "properties": {
+                "birthDate": {
+                    "description": "The date of birth, when a process needs it. DMO-041.",
+                    "format": "date",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "names": {
+                    "description": "The names of the person, each with its type and period. DMO-032.",
+                    "items": {
+                        "$ref": "#/$defs/PersonName"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "partyType": {
+                    "const": "person",
+                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes. DMO-040.",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "partyType",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "Person",
+            "type": "object"
+        },
+        "PersonName": {
+            "additionalProperties": false,
+            "description": "One name of a person. Only the full name is required. DMO-032, LOC-050.",
+            "properties": {
+                "familyName": {
+                    "description": "The family name, only when a process needs the parts.",
+                    "pattern": "\\S",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "fullName": {
+                    "description": "The whole name, as the person writes it.",
+                    "pattern": "\\S",
+                    "type": "string"
+                },
+                "givenNames": {
+                    "description": "The given names, only when a process needs the parts.",
+                    "pattern": "\\S",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "language": {
+                    "description": "The language in which the text is written, when known. LOC-055.",
+                    "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "nameType": {
+                    "description": "The kind of name, such as legal or preferred, from a scheme that the deployment names. DMO-030, DMO-031.",
+                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "validity": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DateInterval"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "When the fact holds: the start is included and the end is not. Replaces the fromDate and thruDate pair of Apache OFBiz (DMO-006). DMO-023, DAT-023."
+                }
+            },
+            "required": [
+                "fullName"
+            ],
+            "title": "PersonName",
+            "type": "object"
+        },
+        "Point": {
+            "additionalProperties": false,
+            "description": "A GeoJSON point: longitude, then latitude, in WGS 84 decimal degrees. DAT-080, DAT-081.",
+            "properties": {
+                "coordinates": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 3,
+                    "minItems": 2,
+                    "type": "array"
+                },
+                "type": {
+                    "$ref": "#/$defs/GeometryType"
+                }
+            },
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "title": "Point",
+            "type": "object"
+        },
+        "PostalAddress": {
+            "additionalProperties": false,
+            "description": "A postal address in separate fields, kept as written. Only the country is required. DMO-033, LOC-053, LOC-055.",
+            "properties": {
+                "addressLines": {
+                    "description": "Other lines of the address, in order, for countries whose parts do not fit the other fields.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "civicNumber": {
+                    "description": "The civic number, with its suffix, such as 1200 or 12A.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "contactMechanismType": {
+                    "const": "postal-address",
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes. DMO-045.",
+                    "type": "string"
+                },
+                "country": {
+                    "description": "The country, as an ISO 3166-1 alpha-2 code.",
+                    "pattern": "^[A-Z]{2}$",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "language": {
+                    "description": "The language in which the text is written, when known. LOC-055.",
+                    "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "locality": {
+                    "description": "The municipality or locality, never translated.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "postalCode": {
+                    "description": "The postal code in the form of its issuer, such as H2X 1Y4. Some countries have none.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "region": {
+                    "description": "The province, state or other region, in the form of its issuer, such as QC.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "street": {
+                    "description": "The street name with its type and direction, as written, such as rue Principale Ouest.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "unit": {
+                    "description": "The apartment, suite or unit, as written.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "country",
+                "contactMechanismType",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "PostalAddress",
+            "type": "object"
+        },
+        "TelephoneNumber": {
+            "additionalProperties": false,
+            "description": "A telephone number. DMO-034.",
+            "properties": {
+                "contactMechanismType": {
+                    "const": "telephone-number",
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes. DMO-045.",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                },
+                "extensionNumber": {
+                    "description": "The internal extension, digits only.",
+                    "pattern": "^[0-9]{1,10}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "number": {
+                    "description": "The number in E.164 form.",
+                    "pattern": "^\\+[1-9][0-9]{1,14}$",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "number",
+                "contactMechanismType",
+                "id",
+                "createdAt",
+                "updatedAt"
+            ],
+            "title": "TelephoneNumber",
+            "type": "object"
+        },
+        "ZonedLocalDateTime": {
+            "additionalProperties": false,
+            "description": "A wall-clock date and time with the time zone it belongs to. DAT-015.",
+            "properties": {
+                "localDateTime": {
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?$",
+                    "type": "string"
+                },
+                "timeZone": {
+                    "pattern": "^[A-Za-z][A-Za-z0-9_+-]*(/[A-Za-z0-9_+-]+)*$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "localDateTime",
+                "timeZone"
+            ],
+            "title": "ZonedLocalDateTime",
+            "type": "object"
+        }
+    },
+    "$id": "https://fpsot.org/model/party",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "additionalProperties": false,
+    "description": "Container used only to test the examples of this schema.",
+    "metamodel_version": "1.12.0",
+    "properties": {
+        "active": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "appointment": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/ZonedLocalDateTime"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "birthDate": {
+            "format": "date",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "createdAt": {
+            "format": "date-time",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "fee": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/Money"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "id": {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+        },
+        "location": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/Point"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "name": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/MultilingualText"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "openingTime": {
+            "pattern": "^[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?$",
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "processingTime": {
+            "pattern": "^P(?:[0-9]+W|(?=[0-9]|T[0-9])(?:[0-9]+Y)?(?:[0-9]+M)?(?:[0-9]+D)?(?:T(?=[0-9])(?:[0-9]+H)?(?:[0-9]+M)?(?:[0-9]+S)?)?)$",
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "status": {
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "validity": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/DateInterval"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        }
+    },
+    "required": [
+        "id"
+    ],
+    "title": "party",
+    "type": "object",
+    "version": "0.1.0"
+}
+

@@ -1,0 +1,64 @@
+= Versions et éléments déconseillés
+include::_fpsot-terms.adoc[]
+
+Un modèle change avec le temps, alors que les systèmes gardent des données écrites selon des versions plus anciennes.
+Ces règles appliquent à un modèle les règles de stabilité de la spécification de la {abbr-fpsot-first} sur le nommage.
+
+== Numéros de version
+
+[[DMO-060]]
+*DMO-060.* Chaque version d’un modèle DOIT avoir un numéro selon le link:https://semver.org/lang/fr/spec/v2.0.0.html[Versionnage sémantique 2.0.0].
+Le schéma le contient dans son attribut `version`.
+L’étiquette de la version dans le {term-repository} DOIT porter le même numéro, comme `v0.1.0`.
+Le numéro dit à un système si une nouvelle version peut briser les données qu’il garde.
+
+== Changements compatibles
+
+[[DMO-061]]
+*DMO-061.* Dans une version majeure, une version NE DOIT PAS retirer ni renommer une classe, un attribut ou une valeur.
+Elle NE DOIT PAS changer le type ni le sens d’un attribut.
+Elle NE DOIT PAS rendre obligatoire un attribut facultatif, ni restreindre un motif.
+Une version mineure PEUT ajouter une classe, un attribut facultatif ou une valeur d’énumération, selon NAM-081.
+Un nom supprimé NE DOIT PAS revenir plus tard avec un autre sens, selon NAM-082.
+Chaque enregistrement valide selon une version antérieure de la même version majeure reste alors valide.
+
+Avant la version 1.0.0, le link:https://semver.org/lang/fr/spec/v2.0.0.html[Versionnage sémantique] permet tout changement.
+Les modèles de {abbr-fpsot} suivent pourtant cette règle dès la version 0.1.0.
+
+== Éléments déconseillés
+
+[[DMO-062]]
+*DMO-062.* Pour retirer un élément, une version DOIT le marquer avec l’attribut `deprecated` des link:https://linkml.io/linkml/schemas/metadata.html[métadonnées d’éléments LinkML].
+Un élément est une classe, un attribut ou une valeur d’énumération.
+Son texte DOIT donner la raison et la version qui l’a déconseillé.
+Quand un seul élément le remplace, la version DOIT aussi donner `deprecated_element_has_exact_replacement`.
+L’élément DOIT rester dans le modèle jusqu’à la version majeure suivante.
+Les données qui l’emploient restent alors valides, et les outils peuvent avertir avant qu’une personne l’emploie dans de nouvelles données.
+
+== Identité et fichiers
+
+[[DMO-063]]
+*DMO-063.* L’`id` d’un schéma NE DOIT PAS changer d’une version à l’autre.
+Les fichiers de chaque version, la source et les fichiers générés, DOIVENT rester disponibles sous l’étiquette de cette version.
+Les données et les autres schémas renvoient à un modèle par son `id`.
+Une ancienne version reste utile tant qu’il existe des données écrites selon elle.
+
+[[DMO-064]]
+*DMO-064.* Un système DEVRAIT valider les données qu’il reçoit avec la dernière version mineure de leur version majeure.
+Cette version accepte chaque enregistrement des versions mineures antérieures, selon DMO-061.
+Un système qui valide avec une version plus ancienne refuserait les attributs facultatifs qu’une version ultérieure a ajoutés.
+
+== Références
+
+=== Références normatives
+
+* link:https://semver.org/lang/fr/spec/v2.0.0.html[Versionnage sémantique 2.0.0], Tom Preston-Werner, 2.0.0, 2013-06-18. link:https://web.archive.org/web/20261006181837/https://semver.org/lang/fr/spec/v2.0.0.html[Copie archivée]
+* link:https://linkml.io/linkml/schemas/metadata.html[LinkML, Schema Element Metadata], LinkML, 1.12.1. link:https://web.archive.org/web/20260728191802/https://linkml.io/linkml/schemas/metadata.html[Copie archivée]
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-07 |Première version.
+|===

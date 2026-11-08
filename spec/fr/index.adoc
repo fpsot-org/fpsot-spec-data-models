@@ -1,8 +1,45 @@
 = Spécification FPSOT sur les modèles de données
 include::_fpsot-terms.adoc[]
 
-Remplacez cette page par le texte normatif de la spécification.
-Commencez par la portée, puis les classes de conformité, puis les exigences.
+Cette spécification fixe comment les projets de la {abbr-fpsot-first} définissent et publient les modèles de données de leurs entités.
+Un modèle de données nomme les entités que les systèmes échangent et conservent.
+Il donne aussi les champs de chaque entité, avec leurs types et leurs références.
+Chaque modèle a une seule source LinkML, et des outils génèrent ses autres formes.
+Le premier domaine est Party : les personnes et les organisations avec lesquelles traite un organisme public.
+
+Chaque partie d’un modèle est facultative.
+Une institution peut employer ses propres dossiers de parties, Apache OFBiz ou un autre système.
+Ce système peut fonctionner dans son programme ou comme service distant.
+L’institution est conforme quand les données qu’elle échange prennent la forme du modèle.
+
+Les règles comportent huit parties.
+
+* Les xref:principles.adoc[principes] disent ce que décrit un modèle et ce qu’il laisse à chaque système.
+* La xref:linkml.adoc[source LinkML et les fichiers générés] : la source d’un modèle et les vérifications des fichiers qui en sont générés.
+* Les xref:names-types.adoc[noms, clés et types] : l’application du nommage et des types de données, et les dates d’Apache OFBiz en intervalles.
+* Les xref:codes-contact.adoc[codes, noms et coordonnées] : les codes rattachés à des vocabulaires, et la forme des coordonnées.
+* Le xref:party.adoc[domaine Party] : les entités du premier domaine.
+* L’xref:history-extensions.adoc[audit, l’historique et les extensions] : les instants d’audit, l’historique et l’endroit où une collectivité publique ajoute des champs.
+* Les xref:versions.adoc[versions et éléments déconseillés] : comment un modèle change sans briser les données conservées.
+* Le xref:persistence.adoc[stockage et les outils] : les correspondances de stockage et les outils prévus.
+
+== Spécifications liées
+
+Cette spécification s’appuie sur d’autres spécifications de {abbr-fpsot}.
+La spécification sur le nommage fixe les noms des classes, des champs et des codes, et quand ils peuvent changer.
+La spécification sur les types de données fixe la forme de chaque valeur, comme un identifiant ou un intervalle.
+La spécification sur les vocabulaires fixe comment un champ se rattache à un vocabulaire contrôlé.
+La spécification sur l’internationalisation fixe les règles sur les noms de personnes, les adresses postales et les étiquettes de langue.
+
+Les spécifications sur la rédaction, la documentation et les schémas fixent comment écrire et dessiner la documentation du modèle.
+La façon dont une {abbr-api-first} sert les entités d’un modèle relève des spécifications de {abbr-fpsot} sur la conception d’{abbr-api}.
+
+== Modèle LinkML
+
+Le fichier `model/party.yaml` définit le domaine Party en LinkML.
+Le dossier `model/generated/` contient les fichiers générés à partir de lui.
+Le dossier `model/examples/` contient des données valides et non valides, un profil type québécois et un schéma de test.
+Le script `model/test-model.sh` les vérifie tous.
 
 == Conformité
 
@@ -11,23 +48,14 @@ ____
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 (link:https://www.rfc-editor.org/info/rfc2119[RFC 2119], link:https://www.rfc-editor.org/info/rfc8174[RFC 8174]) when, and only when, they appear in all capitals, as shown here.
 ____
 
-Les mots clés suivent l'exigence WRT-010 de la spécification de rédaction de la {abbr-fpsot-first}.
-La version française emploie les mots clés français de l'exigence WRT-011.
+Les mots clés suivent l’exigence WRT-010 de la spécification de rédaction de {abbr-fpsot}.
+La version française emploie les mots clés français de l’exigence WRT-011.
 
-== Exigences
-
-Donnez à chaque exigence une ancre avec son identifiant, juste au-dessus de son paragraphe.
-L'ancre ressemble à `+[[XYZ-001]]+`.
-L'exemple ci-dessous montre la forme. Remplacez-le par la première exigence.
-
-[[TPL-001]]
-*TPL-001.* Un énoncé normatif DOIT employer un des mots clés du {abbr-bcp-first} 14, en majuscules.
-Le mot clé donne sa force à la règle.
+Un modèle est conforme quand sa source, ses fichiers générés et ses vérifications respectent chaque règle DOIT d’un modèle.
+Un système est conforme quand les données qu’il échange respectent le modèle, selon DMO-004.
+Un profil de collectivité publique est conforme quand il respecte DMO-053 à DMO-056.
 
 == Références
-
-Donnez ici chaque source externe que cite cette page, avec la même adresse que son lien dans le texte.
-Chaque entrée donne le titre, l'éditeur, la version, la date et une copie archivée.
 
 === Références normatives
 
@@ -36,10 +64,8 @@ Chaque entrée donne le titre, l'éditeur, la version, la date et une copie arch
 
 == Historique du document
 
-Ajoutez une ligne pour chaque version qui modifie cette page.
-
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Changement
-|0.1.0 |2026-11-03 |Première version.
+|0.1.0 |2026-11-07 |Première version.
 |===

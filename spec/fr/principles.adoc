@@ -1,0 +1,90 @@
+= Principes
+include::_fpsot-terms.adoc[]
+
+Ces règles s’appliquent à chaque modèle de données de la {abbr-fpsot-first}.
+Elles disent ce qu’un modèle décrit et ce qu’il laisse à chaque système.
+
+== Ce que décrit un modèle
+
+[[DMO-001]]
+*DMO-001.* Un modèle de données DOIT décrire les données que les systèmes échangent et conservent.
+Il en donne les entités, les champs, les types, les références et les contraintes.
+Il NE DOIT PAS décrire le comportement d’un système, comme les règles d’affaires, les écrans ou les flux de travail.
+Un modèle est un contrat sur les données.
+Plusieurs systèmes au comportement différent peuvent alors partager les mêmes données.
+
+[[DMO-002]]
+*DMO-002.* Chaque domaine, entité et groupe de champs d’un modèle de {abbr-fpsot} est facultatif.
+Un système PEUT mettre en œuvre n’importe quelle partie d’un modèle et laisser le reste.
+Il PEUT aussi prendre une partie d’un autre système, comme ses dossiers de parties, Apache OFBiz ou un autre produit.
+Ce système PEUT fonctionner dans le même programme ou comme service distant.
+Les institutions ont déjà des données sur les parties, et peu adopteraient un modèle à prendre en bloc.
+
+[[DMO-003]]
+*DMO-003.* Un modèle de données NE DOIT PAS dire comment un système stocke ses données.
+Il ne nomme ni tables ni index, et il ne nomme aucun produit de base de données.
+Une correspondance de stockage est un fichier généré à part, selon DMO-070.
+Le même modèle convient alors à une base relationnelle, à un magasin de documents ou à un service distant.
+
+[[DMO-004]]
+*DMO-004.* Un système DOIT échanger sous la forme du modèle les données de chaque partie qu’il met en œuvre.
+Cela vaut aussi pour chaque partie qu’il remplace.
+Il PEUT garder ces données sous une autre forme à l’intérieur de ses limites, et les convertir à la frontière.
+Les autres systèmes dépendent alors du modèle seulement, jamais du produit qui se trouve derrière.
+
+[[DMO-005]]
+*DMO-005.* Un modèle de données NE DOIT PAS exiger un produit ou un cadre d’application donné.
+Il NE DOIT PAS exiger un module d’application ni une façon de déployer.
+Un modèle PEUT nommer un produit comme mise en œuvre possible, comme cette spécification nomme Apache OFBiz.
+Un produit obligatoire lierait chaque organisme à un seul fournisseur ou à un seul code.
+
+== Modèles de données universels
+
+[[DMO-006]]
+*DMO-006.* Un modèle de données DEVRAIT suivre les patrons des modèles universels, tels qu’Apache OFBiz les met en œuvre.
+Il PEUT s’écarter d’un patron qui contredit une autre spécification de {abbr-fpsot}, ou qui ne convient pas aux données publiques.
+La description de l’élément DOIT alors indiquer l’écart et sa raison.
+Ces patrons servent depuis des décennies à bien des organisations, et ils exigent donc rarement une refonte.
+Un écart indiqué permet de faire la correspondance entre le modèle et OFBiz, dans les deux sens.
+
+=== Contexte (informatif)
+
+Les modèles de données universels viennent des travaux de Len Silverston.
+Son livre, _The Data Model Resource Book_, les publie.
+Apache OFBiz est une application ouverte qui met en œuvre ces patrons.
+Son link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[journal des changements du modèle de données] dit qu’OFBiz suit ce modèle, avec quelques changements.
+Cette spécification s’appuie sur le modèle public d’OFBiz, et non sur le livre.
+Elle ne copie aucun texte, schéma ou liste d’attributs du livre.
+
+Le link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml[modèle des parties d’OFBiz] montre ces patrons, en résumé :
+
+* Un seul supertype de partie couvre les personnes et les organisations.
+D’autres données peuvent ainsi renvoyer à l’une ou à l’autre.
+* Un rôle est un enregistrement distinct qui relie une partie à un type de rôle.
+Une même partie peut alors avoir plusieurs rôles.
+* Une relation relie deux parties, chacune dans un rôle, pour une période.
+* Un moyen de contact, comme une adresse, est un enregistrement distinct.
+Un lien le rattache à une partie, avec un but et une période.
+* Les types de rôles, de relations et de buts de contact sont des enregistrements d’entités de type.
+Ces types peuvent former une hiérarchie.
+* Beaucoup de liens portent une date de début et une date de fin, nommées `fromDate` et `thruDate`.
+L’historique reste alors dans les données.
+
+Les autres pages de cette spécification adaptent chaque patron aux autres spécifications de {abbr-fpsot}.
+Par exemple, les entités de type deviennent des vocabulaires contrôlés, et les paires de dates deviennent des intervalles.
+
+== Références
+
+=== Références informatives
+
+* Len Silverston, The Data Model Resource Book, Volume 1: A Library of Universal Data Models for All Enterprises, Revised Edition, Wiley, ISBN 978-0-471-38023-8, 2001-03.
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[Apache OFBiz, DATAMODEL_CHANGES.adoc], The Apache Software Foundation, archivage e103805, 2026-11-07.
+* link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml[Apache OFBiz, party-entitymodel.xml], The Apache Software Foundation, archivage e103805, 2026-11-07.
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-07 |Première version.
+|===

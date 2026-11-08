@@ -1,0 +1,52 @@
+# A person, an organization, a role, a postal address and a Québec extension.
+persons:
+  - id: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    partyType: person
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+    names:
+      - fullName: Marie-Ève Lévesque-Côté
+        givenNames: Marie-Ève
+        familyName: Lévesque-Côté
+        nameType: legal
+        language: fr
+quebecOrganizations:
+  - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    partyType: organization
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:05:00Z"
+    names:
+      - name: Boulangerie du Faubourg inc.
+        nameType: legal
+        language: fr
+        validity: {start: "2019-04-01"}
+    extensions:
+      caQc:
+        administrativeRegion: "03"
+partyRoles:
+  - id: 019a5e10-3c4d-7a21-8b3e-3b4c5d6e7f80
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    role: permit-holder
+    validity: {start: "2026-11-07", end: "2027-11-07"}
+    createdAt: "2026-11-07T14:10:00Z"
+    updatedAt: "2026-11-07T14:10:00Z"
+postalAddresses:
+  - id: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    contactMechanismType: postal-address
+    civicNumber: "1200"
+    street: rue Saint-Jean
+    locality: Québec
+    region: QC
+    postalCode: G1R 1S1
+    country: CA
+    language: fr
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+partyContactMechanisms:
+  - id: 019a5e10-3c4d-7a21-8b3e-5d6e7f8091a2
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    contactMechanismId: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
+    purposes: [mailing, head-office]
+    validity: {start: "2019-04-01"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
