@@ -8,8 +8,10 @@ Ces règles appliquent à un modèle les règles de stabilité de la spécificat
 
 [[DMO-060]]
 *DMO-060.* Chaque version d’un modèle DOIT avoir un numéro selon le link:https://semver.org/lang/fr/spec/v2.0.0.html[Versionnage sémantique 2.0.0].
-Le schéma le contient dans son attribut `version`.
-L’étiquette de la version dans le {term-repository} DOIT porter le même numéro, comme `v0.1.0`.
+La version du modèle suit l’étiquette de la version dans le {term-repository}, comme `v0.1.0`.
+Le schéma DOIT contenir ce numéro dans son attribut `version`, sans le `v`.
+Une version qui change seulement le texte de la spécification est une version de correctif, comme `v0.1.1`.
+Le schéma prend alors le nouveau numéro, même si aucun de ses éléments ne change.
 Le numéro dit à un système si une nouvelle version peut briser les données qu’il garde.
 
 == Changements compatibles

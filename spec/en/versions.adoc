@@ -8,8 +8,10 @@ These rules apply the stability rules of the {abbr-fpsot-first} naming specifica
 
 [[DMO-060]]
 *DMO-060.* Each release of a model MUST have a version number under link:https://semver.org/spec/v2.0.0.html[Semantic Versioning 2.0.0].
-The schema holds it in its `version` slot.
-The tag of the release in the {term-repository} MUST carry the same number, such as `v0.1.0`.
+The model version follows the tag of the release in the {term-repository}, such as `v0.1.0`.
+The schema MUST hold that number in its `version` slot, without the `v`.
+A release that changes only the text of the specification is a patch release, such as `v0.1.1`.
+The schema then takes the new number, although none of its elements changes.
 The number tells a system whether a new release can break the data it holds.
 
 == Compatible changes

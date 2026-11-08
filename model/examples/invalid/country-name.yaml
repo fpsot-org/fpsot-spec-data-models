@@ -1,4 +1,6 @@
 # The country is an ISO 3166-1 alpha-2 code, not a name (DMO-033).
+# expect-json: 'Canada' does not match
+# expect-shacl: ^country: Value does not match pattern
 postalAddresses:
   - id: 019a5e10-3c4d-7a21-8b3e-4c5d6e7f8091
     contactMechanismType: postal-address

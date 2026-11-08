@@ -17,8 +17,9 @@ and versions follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.h
 - Party rules DMO-040 to DMO-047: party, person, organization, party role, party relationship, contact mechanisms, identifications and classifications.
 - Audit, history and extension rules DMO-050 to DMO-057, with one extensions object per jurisdiction.
 - Version rules DMO-060 to DMO-064, and persistence rules DMO-070 to DMO-073 with the planned tooling.
-- LinkML Party model `model/party.yaml`, its generated files, a copy of the data types model, an example Québec profile, examples and the test script `model/test-model.sh`.
-- A `model` job in the continuous integration that runs the test script.
+- LinkML Party model `model/party.yaml`, its generated files, a copy of the data types model, an example Québec profile, examples and the test script `model/test-model.sh`, which checks each example with LinkML, the generated JSON Schema and the generated SHACL shapes.
+- Class diagram of the Party subject area, in English and French, under `diagrams/`.
+- A `model` job in the continuous integration that runs the test script, as a required check of the main branch (DMO-015), with the tools pinned in `model/requirements.txt`.
 - Comparison data for thirteen topics, with Canada and Québec rows.
 - How-to guide that builds a small Party example.
 

@@ -1,0 +1,41 @@
+@startuml party-entities-fr
+' SPDX-License-Identifier: Community-Spec-1.0
+' Diagramme de classes du domaine Party : ses entités et les références entre elles (spec/fr/party.adoc, DMO-040 à DMO-047).
+title Diagramme de classes du domaine Party
+hide circle
+hide methods
+hide empty members
+skinparam monochrome true
+abstract class Party
+class Person
+class Organization
+class PartyRole
+class PartyRelationship
+abstract class ContactMechanism
+class PostalAddress
+class TelephoneNumber
+class TelephoneShortCode
+class EmailAddress
+class PartyContactMechanism
+class PartyIdentification
+class PartyClassification
+Party <|-- Person
+Party <|-- Organization
+ContactMechanism <|-- PostalAddress
+ContactMechanism <|-- TelephoneNumber
+ContactMechanism <|-- TelephoneShortCode
+ContactMechanism <|-- EmailAddress
+PartyRole --> Party : partyId
+PartyRelationship --> Party : partyId
+PartyRelationship --> Party : relatedPartyId
+PartyContactMechanism --> Party : partyId
+PartyContactMechanism --> ContactMechanism : contactMechanismId
+PartyIdentification --> Party : partyId
+PartyClassification --> Party : partyId
+legend bottom left
+  Les noms en italique sont des classes abstraites.
+  Une ligne à triangle vide va d'une sous-classe à sa classe parente.
+  Une ligne à flèche ouverte va d'une entité à l'entité à laquelle elle renvoie.
+  Son étiquette est l'attribut qui contient l'identifiant de cette entité.
+endlegend
+@enduml

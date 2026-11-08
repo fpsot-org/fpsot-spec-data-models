@@ -8,7 +8,7 @@ These rules set the source, the generated files and the checks that keep them in
 == The source
 
 [[DMO-010]]
-*DMO-010.* Each data model MUST have one LinkML schema as its source, kept under version control in the `model/` folder.
+*DMO-010.* Each data model MUST have one link:https://linkml.io/linkml/generators/index.html[LinkML] schema as its source, kept under version control in the `model/` folder.
 A model SHOULD hold one subject area per schema file, such as `model/party.yaml`.
 One source means one place to change the model.
 Every other form then agrees with it by construction.
@@ -37,13 +37,13 @@ A reader then finds the reason for each element in every form of the model.
 == Generated files
 
 [[DMO-014]]
-*DMO-014.* A tool MUST generate each other form of the model from the LinkML source.
+*DMO-014.* A tool MUST generate each other form of the model from the link:https://linkml.io/linkml/generators/index.html[LinkML] source.
 The repository MUST keep these files under `model/generated/`, and nobody edits them by hand.
 For the Party model, the files are:
 
-* a link:https://json-schema.org/draft/2019-09[JSON Schema], to check {abbr-json} data;
-* {abbr-sql-first} table definitions, as one example of a persistence mapping under DMO-070;
-* an link:https://www.w3.org/TR/owl2-overview/[OWL 2] ontology in Turtle, to describe the meaning of the data;
+* a link:https://json-schema.org/draft/2019-09[JSON Schema], to check {abbr-json} data, with the container class `PartyContainer` as its root;
+* {abbr-sql-first} table definitions, the raw output of the generator, as one example of a persistence mapping under DMO-070;
+* an link:https://www.w3.org/TR/owl2-overview/[OWL 2] ontology in link:https://www.w3.org/TR/turtle/[Turtle], to describe the meaning of the data;
 * link:https://www.w3.org/TR/shacl/[SHACL] shapes in Turtle, to check {abbr-rdf-first} data.
 
 A file that people edit drifts from its source, and then two forms of the model disagree.
@@ -60,20 +60,26 @@ The script `model/test-model.sh` of this repository runs this check.
 The check MUST fail when it runs with another release.
 Two releases of a generator can write different files from the same source.
 A fixed release lets the check find drift instead of tool changes.
-The Party model uses link:https://github.com/linkml/linkml/releases/tag/v1.12.1[LinkML 1.12.1].
+The Party model uses link:https://github.com/linkml/linkml/releases/tag/v1.12.1[LinkML 1.12.1], and `model/requirements.txt` pins it with the other tools of the check.
 
 [[DMO-017]]
 *DMO-017.* Each model MUST have examples of valid data and of invalid data, under `model/examples/`.
 The check MUST pass every valid example and reject every invalid one.
 Each invalid example SHOULD break one rule, and a comment SHOULD name it.
 Examples show how the model reads, and they prove that its constraints work.
+The Party model checks each example with LinkML, the generated JSON Schema and the generated SHACL shapes.
 
 == Generators (informative)
 
-The LinkML tools include a generator for each file of DMO-014: `gen-json-schema`, `gen-sqltables`, `gen-owl` and `gen-shacl`.
+The link:https://linkml.io/linkml/generators/index.html[LinkML] tools include a generator for each file of DMO-014: `gen-json-schema`, `gen-sqltables`, `gen-owl` and `gen-shacl`.
 The pages on the link:https://linkml.io/linkml/generators/json-schema.html[JSON Schema], link:https://linkml.io/linkml/generators/sqltable.html[SQL], link:https://linkml.io/linkml/generators/owl.html[OWL] and link:https://linkml.io/linkml/generators/shacl.html[SHACL] generators describe their options.
-Its page marks the SHACL generator as a beta.
+The page of the SHACL generator marks it as a beta.
 LinkML 1.12.1 writes the JSON Schema in the 2019-09 dialect.
+
+The script `model/test-model.sh` adds three recorded steps around the generators.
+It gives them a copy of the model whose data types import keeps only the elements that Party uses.
+It passes `PartyContainer` as the root class of the JSON Schema.
+It removes `sh:closed true` from the SHACL shape of `Extensions`, so that the shape accepts any member, under DMO-056.
 
 == References
 
@@ -84,9 +90,10 @@ LinkML 1.12.1 writes the JSON Schema in the 2019-09 dialect.
 
 === Informative
 
-* link:https://json-schema.org/draft/2019-09[JSON Schema, Draft 2019-09], JSON Schema, 2019-09. link:https://web.archive.org/web/20261009175117/https://json-schema.org/draft/2019-09[Archived copy]
+* link:https://json-schema.org/draft/2019-09[JSON Schema, Draft 2019-09], JSON Schema, 2019-09. link:https://web.archive.org/web/20260825073854/https://json-schema.org/draft/2019-09[Archived copy]
 * link:https://www.w3.org/TR/owl2-overview/[OWL 2 Web Ontology Language Document Overview (Second Edition)], W3C, Recommendation, 2012-12-11. link:https://web.archive.org/web/20261028071421/https://www.w3.org/TR/owl2-overview/[Archived copy]
 * link:https://www.w3.org/TR/shacl/[Shapes Constraint Language (SHACL)], W3C, Recommendation, 2017-07-20. link:https://web.archive.org/web/20261027174052/https://www.w3.org/TR/shacl/[Archived copy]
+* link:https://www.w3.org/TR/turtle/[RDF 1.1 Turtle, Terse RDF Triple Language], W3C, Recommendation, 2014-02-25. link:https://web.archive.org/web/20261026222351/https://www.w3.org/TR/turtle/[Archived copy]
 * link:https://linkml.io/linkml/generators/json-schema.html[LinkML, JSON Schema generator], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151729/https://linkml.io/linkml/generators/json-schema.html[Archived copy]
 * link:https://linkml.io/linkml/generators/sqltable.html[LinkML, SQL DDL generator], LinkML, 1.12.1. link:https://web.archive.org/web/20261001144734/https://linkml.io/linkml/generators/sqltable.html[Archived copy]
 * link:https://linkml.io/linkml/generators/owl.html[LinkML, OWL generator], LinkML, 1.12.1. link:https://web.archive.org/web/20261001144645/https://linkml.io/linkml/generators/owl.html[Archived copy]

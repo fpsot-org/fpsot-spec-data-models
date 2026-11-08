@@ -1,4 +1,6 @@
 # A UUID is written in lower case (DMO-021, DAT-065).
+# expect-json: '019A5E10-3C4D-7A21-8B3E-1F2A3B4C5D6E' does not match
+# expect-shacl: accepted, because the id becomes the IRI of the node, and SHACL shapes do not constrain node IRIs.
 persons:
   - id: 019A5E10-3C4D-7A21-8B3E-1F2A3B4C5D6E
     partyType: person

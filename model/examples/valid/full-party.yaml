@@ -39,11 +39,12 @@ partyRoles:
     createdAt: "2026-11-07T14:00:00Z"
     updatedAt: "2026-11-07T14:00:00Z"
 partyRelationships:
+  # As in Apache OFBiz, an employment reads from the employer to the employee (DMO-044).
   - id: 019a5e10-3c4d-7a21-8b3e-7f8091a2b3c4
-    partyId: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
-    role: employee
-    relatedPartyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
-    relatedRole: employer
+    partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    role: employer
+    relatedPartyId: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    relatedRole: employee
     relationshipType: employment
     validity: {start: "2021-03-15"}
     createdAt: "2026-11-07T14:00:00Z"
@@ -74,6 +75,13 @@ telephoneNumbers:
     contactMechanismType: telephone-number
     number: "+14185550123"
     extensionNumber: "204"
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+telephoneShortCodes:
+  - id: 019a5e10-3c4d-7a21-8b3e-f708192a3b4c
+    contactMechanismType: telephone-short-code
+    code: "211"
+    country: CA
     createdAt: "2026-11-07T14:00:00Z"
     updatedAt: "2026-11-07T14:00:00Z"
 emailAddresses:

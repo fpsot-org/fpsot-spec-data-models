@@ -1,0 +1,41 @@
+@startuml party-entities-en
+' SPDX-License-Identifier: Community-Spec-1.0
+' Class diagram of the Party subject area: its entities and the references between them (spec/en/party.adoc, DMO-040 to DMO-047).
+title Class diagram of the Party subject area
+hide circle
+hide methods
+hide empty members
+skinparam monochrome true
+abstract class Party
+class Person
+class Organization
+class PartyRole
+class PartyRelationship
+abstract class ContactMechanism
+class PostalAddress
+class TelephoneNumber
+class TelephoneShortCode
+class EmailAddress
+class PartyContactMechanism
+class PartyIdentification
+class PartyClassification
+Party <|-- Person
+Party <|-- Organization
+ContactMechanism <|-- PostalAddress
+ContactMechanism <|-- TelephoneNumber
+ContactMechanism <|-- TelephoneShortCode
+ContactMechanism <|-- EmailAddress
+PartyRole --> Party : partyId
+PartyRelationship --> Party : partyId
+PartyRelationship --> Party : relatedPartyId
+PartyContactMechanism --> Party : partyId
+PartyContactMechanism --> ContactMechanism : contactMechanismId
+PartyIdentification --> Party : partyId
+PartyClassification --> Party : partyId
+legend bottom left
+  Names in italics are abstract classes.
+  A line with a hollow triangle points from a subclass to its parent class.
+  A line with an open arrow points from an entity to the entity that it refers to.
+  Its label is the slot that holds the identifier of that entity.
+endlegend
+@enduml

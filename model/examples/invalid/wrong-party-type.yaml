@@ -1,4 +1,6 @@
 # A person cannot have the party type of an organization (DMO-040).
+# expect-json: 'organization' is not one of \['person'\]
+# expect-shacl: ^partyType: Value .* not in list
 persons:
   - id: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
     partyType: organization

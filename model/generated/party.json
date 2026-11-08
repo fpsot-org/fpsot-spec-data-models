@@ -2,17 +2,20 @@
     "$defs": {
         "ContactMechanism": {
             "additionalProperties": false,
-            "description": "A way to reach a party: a postal address, a telephone number or an email address. Apache OFBiz calls it ContactMech. DMO-045.",
+            "description": "A way to reach a party: a postal address, a telephone number, a telephone short code or an email address. Apache OFBiz calls it ContactMech. DMO-045.",
             "properties": {
                 "contactMechanismType": {
-                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes. DMO-045.",
-                    "type": "string"
+                    "$ref": "#/$defs/ContactMechanismType",
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045."
                 },
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -26,31 +29,33 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
                 "contactMechanismType",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "ContactMechanism",
             "type": "object"
         },
         "ContactMechanismType": {
-            "description": "The three kinds of contact mechanism of this version. DMO-045.",
+            "description": "The four kinds of contact mechanism of this version. Each meaning is a concept of the planned FPSOT scheme https://fpsot.org/vocabularies/contact-mechanism-types, which will be published under the FPSOT vocabularies specification; its URIs are reserved under VOC-002 to VOC-004. DMO-030, DMO-045.",
             "enum": [
                 "postal-address",
                 "telephone-number",
+                "telephone-short-code",
                 "email-address"
             ],
             "title": "ContactMechanismType",
@@ -90,15 +95,17 @@
                     "type": "string"
                 },
                 "contactMechanismType": {
-                    "const": "email-address",
-                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes. DMO-045.",
-                    "type": "string"
+                    "$ref": "#/$defs/EmailAddressMechanismType",
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045."
                 },
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -112,36 +119,48 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
                 "address",
                 "contactMechanismType",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "EmailAddress",
             "type": "object"
         },
+        "EmailAddressMechanismType": {
+            "description": "The contact mechanism type of an email address. DMO-045.",
+            "enum": [
+                "email-address"
+            ],
+            "title": "EmailAddressMechanismType",
+            "type": "string"
+        },
         "Entity": {
             "additionalProperties": false,
-            "description": "Fields that every entity of the model has: an identifier, audit instants and the extensions object. Departs from Apache OFBiz (DMO-006): each entity has its own UUID key, never a key of several fields. DMO-021, DMO-022, DMO-050, DMO-053.",
+            "description": "Fields that every entity of the model has: an identifier, audit instants and the extensions object. An entity is a class whose records exist on their own and that other data can refer to. A value class, such as PersonName or DateInterval, exists only inlined in an entity, so it has no identifier and no audit instants. Departs from Apache OFBiz (DMO-006): each entity has its own UUID key, never a key of several fields. DMO-021, DMO-022, DMO-050, DMO-053.",
             "properties": {
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -155,215 +174,30 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
-                    "format": "date-time",
-                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "id",
-                "createdAt",
-                "updatedAt"
-            ],
-            "title": "Entity",
-            "type": "object"
-        },
-        "Examples": {
-            "additionalProperties": false,
-            "description": "Container used only to test the examples of this schema.",
-            "properties": {
-                "active": {
-                    "type": [
-                        "boolean",
-                        "null"
-                    ]
-                },
-                "appointment": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/ZonedLocalDateTime"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
-                },
-                "birthDate": {
-                    "format": "date",
-                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "createdAt": {
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
                     "type": [
                         "string",
                         "null"
-                    ]
-                },
-                "fee": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/Money"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
-                },
-                "id": {
-                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-                    "type": "string"
-                },
-                "location": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/Point"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
-                },
-                "name": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/MultilingualText"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
-                },
-                "openingTime": {
-                    "pattern": "^[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?$",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "processingTime": {
-                    "pattern": "^P(?:[0-9]+W|(?=[0-9]|T[0-9])(?:[0-9]+Y)?(?:[0-9]+M)?(?:[0-9]+D)?(?:T(?=[0-9])(?:[0-9]+H)?(?:[0-9]+M)?(?:[0-9]+S)?)?)$",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "status": {
-                    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "validity": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/DateInterval"
-                        },
-                        {
-                            "type": "null"
-                        }
                     ]
                 }
             },
             "required": [
                 "id"
             ],
-            "title": "Examples",
+            "title": "Entity",
             "type": "object"
         },
         "Extensions": {
             "additionalProperties": true,
-            "description": "The extensions object. Each member is named after the ISO 3166-1 or ISO 3166-2 code of one jurisdiction, in lowerCamelCase, such as ca or caQc. Its value is an object that the profile of that jurisdiction defines. The core model accepts any member, so that a system can keep extensions it does not know. DMO-053, DMO-056.",
+            "description": "The extensions object. Each member is named after the ISO 3166-1 or ISO 3166-2 code of one jurisdiction, in lowerCamelCase, such as ca or caQc. A jurisdiction with no such code nests its member in the member of the nearest coded jurisdiction, such as caQc.montreal. Its value is an object that the profile of that jurisdiction defines. The core model accepts any member, so that a system can keep extensions it does not know. The generated SHACL shape of this class is left open after generation, as model/test-model.sh records. DMO-053, DMO-056.",
             "title": "Extensions",
-            "type": "object"
-        },
-        "GeometryType": {
-            "description": "",
-            "enum": [
-                "Point"
-            ],
-            "title": "GeometryType",
-            "type": "string"
-        },
-        "InstantInterval": {
-            "additionalProperties": false,
-            "description": "A span between two instants. The end is excluded and may be absent. DAT-023.",
-            "properties": {
-                "end": {
-                    "format": "date-time",
-                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": [
-                        "string",
-                        "null"
-                    ]
-                },
-                "start": {
-                    "format": "date-time",
-                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "start"
-            ],
-            "title": "InstantInterval",
-            "type": "object"
-        },
-        "Money": {
-            "additionalProperties": false,
-            "description": "An amount of money. DAT-050 to DAT-053.",
-            "properties": {
-                "amount": {
-                    "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$",
-                    "type": "string"
-                },
-                "currency": {
-                    "pattern": "^[A-Z]{3}$",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "amount",
-                "currency"
-            ],
-            "title": "Money",
-            "type": "object"
-        },
-        "MultilingualText": {
-            "additionalProperties": {
-                "pattern": "\\S",
-                "type": [
-                    "string",
-                    "null"
-                ]
-            },
-            "description": "Text in English and French, keyed by language tag. Other language tags are allowed as extra members. DAT-004 to DAT-006.",
-            "properties": {
-                "en": {
-                    "pattern": "\\S",
-                    "type": "string"
-                },
-                "fr": {
-                    "pattern": "\\S",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "en",
-                "fr"
-            ],
-            "title": "MultilingualText",
             "type": "object"
         },
         "Organization": {
@@ -371,10 +205,13 @@
             "description": "A group of people with a shared purpose, such as a business, a public body or an association. Apache OFBiz calls it PartyGroup. DMO-042.",
             "properties": {
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -388,7 +225,7 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
@@ -403,29 +240,29 @@
                     ]
                 },
                 "partyType": {
-                    "const": "organization",
-                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes. DMO-040.",
-                    "type": "string"
+                    "$ref": "#/$defs/OrganizationPartyType",
+                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes to one value. DMO-040."
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
                 "partyType",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "Organization",
             "type": "object"
         },
         "OrganizationName": {
             "additionalProperties": false,
-            "description": "One name of an organization, as registered or used. DMO-035, DMO-042.",
+            "description": "One name of an organization, as registered or used. A value class inlined in its organization, so it has no identifier and no audit instants. DMO-021, DMO-035, DMO-042.",
             "properties": {
                 "language": {
                     "description": "The language in which the text is written, when known. LOC-055.",
@@ -466,15 +303,26 @@
             "title": "OrganizationName",
             "type": "object"
         },
+        "OrganizationPartyType": {
+            "description": "The party type of an organization. DMO-040.",
+            "enum": [
+                "organization"
+            ],
+            "title": "OrganizationPartyType",
+            "type": "string"
+        },
         "Party": {
             "additionalProperties": false,
             "description": "A person or an organization. Each party is exactly one of the two. DMO-040.",
             "properties": {
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -488,33 +336,34 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
                 "partyType": {
-                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes. DMO-040.",
-                    "type": "string"
+                    "$ref": "#/$defs/PartyType",
+                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes to one value. DMO-040."
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
                 "partyType",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "Party",
             "type": "object"
         },
         "PartyClassification": {
             "additionalProperties": false,
-            "description": "Places a party in a category of a controlled vocabulary, such as an industry. DMO-047.",
+            "description": "Places a party in a category of a controlled vocabulary, such as an industry. Departs from Apache OFBiz (DMO-006): OFBiz links a party to a PartyClassificationGroup record. This model holds the URI of a concept scheme and a code, so that categories come from published vocabularies (DMO-030). DMO-047.",
             "properties": {
                 "code": {
                     "description": "The code of the concept in that scheme, in the form of the scheme. VOC-065.",
@@ -527,10 +376,13 @@
                     "type": "string"
                 },
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -544,7 +396,7 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
@@ -553,10 +405,13 @@
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "validity": {
                     "anyOf": [
@@ -574,9 +429,7 @@
                 "partyId",
                 "conceptScheme",
                 "code",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "PartyClassification",
             "type": "object"
@@ -586,13 +439,17 @@
             "description": "Links a party to a contact mechanism, for some purposes and a period. DMO-045.",
             "properties": {
                 "contactMechanismId": {
+                    "description": "The contact mechanism that the link ties to the party. DMO-045.",
                     "type": "string"
                 },
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -606,7 +463,7 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
@@ -615,7 +472,7 @@
                     "type": "string"
                 },
                 "purposes": {
-                    "description": "What the party uses the mechanism for, such as billing or mailing, from a scheme that the deployment names. DMO-030, DMO-031.",
+                    "description": "What the party uses the mechanism for, such as billing or mailing, from a scheme that the deployment names. Departs from Apache OFBiz (DMO-006): OFBiz keeps each purpose in its own PartyContactMechPurpose record, with its own period. Here every purpose shares the period of the link, and a purpose with another period needs another link, so that one record holds one period. DMO-030, DMO-031.",
                     "items": {
                         "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
                         "type": "string"
@@ -626,10 +483,13 @@
                     ]
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "validity": {
                     "anyOf": [
@@ -646,22 +506,141 @@
             "required": [
                 "partyId",
                 "contactMechanismId",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "PartyContactMechanism",
             "type": "object"
         },
+        "PartyContainer": {
+            "additionalProperties": false,
+            "description": "A container that carries records of the Party subject area in one document, one list per class, such as for a bulk exchange or a test. It is not an entity: it has no identifier and no audit instants. It is the root class of the generated JSON Schema. DMO-014.",
+            "properties": {
+                "emailAddresses": {
+                    "description": "Email addresses. DMO-034, DMO-045.",
+                    "items": {
+                        "$ref": "#/$defs/EmailAddress"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "organizations": {
+                    "description": "Organizations. DMO-042.",
+                    "items": {
+                        "$ref": "#/$defs/Organization"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "partyClassifications": {
+                    "description": "Party classifications. DMO-047.",
+                    "items": {
+                        "$ref": "#/$defs/PartyClassification"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "partyContactMechanisms": {
+                    "description": "Links between parties and contact mechanisms. DMO-045.",
+                    "items": {
+                        "$ref": "#/$defs/PartyContactMechanism"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "partyIdentifications": {
+                    "description": "Party identifications. DMO-046.",
+                    "items": {
+                        "$ref": "#/$defs/PartyIdentification"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "partyRelationships": {
+                    "description": "Party relationships. DMO-044.",
+                    "items": {
+                        "$ref": "#/$defs/PartyRelationship"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "partyRoles": {
+                    "description": "Party roles. DMO-043.",
+                    "items": {
+                        "$ref": "#/$defs/PartyRole"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "persons": {
+                    "description": "Persons. DMO-041.",
+                    "items": {
+                        "$ref": "#/$defs/Person"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "postalAddresses": {
+                    "description": "Postal addresses. DMO-033, DMO-045.",
+                    "items": {
+                        "$ref": "#/$defs/PostalAddress"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "telephoneNumbers": {
+                    "description": "Telephone numbers. DMO-034, DMO-045.",
+                    "items": {
+                        "$ref": "#/$defs/TelephoneNumber"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "telephoneShortCodes": {
+                    "description": "Telephone short codes. DMO-034, DMO-045.",
+                    "items": {
+                        "$ref": "#/$defs/TelephoneShortCode"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "title": "PartyContainer",
+            "type": "object"
+        },
         "PartyIdentification": {
             "additionalProperties": false,
-            "description": "An identifier that a body issued for a party, such as a business number. DMO-046.",
+            "description": "An identifier that a body issued for a party, such as a business number. Departs from Apache OFBiz (DMO-006): OFBiz keys PartyIdentification by the party and the identification type, with no period and no issuer, so a party holds one identifier per type. This model gives each identification its own id, a period and an optional issuer, because an identifier can expire or be replaced while the party stays the same. DMO-046.",
             "properties": {
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -675,7 +654,7 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
@@ -696,10 +675,13 @@
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "validity": {
                     "anyOf": [
@@ -722,9 +704,7 @@
                 "partyId",
                 "identificationScheme",
                 "value",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "PartyIdentification",
             "type": "object"
@@ -734,10 +714,13 @@
             "description": "A relationship between two parties, each in a role, such as an employee and an employer. DMO-044.",
             "properties": {
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -751,7 +734,7 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
@@ -779,10 +762,13 @@
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "validity": {
                     "anyOf": [
@@ -802,9 +788,7 @@
                 "relatedPartyId",
                 "relatedRole",
                 "relationshipType",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "PartyRelationship",
             "type": "object"
@@ -814,10 +798,13 @@
             "description": "A role that a party plays, such as applicant, employer or supplier. Departs from Apache OFBiz (DMO-006): the role has a period, and the role is a code instead of a RoleType record. DMO-043.",
             "properties": {
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -831,7 +818,7 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
@@ -845,10 +832,13 @@
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "validity": {
                     "anyOf": [
@@ -865,15 +855,13 @@
             "required": [
                 "partyId",
                 "role",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "PartyRole",
             "type": "object"
         },
         "PartyType": {
-            "description": "The two kinds of party. The model defines them, so they change only with a major version. DMO-040.",
+            "description": "The two kinds of party. The model defines them, so they change only with a major version. Each meaning is a concept of the planned FPSOT scheme https://fpsot.org/vocabularies/party-types, which will be published under the FPSOT vocabularies specification; its URIs are reserved under VOC-002 to VOC-004. DMO-030, DMO-040.",
             "enum": [
                 "person",
                 "organization"
@@ -895,10 +883,13 @@
                     ]
                 },
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -912,7 +903,7 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
@@ -927,29 +918,29 @@
                     ]
                 },
                 "partyType": {
-                    "const": "person",
-                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes. DMO-040.",
-                    "type": "string"
+                    "$ref": "#/$defs/PersonPartyType",
+                    "description": "Whether the party is a person or an organization: a code of the PartyType enumeration, which each subclass fixes to one value. DMO-040."
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
                 "partyType",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "Person",
             "type": "object"
         },
         "PersonName": {
             "additionalProperties": false,
-            "description": "One name of a person. Only the full name is required. DMO-032, LOC-050.",
+            "description": "One name of a person, a value class inlined in its person, so it has no identifier and no audit instants. Only the full name is required. Departs from Apache OFBiz (DMO-006): OFBiz keeps one set of name parts on Person, such as firstName and lastName, and a PartyNameHistory keyed by the date of change. This model keeps several names, each with a type and a period, and requires only the full name, because many names have no first and last parts (LOC-050). DMO-021, DMO-032.",
             "properties": {
                 "familyName": {
                     "description": "The family name, only when a process needs the parts.",
@@ -1006,32 +997,17 @@
             "title": "PersonName",
             "type": "object"
         },
-        "Point": {
-            "additionalProperties": false,
-            "description": "A GeoJSON point: longitude, then latitude, in WGS 84 decimal degrees. DAT-080, DAT-081.",
-            "properties": {
-                "coordinates": {
-                    "items": {
-                        "type": "number"
-                    },
-                    "maxItems": 3,
-                    "minItems": 2,
-                    "type": "array"
-                },
-                "type": {
-                    "$ref": "#/$defs/GeometryType"
-                }
-            },
-            "required": [
-                "type",
-                "coordinates"
+        "PersonPartyType": {
+            "description": "The party type of a person. DMO-040.",
+            "enum": [
+                "person"
             ],
-            "title": "Point",
-            "type": "object"
+            "title": "PersonPartyType",
+            "type": "string"
         },
         "PostalAddress": {
             "additionalProperties": false,
-            "description": "A postal address in separate fields, kept as written. Only the country is required. DMO-033, LOC-053, LOC-055.",
+            "description": "A postal address in separate fields, kept as written. Only the country is required. Departs from Apache OFBiz (DMO-006): OFBiz holds address1 and address2, a numeric houseNumber, recipient names, and references to Geo records for the city, the region and the country. This model keeps each part as written, with the region and the country as codes in the form of their issuer, and holds no recipient name, because each country orders and writes its addresses in its own way (LOC-053, DAT-066). DMO-033, LOC-055.",
             "properties": {
                 "addressLines": {
                     "description": "Other lines of the address, in order, for countries whose parts do not fit the other fields.",
@@ -1051,9 +1027,8 @@
                     ]
                 },
                 "contactMechanismType": {
-                    "const": "postal-address",
-                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes. DMO-045.",
-                    "type": "string"
+                    "$ref": "#/$defs/PostalAddressMechanismType",
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045."
                 },
                 "country": {
                     "description": "The country, as an ISO 3166-1 alpha-2 code.",
@@ -1061,10 +1036,13 @@
                     "type": "string"
                 },
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensions": {
                     "anyOf": [
@@ -1078,7 +1056,7 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
@@ -1126,36 +1104,47 @@
                     ]
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
                 "country",
                 "contactMechanismType",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "PostalAddress",
             "type": "object"
         },
+        "PostalAddressMechanismType": {
+            "description": "The contact mechanism type of a postal address. DMO-045.",
+            "enum": [
+                "postal-address"
+            ],
+            "title": "PostalAddressMechanismType",
+            "type": "string"
+        },
         "TelephoneNumber": {
             "additionalProperties": false,
-            "description": "A telephone number. DMO-034.",
+            "description": "A telephone number in the international form. Departs from Apache OFBiz (DMO-006): OFBiz TelecomNumber splits the country code, the area code and the number, and keeps the extension on PartyContactMech. This model keeps one E.164 string, because not every numbering plan has area codes, and keeps the extension with the number. DMO-034.",
             "properties": {
                 "contactMechanismType": {
-                    "const": "telephone-number",
-                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes. DMO-045.",
-                    "type": "string"
+                    "$ref": "#/$defs/TelephoneNumberMechanismType",
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045."
                 },
                 "createdAt": {
-                    "description": "When the system of record first stored the entity. DMO-050.",
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "extensionNumber": {
                     "description": "The internal extension, digits only.",
@@ -1177,160 +1166,229 @@
                     "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
                 },
                 "id": {
-                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063). DMO-021.",
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
                     "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
                     "type": "string"
                 },
                 "number": {
-                    "description": "The number in E.164 form.",
+                    "description": "The number in E.164 form. The leading plus sign is the notation of ITU-T E.123.",
                     "pattern": "^\\+[1-9][0-9]{1,14}$",
                     "type": "string"
                 },
                 "updatedAt": {
-                    "description": "When the system of record last changed the entity. DMO-050.",
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
                     "format": "date-time",
                     "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
-                    "type": "string"
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
                 "number",
                 "contactMechanismType",
-                "id",
-                "createdAt",
-                "updatedAt"
+                "id"
             ],
             "title": "TelephoneNumber",
             "type": "object"
         },
-        "ZonedLocalDateTime": {
+        "TelephoneNumberMechanismType": {
+            "description": "The contact mechanism type of a telephone number. DMO-045.",
+            "enum": [
+                "telephone-number"
+            ],
+            "title": "TelephoneNumberMechanismType",
+            "type": "string"
+        },
+        "TelephoneShortCode": {
             "additionalProperties": false,
-            "description": "A wall-clock date and time with the time zone it belongs to. DAT-015.",
+            "description": "A short code that people dial within one country, such as 211 or 311. It has no E.164 form, so it is a separate kind of contact mechanism. DMO-034.",
             "properties": {
-                "localDateTime": {
-                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?$",
+                "code": {
+                    "description": "The digits that people dial, such as 211.",
+                    "pattern": "^[0-9]{2,8}$",
                     "type": "string"
                 },
-                "timeZone": {
-                    "pattern": "^[A-Za-z][A-Za-z0-9_+-]*(/[A-Za-z0-9_+-]+)*$",
+                "contactMechanismType": {
+                    "$ref": "#/$defs/TelephoneShortCodeMechanismType",
+                    "description": "The kind of contact mechanism: a code of the ContactMechanismType enumeration, which each subclass fixes to one value. DMO-045."
+                },
+                "country": {
+                    "description": "The country whose numbering plan defines the code, as an ISO 3166-1 alpha-2 code.",
+                    "pattern": "^[A-Z]{2}$",
                     "type": "string"
+                },
+                "createdAt": {
+                    "description": "When the system of record first stored the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "extensions": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Extensions"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "Fields that one jurisdiction adds, keyed by jurisdiction code. DMO-053 to DMO-056."
+                },
+                "id": {
+                    "description": "The identifier of the entity. New ones should be version 7 UUIDs (DAT-063), and must be version 4 when DAT-064 applies. DMO-021.",
+                    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "When the system of record last changed the entity. Optional in the core model, so that a record sent in to be created can omit it. Required in every record that a system of record emits. DMO-050.",
+                    "format": "date-time",
+                    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
-                "localDateTime",
-                "timeZone"
+                "code",
+                "country",
+                "contactMechanismType",
+                "id"
             ],
-            "title": "ZonedLocalDateTime",
+            "title": "TelephoneShortCode",
             "type": "object"
+        },
+        "TelephoneShortCodeMechanismType": {
+            "description": "The contact mechanism type of a telephone short code. DMO-045.",
+            "enum": [
+                "telephone-short-code"
+            ],
+            "title": "TelephoneShortCodeMechanismType",
+            "type": "string"
         }
     },
     "$id": "https://fpsot.org/model/party",
     "$schema": "https://json-schema.org/draft/2019-09/schema",
     "additionalProperties": false,
-    "description": "Container used only to test the examples of this schema.",
+    "description": "A container that carries records of the Party subject area in one document, one list per class, such as for a bulk exchange or a test. It is not an entity: it has no identifier and no audit instants. It is the root class of the generated JSON Schema. DMO-014.",
     "metamodel_version": "1.12.0",
     "properties": {
-        "active": {
+        "emailAddresses": {
+            "description": "Email addresses. DMO-034, DMO-045.",
+            "items": {
+                "$ref": "#/$defs/EmailAddress"
+            },
             "type": [
-                "boolean",
+                "array",
                 "null"
             ]
         },
-        "appointment": {
-            "anyOf": [
-                {
-                    "$ref": "#/$defs/ZonedLocalDateTime"
-                },
-                {
-                    "type": "null"
-                }
-            ]
-        },
-        "birthDate": {
-            "format": "date",
-            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+        "organizations": {
+            "description": "Organizations. DMO-042.",
+            "items": {
+                "$ref": "#/$defs/Organization"
+            },
             "type": [
-                "string",
+                "array",
                 "null"
             ]
         },
-        "createdAt": {
-            "format": "date-time",
-            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+        "partyClassifications": {
+            "description": "Party classifications. DMO-047.",
+            "items": {
+                "$ref": "#/$defs/PartyClassification"
+            },
             "type": [
-                "string",
+                "array",
                 "null"
             ]
         },
-        "fee": {
-            "anyOf": [
-                {
-                    "$ref": "#/$defs/Money"
-                },
-                {
-                    "type": "null"
-                }
-            ]
-        },
-        "id": {
-            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-            "type": "string"
-        },
-        "location": {
-            "anyOf": [
-                {
-                    "$ref": "#/$defs/Point"
-                },
-                {
-                    "type": "null"
-                }
-            ]
-        },
-        "name": {
-            "anyOf": [
-                {
-                    "$ref": "#/$defs/MultilingualText"
-                },
-                {
-                    "type": "null"
-                }
-            ]
-        },
-        "openingTime": {
-            "pattern": "^[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?$",
+        "partyContactMechanisms": {
+            "description": "Links between parties and contact mechanisms. DMO-045.",
+            "items": {
+                "$ref": "#/$defs/PartyContactMechanism"
+            },
             "type": [
-                "string",
+                "array",
                 "null"
             ]
         },
-        "processingTime": {
-            "pattern": "^P(?:[0-9]+W|(?=[0-9]|T[0-9])(?:[0-9]+Y)?(?:[0-9]+M)?(?:[0-9]+D)?(?:T(?=[0-9])(?:[0-9]+H)?(?:[0-9]+M)?(?:[0-9]+S)?)?)$",
+        "partyIdentifications": {
+            "description": "Party identifications. DMO-046.",
+            "items": {
+                "$ref": "#/$defs/PartyIdentification"
+            },
             "type": [
-                "string",
+                "array",
                 "null"
             ]
         },
-        "status": {
-            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+        "partyRelationships": {
+            "description": "Party relationships. DMO-044.",
+            "items": {
+                "$ref": "#/$defs/PartyRelationship"
+            },
             "type": [
-                "string",
+                "array",
                 "null"
             ]
         },
-        "validity": {
-            "anyOf": [
-                {
-                    "$ref": "#/$defs/DateInterval"
-                },
-                {
-                    "type": "null"
-                }
+        "partyRoles": {
+            "description": "Party roles. DMO-043.",
+            "items": {
+                "$ref": "#/$defs/PartyRole"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "persons": {
+            "description": "Persons. DMO-041.",
+            "items": {
+                "$ref": "#/$defs/Person"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "postalAddresses": {
+            "description": "Postal addresses. DMO-033, DMO-045.",
+            "items": {
+                "$ref": "#/$defs/PostalAddress"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "telephoneNumbers": {
+            "description": "Telephone numbers. DMO-034, DMO-045.",
+            "items": {
+                "$ref": "#/$defs/TelephoneNumber"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "telephoneShortCodes": {
+            "description": "Telephone short codes. DMO-034, DMO-045.",
+            "items": {
+                "$ref": "#/$defs/TelephoneShortCode"
+            },
+            "type": [
+                "array",
+                "null"
             ]
         }
     },
-    "required": [
-        "id"
-    ],
     "title": "party",
     "type": "object",
     "version": "0.1.0"

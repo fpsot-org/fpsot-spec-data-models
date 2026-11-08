@@ -9,10 +9,14 @@ Ces règles portent sur les fichiers qui font correspondre un modèle à un stoc
 [[DMO-070]]
 *DMO-070.* Une correspondance de stockage DOIT être un fichier distinct, généré à partir du modèle selon DMO-014.
 Par exemple, des définitions de tables en {abbr-sql-first} ou un fichier de définition d’entités d’Apache OFBiz.
-Le fichier {abbr-sql} de `model/generated/` est un exemple de correspondance, pour PostgreSQL.
 Un système PEUT stocker les données d’un modèle de toute autre façon.
 Par exemple, dans un magasin de documents, dans le moteur d’entités d’OFBiz ou dans un service distant.
 Une correspondance générée suit chaque changement du modèle, et aucun stockage ne devient une partie du modèle.
+
+Le fichier {abbr-sql} de `model/generated/` est la sortie brute du générateur link:https://linkml.io/linkml/generators/index.html[LinkML] pour PostgreSQL, comme le dit son en-tête.
+Il montre seulement la forme d’une correspondance, et ce n’est pas une correspondance utilisable.
+Ses clés étrangères pointent vers des classes abstraites, et l’objet `extensions` et les intervalles ne correspondent à aucune colonne utile.
+Les règles d’un modèle restent indépendantes du stockage, selon DMO-003.
 
 [[DMO-071]]
 *DMO-071.* Une correspondance de stockage PEUT ajouter des éléments propres au stockage.
@@ -38,7 +42,7 @@ La personne qui met en œuvre sait alors ce qu’une conversion garde, change et
 La {abbr-fpsot} prévoit trois outils.
 Aucun n’existe encore, et cette spécification n’en dépend pas.
 
-* Un traducteur du {abbr-xml} de l’Entity Engine vers LinkML, pour partir des définitions d’entités d’OFBiz existantes.
+* Un traducteur du {abbr-xml} de l’Entity Engine vers link:https://linkml.io/linkml/generators/index.html[LinkML], pour partir des définitions d’entités d’OFBiz existantes.
 * Un générateur de LinkML vers le {abbr-xml} de l’Entity Engine, pour produire le fichier de DMO-072.
 * Une extension LinkML pour Quarkus, pour qu’un service Java emploie directement un modèle LinkML.
 Le moteur d’entités d’OFBiz fonctionne de la même façon avec ses propres définitions.
@@ -49,6 +53,7 @@ Chaque outil suivra DMO-002 : un système peut l’employer ou non, et rester co
 
 === Références informatives
 
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Copie archivée]
 * link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/dtd/entitymodel.xsd[Apache OFBiz, entitymodel.xsd], The Apache Software Foundation, archivage e103805, 2026-11-07.
 
 == Historique du document

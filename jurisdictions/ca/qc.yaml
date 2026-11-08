@@ -8,8 +8,8 @@ rows:
     last_checked: "2026-11-07"
   - id: DMO-014
     text: {en: "RDF is retained for describing and modeling information, and XML 1.0 and JSON are retained for structured data. The framework names no source model and does not ask for generated forms.", fr: "Le RDF est retenu pour décrire et modéliser l’information, et le XML 1.0 et le JSON sont retenus pour les données structurées. Le cadre ne nomme aucun modèle source et ne demande pas de formes générées."}
-    status: looser
-    source: {title: "Cadre commun d’interopérabilité du gouvernement du Québec, section 3.3.3, Structuration et traitement des données structurées", version: "AEG 3.2", date: "2017-06", url: "https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/cybersecurite_numerique/Publications/AEG/Cadre_commun_interoperabilite.pdf", archive: "https://web.archive.org/web/20240924132115/https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/cybersecurite_numerique/Publications/AEG/Cadre_commun_interoperabilite.pdf"}
+    status: not-covered
+    source: {title: "Cadre commun d’interopérabilité du gouvernement du Québec, section 3.3.3, Structuration et traitement des données structurées", version: "AEG 3.3", date: "2017-06", url: "https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/cybersecurite_numerique/Publications/AEG/Cadre_commun_interoperabilite.pdf", archive: "https://web.archive.org/web/20240924132115/https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/cybersecurite_numerique/Publications/AEG/Cadre_commun_interoperabilite.pdf"}
     last_checked: "2026-11-07"
   - id: DMO-046
     text: {en: "The Québec enterprise number is a ten-digit identifier that the Registraire des entreprises gives to each registered enterprise. Most enterprises doing business in Québec must have one, and many public bodies use it.", fr: "Le numéro d’entreprise du Québec est un identifiant de dix chiffres que le Registraire des entreprises attribue à chaque entreprise immatriculée. La plupart des entreprises qui font des affaires au Québec doivent en avoir un, et de nombreux organismes publics l’emploient."}

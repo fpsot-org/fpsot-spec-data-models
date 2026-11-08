@@ -1,4 +1,6 @@
 # A name always has its full form; the parts are optional (DMO-032, LOC-050).
+# expect-json: 'fullName' is a required property
+# expect-shacl: ^fullName: Less than 1 values
 persons:
   - id: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
     partyType: person

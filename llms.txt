@@ -19,6 +19,7 @@
 - [LinkML Party model](model/party.yaml)
 - [Generated files](model/generated/)
 - [Example Québec profile](model/examples/ca-qc-profile.yaml)
+- [Class diagram of the Party subject area](diagrams/party-entities-en.svg)
 - [How-to guide](docs/modules/en/pages/index.adoc)
 
 ## Optional

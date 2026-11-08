@@ -1,8 +1,15 @@
 # An identifier from another body is a string in the form of its issuer (DMO-046, DAT-066).
+# expect-json: 123456789 is not of type 'string'
+# expect-shacl: ^value: Value is not Literal with datatype xsd:string
 partyIdentifications:
   - id: 019a5e10-3c4d-7a21-8b3e-d5e6f708192a
     partyId: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
     identificationScheme: ca-business-number
     value: 123456789
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+organizations:
+  - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
+    partyType: organization
     createdAt: "2026-11-07T14:00:00Z"
     updatedAt: "2026-11-07T14:00:00Z"

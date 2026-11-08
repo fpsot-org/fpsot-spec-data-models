@@ -25,8 +25,12 @@ classes:
         pattern: "^[0-9]{2}$"
         description: >-
           The administrative region of Québec where the organization has its
-          head office, as the two-digit code of its issuer, such as 03.
-          DAT-066.
+          head office, as the two-digit code of its issuer, such as 03 for
+          Capitale-Nationale. The codes come from the official list of the
+          administrative regions of Québec, Institut de la statistique du
+          Québec, Régions administratives (1997). DAT-066, DMO-055.
+        see_also:
+          - https://statistique.quebec.ca/statistiques/divisions-territoriales/nom-code_dt/6_1.htm
 
   QuebecOrganizationExtensions:
     is_a: Extensions
@@ -45,3 +49,11 @@ classes:
     slot_usage:
       extensions:
         range: QuebecOrganizationExtensions
+
+  QuebecPartyContainer:
+    is_a: PartyContainer
+    tree_root: true
+    description: "The container of the Party model, with the organizations of this profile. Used to test the examples."
+    slot_usage:
+      organizations:
+        range: QuebecOrganization

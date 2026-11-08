@@ -42,7 +42,7 @@ A required product would tie every adopter to one vendor or one code base.
 *DMO-006.* A data model SHOULD follow the patterns of the universal data models, as Apache OFBiz implements them.
 It MAY depart from a pattern that conflicts with another {abbr-fpsot} specification, or that does not fit public sector data.
 The description of the element MUST then state the departure and its reason.
-These patterns have served many kinds of organizations for decades, so they rarely need a redesign.
+Following them keeps a model close to a public implementation that anyone can study.
 A stated departure lets an implementer map the model to OFBiz and back.
 
 === Background (informative)

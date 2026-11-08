@@ -1,8 +1,15 @@
 # An interval always has its start (DMO-023, DAT-023).
+# expect-json: 'start' is a required property
+# expect-shacl: ^start: Less than 1 values
 partyRoles:
   - id: 019a5e10-3c4d-7a21-8b3e-3b4c5d6e7f80
     partyId: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
     role: employee
     validity: {end: "2027-01-01"}
+    createdAt: "2026-11-07T14:00:00Z"
+    updatedAt: "2026-11-07T14:00:00Z"
+persons:
+  - id: 019a5e10-3c4d-7a21-8b3e-1f2a3b4c5d6e
+    partyType: person
     createdAt: "2026-11-07T14:00:00Z"
     updatedAt: "2026-11-07T14:00:00Z"

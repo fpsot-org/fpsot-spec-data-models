@@ -10,7 +10,7 @@ persons:
         familyName: Lévesque-Côté
         nameType: legal
         language: fr
-quebecOrganizations:
+organizations:
   - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
     partyType: organization
     createdAt: "2026-11-07T14:00:00Z"

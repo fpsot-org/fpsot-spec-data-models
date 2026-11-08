@@ -12,24 +12,29 @@ Les noms d’attributs et les valeurs d’énumération DOIVENT suivre le nommag
 Chaque nom DOIT employer le terme de la base terminologique de rédaction quand il en existe un, selon NAM-002.
 Un nom NE DOIT PAS abréger un mot, selon NAM-005.
 Le modèle écrit donc `Organization` et `ContactMechanism`, là où Apache OFBiz écrit `PartyGroup` et `ContactMech`.
-L’UpperCamelCase est la forme courante des classes LinkML, et il concorde avec les noms de classes du code généré.
+L’UpperCamelCase est la forme courante des classes link:https://linkml.io/linkml/generators/index.html[LinkML], et il concorde avec les noms de classes du code généré.
 
 == Clés et références
 
+Dans cette spécification, une entité est une classe dont les enregistrements existent par eux-mêmes et auxquels d’autres données peuvent renvoyer.
+Une classe de valeur, comme `PersonName` ou `DateInterval`, existe seulement intégrée à une entité.
+Elle n’a besoin ni d’`id` ni d’horodatages de création et de modification, car elle fait partie de son entité.
+
 [[DMO-021]]
 *DMO-021.* Chaque entité DOIT avoir un attribut `id`, marqué `identifier: true`, avec le type `Uuid` des types de données.
-Un nouvel identifiant DEVRAIT être un {abbr-uuid-first} de version 7, selon DAT-063, ou de version 4 selon DAT-064.
+Un nouvel identifiant DEVRAIT être un {abbr-uuid-first} de version 7, selon DAT-063.
+Il DOIT être de version 4 quand DAT-064 s’applique.
 Un identifiant qu’attribue un autre organisme, comme un numéro d’entreprise, NE DOIT PAS servir d’`id`.
 Une clé que crée un système ne change jamais et ne révèle rien, selon DAT-062.
 Un autre organisme peut changer son numéro, le donner plus tard à quelqu’un d’autre, ou n’en attribuer aucun.
 
 [[DMO-022]]
 *DMO-022.* Une référence à une autre entité DOIT être un attribut qui contient son `id`, comme `partyId`.
-Un modèle NE DOIT PAS employer de clé formée de plusieurs champs.
-Une entité qui relie deux autres entités, comme un rôle de partie, DOIT quand même avoir son propre `id`.
-Apache OFBiz forme la clé d’un tel lien avec les deux références et une date de début.
-Avec son propre `id`, un lien peut changer de période et garder sa clé.
-D’autres données peuvent aussi y renvoyer.
+Un modèle NE DOIT PAS employer de clé formée de plusieurs champs comme identifiant ou comme cible d’une référence.
+Une entité de lien, comme `PartyContactMechanism`, DOIT quand même avoir son propre `id`.
+Apache OFBiz forme la clé de `PartyContactMech` avec la partie, le moyen de contact et une date de début.
+Un modèle PEUT indiquer une unicité naturelle avec les `unique_keys` de link:https://linkml.io/linkml/generators/index.html[LinkML], qui ne sont pas un identifiant.
+Avec son propre `id`, un lien garde sa clé quand sa période change, et d’autres données peuvent y renvoyer.
 
 == Périodes de validité
 
@@ -54,7 +59,14 @@ Le tableau fait correspondre la paire de dates d’Apache OFBiz à un intervalle
 
 Le link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/framework/entity/src/main/java/org/apache/ofbiz/entity/util/EntityUtil.java[filtre de dates d’OFBiz] tient un enregistrement pour valable à partir de `fromDate` et jusqu’avant `thruDate`.
 C’est la même règle que DAT-023 : l’intervalle comprend son début, mais pas sa fin.
-Une correspondance copie donc les deux valeurs sans décalage d’un jour ni d’une seconde.
+Vers un `InstantInterval`, une correspondance copie donc les deux valeurs sans décalage d’un jour ni d’une seconde.
+
+Vers un `DateInterval`, une correspondance DOIT connaître le fuseau horaire de la source.
+Elle convertit chaque valeur en date dans ce fuseau, et le `start` est la date de `fromDate`.
+Le `end` est la date de `thruDate` si celui-ci tombe à minuit, et sinon le jour suivant.
+Le jour suivant garde le dernier jour du fait dans l’intervalle, puisque l’intervalle exclut sa fin.
+Une correspondance DOIT signaler un enregistrement sans `fromDate`, et omettre son `validity` jusqu’à ce qu’une personne fixe le début.
+Tirer le début d’un autre champ, comme l’instant du stockage, affirmerait un fait absent de la source.
 
 == Types
 
@@ -64,9 +76,13 @@ Par exemple, `Instant` pour un moment, `CalendarDate` pour une date et `Money` p
 Le texte que {abbr-fpsot} ou une institution publie en plusieurs langues DOIT employer `MultilingualText`.
 Le texte qu’une personne saisit DOIT être une simple chaîne, gardée telle que la personne l’a écrite.
 C’est le cas d’un nom ou d’une adresse.
-Un nom ou une adresse a une seule forme dans sa propre langue, selon LOC-055, et personne ne le traduit.
+Un nom ou une adresse a une seule forme dans sa propre langue, selon LOC-051, et personne ne le traduit.
 
 == Références
+
+=== Références normatives
+
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Copie archivée]
 
 === Références informatives
 

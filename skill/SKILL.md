@@ -33,9 +33,9 @@ Each line keeps the strength of its rule: "must" and "must not" are MUST and MUS
 ## Names, keys and types
 
 - Classes must be singular UpperCamelCase nouns; slots and enum values must follow the naming spec; use term base terms, no shortened words: `ContactMechanism`, not `ContactMech` (DMO-020).
-- Each entity must have `id` with type `Uuid`; new ones should be UUID v7. An identifier from another body must not be the `id` (DMO-021).
-- A reference must be a slot holding the other entity's `id`, such as `partyId`. Composite keys must not be used; link entities must have their own `id` (DMO-022).
-- A period must be a `validity` interval, never two date fields. It should be `DateInterval` or `InstantInterval`, as the fact needs. OFBiz `fromDate` maps to `start` and `thruDate` to `end`, with no shift (DMO-023).
+- Each entity must have `id` with type `Uuid`; new ones should be UUID v7, and must be v4 when DAT-064 applies. An identifier from another body must not be the `id`. Value classes inlined in an entity, such as `PersonName`, have no `id` (DMO-021).
+- A reference must be a slot holding the other entity's `id`, such as `partyId`. Composite keys must not be identifiers or reference targets; link entities must have their own `id`. Natural uniqueness may use LinkML `unique_keys` (DMO-022).
+- A period must be a `validity` interval, never two date fields. It should be `DateInterval` or `InstantInterval`, as the fact needs. OFBiz `fromDate` maps to `start` and `thruDate` to `end`, with no shift into an `InstantInterval`. Into a `DateInterval`, the source time zone must be known, a `thruDate` after midnight ends on the next day, and a record with no `fromDate` must be flagged (DMO-023).
 - Slots must use data types: `Instant`, `CalendarDate`, `Money`, `MultilingualText` for published text. Text a person enters must be a plain string as written (DMO-024).
 
 ## Codes, names and contact data
@@ -44,7 +44,7 @@ Each line keeps the strength of its rule: "must" and "must not" are MUST and MUS
 - When codes vary by institution, the slot may be `CodeValue`; its description must name the kind of scheme, and the deployment must name the scheme (DMO-031).
 - A person name must have a required `fullName`; `givenNames` and `familyName` must be optional; no title required; no restrictive pattern (DMO-032).
 - A postal address must have separate slots; only `country` (ISO 3166-1 alpha-2) is required; region and postal code keep the issuer form; nothing is translated (DMO-033).
-- Telephone numbers must be stored in E.164 form, such as `+14185550123`, with the extension separate. Email addresses must be stored as written, without changing the case of the local part (DMO-034).
+- Telephone numbers must be exchanged in E.164 form, such as `+14185550123`, with the extension separate; a short code such as 211 must be a `TelephoneShortCode`. Email addresses must be exchanged as written, without changing the case of the local part (DMO-034).
 - Organization names must be plain strings as registered, one entry per language with its tag (DMO-035).
 - A slot about a person must not be required unless every use needs it (DMO-036).
 
@@ -53,25 +53,25 @@ Each line keeps the strength of its rule: "must" and "must not" are MUST and MUS
 - `Party` must be abstract; each party must be one `Person` or one `Organization`, with `partyType` `person` or `organization` (DMO-040).
 - A `Person` may hold names and a `birthDate` (DMO-041). An `Organization` may hold names (DMO-042).
 - Roles must be `PartyRole` entities with a code and a period, never subclasses or flags (DMO-043).
-- Relationships must be `PartyRelationship` entities with both parties, both roles, a type and a period (DMO-044).
-- Addresses, telephone numbers and email addresses must be `ContactMechanism` entities, linked through `PartyContactMechanism` with purposes and a period; they may be shared (DMO-045).
+- Relationships must be `PartyRelationship` entities with both parties, both roles, a type and a period; they read from the first party to the second, such as employer to employee, as in OFBiz (DMO-044).
+- Addresses, telephone numbers, telephone short codes and email addresses must be `ContactMechanism` entities, linked through `PartyContactMechanism` with purposes and a period; they may be shared (DMO-045).
 - Identifiers issued by other bodies must be `PartyIdentification` entities: scheme code and value in the issuer form (DMO-046).
 - Categories must be `PartyClassification` entities: scheme URI, code and period (DMO-047).
 
 ## Audit, history and extensions
 
-- Every entity must have required `createdAt` and `updatedAt` instants, set by the system of record, never used as validity. Who changed what should go in a separate audit log (DMO-050).
-- A real-world change must end the current record and add a new one; a correction may change it in place (DMO-051). A record must not be deleted only because its period ended (DMO-052).
-- Jurisdiction fields go in the one `extensions` object; each member must be named after the ISO 3166 code in lowerCamelCase, such as `caQc`, and its value must be an object (DMO-053).
+- Every entity must have `createdAt` and `updatedAt` instant slots. A record that a system of record emits must hold both; a record sent in to be created may omit them. They must never serve as validity. Who changed what should go in a separate audit log (DMO-050).
+- Past facts must stay retrievable as ended records in the model form; when a fact changes, the old record must end where the new one starts; a correction may replace the record (DMO-051). A record must not be deleted only because its period ended (DMO-052).
+- Jurisdiction fields go in the one `extensions` object; each member must be named after the ISO 3166 code in lowerCamelCase, such as `caQc`, and its value must be an object. A jurisdiction with no code must nest under the nearest coded one, such as `caQc.montreal`; a body that is not a jurisdiction, such as the EU, must use its registered name (DMO-053).
 - Jurisdiction fields must not sit beside core fields or carry a prefix or namespace (DMO-054).
 - Each member must be defined by a jurisdiction profile in its own LinkML schema, citing its legal source; the core must not change (DMO-055).
 - Systems must keep unknown extension members and must not reject them; a member must not redefine a core field (DMO-056). A field that several jurisdictions share should move into the core (DMO-057).
 
 ## Versions and deprecation
 
-- Each release must have a Semantic Versioning number, matching the repository tag (DMO-060).
+- Each release must have a Semantic Versioning number; the model version follows the repository tag, and a text-only release is a patch release (DMO-060).
 - Within a major version, a release must not remove, rename or retype anything, make a slot required or narrow a pattern; it may add optional items (DMO-061).
-- Retire an element with LinkML `deprecated` (reason and release) and `deprecated_element_has_exact_replacement`; it must stay until the next major version (DMO-062).
+- Retire an element with LinkML `deprecated` (reason and release), and `deprecated_element_has_exact_replacement` when one element replaces it; it must stay until the next major version (DMO-062).
 - The schema `id` must not change; each release's files must stay available under its tag (DMO-063).
 - Validate incoming data with the latest minor release of its major version (DMO-064, should).
 

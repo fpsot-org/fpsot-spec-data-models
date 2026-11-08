@@ -13,6 +13,7 @@ Each requirement has an ID from `DMO-001` to `DMO-073`.
 
 * Write each model as a LinkML schema under `model/`, which imports the FPSOT data types model.
 * Generate the other forms into `model/generated/`, and run `model/test-model.sh` in the continuous integration, so that drift fails the build.
+  In this repository, the `model` job of `.github/workflows/ci.yml` runs it, and it is a required check of the main branch (DMO-015).
 * Keep jurisdiction fields in the `extensions` object, defined by a separate profile schema.
 
 Every part of a model is optional.
@@ -30,7 +31,7 @@ To check the model locally:
 [source,shell]
 ----
 python3 -m venv .venv
-.venv/bin/pip install "linkml==1.12.1"
+.venv/bin/pip install -r model/requirements.txt
 PATH="$PWD/.venv/bin:$PATH" bash model/test-model.sh
 ----
 
@@ -47,7 +48,7 @@ PATH="$PWD/.venv/bin:$PATH" bash model/test-model.sh
 | Guides, in the Antora folder layout.
 
 | `model/`
-| The LinkML Party model, a copy of the data types model in `imports/`, the generated files in `generated/`, and examples with a Québec profile in `examples/`. Run `model/test-model.sh` after a change.
+| The LinkML Party model, a copy of the data types model in `imports/`, the generated files in `generated/`, and examples with a Québec profile in `examples/`. `requirements.txt` pins the tools. Run `model/test-model.sh` after a change.
 
 | `skill/`
 | The agent skill: a short summary that cites requirement IDs.
@@ -56,7 +57,7 @@ PATH="$PWD/.venv/bin:$PATH" bash model/test-model.sh
 | Machine-checkable rules. The model checks are in `model/`.
 
 | `diagrams/`
-| PlantUML sources and their rendered SVG files. None yet; the Party diagram is inline in `spec/`.
+| PlantUML sources and their rendered SVG files, such as the class diagram of the Party subject area in English and French.
 
 | `jurisdictions/`
 | Comparison data: how each government handles the same topics.

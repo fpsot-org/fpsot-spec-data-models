@@ -44,7 +44,7 @@ Un produit obligatoire lierait chaque organisme à un seul fournisseur ou à un 
 *DMO-006.* Un modèle de données DEVRAIT suivre les patrons des modèles universels, tels qu’Apache OFBiz les met en œuvre.
 Il PEUT s’écarter d’un patron qui contredit une autre spécification de {abbr-fpsot}, ou qui ne convient pas aux données publiques.
 La description de l’élément DOIT alors indiquer l’écart et sa raison.
-Ces patrons servent depuis des décennies à bien des organisations, et ils exigent donc rarement une refonte.
+Les suivre garde un modèle proche d’une mise en œuvre publique que chacun peut étudier.
 Un écart indiqué permet de faire la correspondance entre le modèle et OFBiz, dans les deux sens.
 
 === Contexte (informatif)

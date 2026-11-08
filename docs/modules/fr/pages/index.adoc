@@ -2,18 +2,18 @@
 :page-type: how-to
 include::_fpsot-terms.adoc[]
 
-Ce guide bâtit un petit ensemble d’enregistrements Party et les vérifie avec le validateur LinkML.
+Ce guide bâtit un petit ensemble d’enregistrements Party et les vérifie avec le validateur link:https://linkml.io/linkml/generators/index.html[LinkML].
 L’ensemble contient une personne, une organisation, un rôle, une adresse postale et une extension pour le Québec.
-Le fichier final est `model/examples/valid/party-example.yaml`.
+Le fichier final est `model/examples/profile/valid/party-example.yaml`.
 
 == Installer les outils
 
-Installez les outils LinkML à la version que fixe le dépôt, selon DMO-016 :
+Installez les outils link:https://linkml.io/linkml/generators/index.html[LinkML] aux versions que fixe le dépôt, selon DMO-016 :
 
 [source,shell]
 ----
 python3 -m venv .venv
-.venv/bin/pip install "linkml==1.12.1"
+.venv/bin/pip install -r model/requirements.txt
 export PATH="$PWD/.venv/bin:$PATH"
 ----
 
@@ -45,7 +45,7 @@ Il ne va jamais à côté des champs de base, selon DMO-054.
 
 [source,yaml]
 ----
-quebecOrganizations:
+organizations:
   - id: 019a5e10-3c4d-7a21-8b3e-2a3b4c5d6e7f
     partyType: organization
     createdAt: "2026-11-07T14:00:00Z"
@@ -60,7 +60,7 @@ quebecOrganizations:
         administrativeRegion: "03"
 ----
 
-Le profil type `model/examples/ca-qc-profile.yaml` définit `caQc` et vérifie que la région est un code de deux chiffres.
+L’exemple de profil `model/examples/ca-qc-profile.yaml` définit `caQc` et vérifie que la région est un code de deux chiffres.
 Le modèle de base garde le membre sans le vérifier, selon DMO-056.
 
 == Donner un rôle à l’organisation
@@ -111,11 +111,11 @@ partyContactMechanisms:
 == Vérifier les enregistrements
 
 Placez les quatre parties dans un seul fichier.
-Validez-le ensuite avec le schéma de test, qui importe le profil du Québec :
+Validez-le ensuite avec le profil du Québec et sa classe conteneur :
 
 [source,shell]
 ----
-linkml-validate -s model/examples/test-schema.yaml -C Examples party-example.yaml
+linkml-validate -s model/examples/ca-qc-profile.yaml -C QuebecPartyContainer party-example.yaml
 ----
 
 Le validateur répond `No issues found`.
@@ -131,8 +131,15 @@ Lancez le script du dépôt après chaque changement du modèle :
 bash model/test-model.sh
 ----
 
-Il vérifie les exemples et compare chaque fichier généré à une nouvelle génération, selon DMO-015.
+Il vérifie les exemples avec LinkML, le JSON Schema généré et les formes SHACL générées.
+Il compare aussi chaque fichier généré à une nouvelle génération, selon DMO-015.
 Après un changement de `model/party.yaml`, lancez-le avec `UPDATE=true`, puis archivez les fichiers générés avec la source.
+
+== Références
+
+=== Références informatives
+
+* link:https://linkml.io/linkml/generators/index.html[LinkML, Generators], LinkML, 1.12.1. link:https://web.archive.org/web/20261001151732/https://linkml.io/linkml/generators/index.html[Copie archivée]
 
 == Historique du document
 
