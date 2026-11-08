@@ -113,7 +113,7 @@ for f in party.json party.sql party-owl.ttl party-shacl.ttl; do
   elif [ "${UPDATE:-false}" = true ]; then
     cp "$work/$f" "$here/generated/$f"
   elif ! cmp -s "$work/$f" "$here/generated/$f"; then
-    echo "FAIL: generated/$f does not match party.yaml; run with UPDATE=true and commit the result"; fail=1
+    echo "FAIL: generated/$f does not match party.yaml; run with UPDATE=true and commit the result"; diff -u "$here/generated/$f" "$work/$f" | head -40; fail=1
   fi
 done
 if grep -q 'Examples\|Money\|"Point"' "$here/generated/"*; then
