@@ -6,6 +6,12 @@ and versions follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-18
+
+### Changed
+
+- The background on the principles page cites only the public Apache OFBiz model; the reference to a book is removed.
+
 ## [0.1.0] - 2026-11-07
 
 ### Added
