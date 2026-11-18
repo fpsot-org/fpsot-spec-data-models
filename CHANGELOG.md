@@ -6,6 +6,16 @@ and versions follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-18
+
+### Changed
+
+- The background on the principles page cites only the public Apache OFBiz model; the reference to a book is removed.
+
+### Fixed
+
+- The model check sorts the indexes that the SQL generator emits for each table, so the generated file no longer changes between runs, and it now fails when a generator in a pipe fails.
+
 ## [0.1.0] - 2026-11-07
 
 ### Added

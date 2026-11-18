@@ -47,12 +47,10 @@ A stated departure lets an implementer map the model to OFBiz and back.
 
 === Background (informative)
 
-The universal data models come from the work of Len Silverston.
-His book, _The Data Model Resource Book_, publishes them.
-Apache OFBiz is an open source application that implements these patterns.
-Its link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[list of model changes] says that OFBiz follows this model, with some changes.
-This specification relies on the public OFBiz model, not on the book.
-It copies no text, diagram or attribute list from the book.
+Apache OFBiz is an open source application.
+It implements the patterns of universal data models.
+Its link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[list of model changes] records the changes OFBiz made to these patterns.
+This specification relies only on the public OFBiz model.
 
 The link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml[OFBiz party model] shows these patterns, in short:
 
@@ -73,7 +71,6 @@ For example, type entities become controlled vocabularies, and date pairs become
 
 === Informative
 
-* Len Silverston, The Data Model Resource Book, Volume 1: A Library of Universal Data Models for All Enterprises, Revised Edition, Wiley, ISBN 978-0-471-38023-8, 2001-03.
 * link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[Apache OFBiz, DATAMODEL_CHANGES.adoc], The Apache Software Foundation, commit e103805, 2026-11-07.
 * link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml[Apache OFBiz, party-entitymodel.xml], The Apache Software Foundation, commit e103805, 2026-11-07.
 
@@ -82,5 +79,6 @@ For example, type entities become controlled vocabularies, and date pairs become
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Change
+|0.1.1 |2026-11-18 |Removed a reference to a book. The background relies on the public OFBiz model only.
 |0.1.0 |2026-11-07 |First version.
 |===

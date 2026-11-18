@@ -9,6 +9,6 @@ This repository holds the FPSOT data models specification: how FPSOT projects de
 - Every page exists in English and in French, with the same file name and the same IDs.
 - Terms and abbreviations come from the term base of `fpsot-spec-writing`. Add a missing term there first.
 - This is a layer 1 specification. It may refer to the layer 0 specifications and to the data types and vocabularies specifications. It refers to API design only by topic, and never to the registry.
-- Do not copy text, diagrams or attribute lists from Len Silverston's books. Summarize patterns in your own words, from the public Apache OFBiz model.
+- Do not copy text, diagrams or attribute lists from published data-model books, and do not cite them. Summarize patterns in your own words, from the public Apache OFBiz model.
 - Do not copy text from outside standards. Summarize them in your own words and cite the exact version.
 - Commits follow Conventional Commits and are signed. Pull requests are squash-merged.

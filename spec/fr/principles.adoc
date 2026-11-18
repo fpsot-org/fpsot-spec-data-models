@@ -49,12 +49,10 @@ Un écart indiqué permet de faire la correspondance entre le modèle et OFBiz, 
 
 === Contexte (informatif)
 
-Les modèles de données universels viennent des travaux de Len Silverston.
-Son livre, _The Data Model Resource Book_, les publie.
-Apache OFBiz est une application ouverte qui met en œuvre ces patrons.
-Son link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[journal des changements du modèle de données] dit qu’OFBiz suit ce modèle, avec quelques changements.
-Cette spécification s’appuie sur le modèle public d’OFBiz, et non sur le livre.
-Elle ne copie aucun texte, schéma ou liste d’attributs du livre.
+Apache OFBiz est une application ouverte.
+Elle met en œuvre les patrons des modèles de données universels.
+Son link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[journal des changements du modèle de données] consigne les changements qu’OFBiz a apportés à ces patrons.
+Cette spécification s’appuie seulement sur le modèle public d’OFBiz.
 
 Le link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml[modèle des parties d’OFBiz] montre ces patrons, en résumé :
 
@@ -77,7 +75,6 @@ Par exemple, les entités de type deviennent des vocabulaires contrôlés, et le
 
 === Références informatives
 
-* Len Silverston, The Data Model Resource Book, Volume 1: A Library of Universal Data Models for All Enterprises, Revised Edition, Wiley, ISBN 978-0-471-38023-8, 2001-03.
 * link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/DATAMODEL_CHANGES.adoc[Apache OFBiz, DATAMODEL_CHANGES.adoc], The Apache Software Foundation, archivage e103805, 2026-11-07.
 * link:https://github.com/apache/ofbiz-framework/blob/e103805ef7f15e9f3802e97b0a5c8a6cb47032b2/applications/datamodel/entitydef/party-entitymodel.xml[Apache OFBiz, party-entitymodel.xml], The Apache Software Foundation, archivage e103805, 2026-11-07.
 
@@ -86,5 +83,6 @@ Par exemple, les entités de type deviennent des vocabulaires contrôlés, et le
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Changement
+|0.1.1 |2026-11-18 |Retrait d’une référence à un livre. Le contexte s’appuie seulement sur le modèle public d’OFBiz.
 |0.1.0 |2026-11-07 |Première version.
 |===

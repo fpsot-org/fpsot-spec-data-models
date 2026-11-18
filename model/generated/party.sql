@@ -436,8 +436,8 @@ CREATE TABLE "PartyContactMechanism_purposes" (
 	PRIMARY KEY ("PartyContactMechanism_id", purposes),
 	FOREIGN KEY("PartyContactMechanism_id") REFERENCES "PartyContactMechanism" (id)
 );
-CREATE INDEX "ix_PartyContactMechanism_purposes_purposes" ON "PartyContactMechanism_purposes" (purposes);
 CREATE INDEX "ix_PartyContactMechanism_purposes_PartyContactMechanism_id" ON "PartyContactMechanism_purposes" ("PartyContactMechanism_id");
+CREATE INDEX "ix_PartyContactMechanism_purposes_purposes" ON "PartyContactMechanism_purposes" (purposes);
 COMMENT ON TABLE "PartyContactMechanism_purposes" IS 'None';
 COMMENT ON COLUMN "PartyContactMechanism_purposes"."PartyContactMechanism_id" IS 'Autocreated FK slot';
 COMMENT ON COLUMN "PartyContactMechanism_purposes".purposes IS 'What the party uses the mechanism for, such as billing or mailing, from a scheme that the deployment names. Departs from Apache OFBiz (DMO-006): OFBiz keeps each purpose in its own PartyContactMechPurpose record, with its own period. Here every purpose shares the period of the link, and a purpose with another period needs another link, so that one record holds one period. DMO-030, DMO-031.';
