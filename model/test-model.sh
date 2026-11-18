@@ -95,7 +95,8 @@ generate() {
         '-- It shows the shape of a persistence mapping only, and is not a working mapping:' \
         '-- foreign keys to abstract classes, the extensions object and intervals do not' \
         '-- map to useful tables or columns. The model stays storage-independent (DMO-003, DMO-070).'
-      gen-sqltables --dialect postgresql "$work/party.yaml" ;;
+      # The generator orders indexes by set iteration; a fixed hash seed keeps the output stable.
+      PYTHONHASHSEED=0 gen-sqltables --dialect postgresql "$work/party.yaml" ;;
     party-owl.ttl) gen-owl "$work/party.yaml" ;;
     party-shacl.ttl)
       gen-shacl "$work/party.yaml" | awk '

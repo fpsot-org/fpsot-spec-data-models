@@ -12,6 +12,10 @@ and versions follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.h
 
 - The background on the principles page cites only the public Apache OFBiz model; the reference to a book is removed.
 
+### Fixed
+
+- The model check runs the SQL generator with a fixed hash seed, so the order of the generated indexes no longer changes between runs.
+
 ## [0.1.0] - 2026-11-07
 
 ### Added
