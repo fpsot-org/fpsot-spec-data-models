@@ -30,7 +30,7 @@
 # such as PATH=<venv>/bin:$PATH. Environment: PYTHON (default python3, the Python
 # of that install), DATA_TYPES (optional), UPDATE=true to rewrite generated/
 # instead of checking it.
-set -u
+set -u -o pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 python=${PYTHON:-python3}
 model="$here/party.yaml"
@@ -95,8 +95,18 @@ generate() {
         '-- It shows the shape of a persistence mapping only, and is not a working mapping:' \
         '-- foreign keys to abstract classes, the extensions object and intervals do not' \
         '-- map to useful tables or columns. The model stays storage-independent (DMO-003, DMO-070).'
-      # The generator orders indexes by set iteration; a fixed hash seed keeps the output stable.
-      PYTHONHASHSEED=0 gen-sqltables --dialect postgresql "$work/party.yaml" ;;
+      # The generator emits the indexes of a table in no fixed order, so each run of
+      # CREATE INDEX lines is sorted to keep the output stable.
+      gen-sqltables --dialect postgresql "$work/party.yaml" | $python -I -c '
+import sys
+run = []
+for line in sys.stdin:
+    if line.startswith("CREATE INDEX "):
+        run.append(line)
+        continue
+    sys.stdout.writelines(sorted(run)); run = []
+    sys.stdout.write(line)
+sys.stdout.writelines(sorted(run))' ;;
     party-owl.ttl) gen-owl "$work/party.yaml" ;;
     party-shacl.ttl)
       gen-shacl "$work/party.yaml" | awk '

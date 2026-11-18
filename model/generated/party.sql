@@ -424,8 +424,8 @@ CREATE TABLE "PostalAddress_addressLines" (
 	PRIMARY KEY ("PostalAddress_id", "addressLines"),
 	FOREIGN KEY("PostalAddress_id") REFERENCES "PostalAddress" (id)
 );
-CREATE INDEX "ix_PostalAddress_addressLines_addressLines" ON "PostalAddress_addressLines" ("addressLines");
 CREATE INDEX "ix_PostalAddress_addressLines_PostalAddress_id" ON "PostalAddress_addressLines" ("PostalAddress_id");
+CREATE INDEX "ix_PostalAddress_addressLines_addressLines" ON "PostalAddress_addressLines" ("addressLines");
 COMMENT ON TABLE "PostalAddress_addressLines" IS 'None';
 COMMENT ON COLUMN "PostalAddress_addressLines"."PostalAddress_id" IS 'Autocreated FK slot';
 COMMENT ON COLUMN "PostalAddress_addressLines"."addressLines" IS 'Other lines of the address, in order, for countries whose parts do not fit the other fields.';

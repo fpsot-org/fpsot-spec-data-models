@@ -14,7 +14,7 @@ and versions follow [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.h
 
 ### Fixed
 
-- The model check runs the SQL generator with a fixed hash seed, so the order of the generated indexes no longer changes between runs.
+- The model check sorts the indexes that the SQL generator emits for each table, so the generated file no longer changes between runs, and it now fails when a generator in a pipe fails.
 
 ## [0.1.0] - 2026-11-07
 
